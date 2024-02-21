@@ -10,3 +10,14 @@ script = ExtResource("1_qtvha")
 [node name="Wire" parent="." instance=ExtResource("2_aemxx")]
 
 [node name="TestNode" parent="." instance=ExtResource("3_okqtv")]
+
+[node name="TestNode2" parent="." instance=ExtResource("3_okqtv")]
+
+[node name="TestNode3" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(0, 12)
+
+[node name="TestNode4" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(0, 18)
+
+[node name="TestNode5" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(0, 24)
