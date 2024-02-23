@@ -18,3 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 TestNode="*res://testNode.gd"
+
+[display]
+
+window/size/viewport_width=3000
+window/size/viewport_height=1500

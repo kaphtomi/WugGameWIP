@@ -10,14 +10,22 @@ script = ExtResource("1_qtvha")
 [node name="Wire" parent="." instance=ExtResource("2_aemxx")]
 
 [node name="TestNode" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(400, 799)
 
 [node name="TestNode2" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(672, 300)
 
 [node name="TestNode3" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(0, 12)
+position = Vector2(2151, 359)
 
 [node name="TestNode4" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(0, 18)
+position = Vector2(1408, 458)
 
 [node name="TestNode5" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(0, 24)
+position = Vector2(1883, 1074)
+
+[node name="TestNode6" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(2575, 1059)
+
+[node name="TestNode7" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(931, 1197)
