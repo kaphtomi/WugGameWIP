@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1ubg4xnqp7f7"]
+
+[ext_resource type="Script" path="res://wire.gd" id="1_q1emx"]
+[ext_resource type="Script" path="res://Hitbox.gd" id="2_ehds6"]
+[ext_resource type="Script" path="res://Stroke.gd" id="3_whn04"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5avcy"]
+size = Vector2(124, 10)
+
+[node name="Wire" type="AnimatableBody2D"]
+script = ExtResource("1_q1emx")
+metadata/_edit_group_ = true
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+position = Vector2(62, 0)
+shape = SubResource("RectangleShape2D_5avcy")
+script = ExtResource("2_ehds6")
+
+[node name="Stroke" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 124, 0)
+script = ExtResource("3_whn04")
