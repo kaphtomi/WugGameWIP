@@ -1,10 +1,8 @@
-extends CollisionShape2D
+extends Line2D
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var smth = shape: SegmentedShape2D
-	
 	pass # Replace with function body.
 
 

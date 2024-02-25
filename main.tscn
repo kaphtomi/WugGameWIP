@@ -4,28 +4,56 @@
 [ext_resource type="PackedScene" uid="uid://c1ubg4xnqp7f7" path="res://wire.tscn" id="2_aemxx"]
 [ext_resource type="PackedScene" uid="uid://3e5wwy2ot2ta" path="res://testNode.tscn" id="3_okqtv"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node2D"]
 script = ExtResource("1_qtvha")
 
 [node name="Wire" parent="." instance=ExtResource("2_aemxx")]
+position = Vector2(388, 173)
+
+[node name="Wire2" parent="." instance=ExtResource("2_aemxx")]
+position = Vector2(388, 173)
+
+[node name="Wire3" parent="." instance=ExtResource("2_aemxx")]
+position = Vector2(388, 173)
+
+[node name="Wire4" parent="." instance=ExtResource("2_aemxx")]
+position = Vector2(388, 173)
+
+[node name="Wire5" parent="." instance=ExtResource("2_aemxx")]
+position = Vector2(388, 173)
+
+[node name="Wire6" parent="." instance=ExtResource("2_aemxx")]
+position = Vector2(388, 173)
+
+[node name="Wire7" parent="." instance=ExtResource("2_aemxx")]
+position = Vector2(388, 173)
+
+[node name="Wire8" parent="." instance=ExtResource("2_aemxx")]
+position = Vector2(388, 173)
 
 [node name="TestNode" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(400, 799)
+position = Vector2(192, 89)
 
 [node name="TestNode2" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(672, 300)
+position = Vector2(1141, 625)
 
 [node name="TestNode3" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(2151, 359)
+position = Vector2(1028, 407)
 
 [node name="TestNode4" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(1408, 458)
+position = Vector2(254, 420)
 
 [node name="TestNode5" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(1883, 1074)
+position = Vector2(547, 370)
 
 [node name="TestNode6" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(2575, 1059)
+position = Vector2(160, 640)
 
 [node name="TestNode7" parent="." instance=ExtResource("3_okqtv")]
-position = Vector2(931, 1197)
+position = Vector2(1003, 144)
+
+[node name="TestNode8" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(701, 97)
+
+[node name="TestNode9" parent="." instance=ExtResource("3_okqtv")]
+position = Vector2(606, 636)

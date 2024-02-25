@@ -13,6 +13,7 @@ Label/colors/font_color = Color(0, 0, 0, 1)
 
 [node name="TestNode" type="Area2D"]
 position = Vector2(0, 6)
+scale = Vector2(0.43, 0.43)
 script = ExtResource("1_kut2j")
 metadata/_edit_group_ = true
 
