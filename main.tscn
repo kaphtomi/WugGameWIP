@@ -2,34 +2,26 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1_qtvha"]
 [ext_resource type="PackedScene" uid="uid://c1ubg4xnqp7f7" path="res://wire.tscn" id="2_aemxx"]
-[ext_resource type="PackedScene" uid="uid://3e5wwy2ot2ta" path="res://testNode.tscn" id="3_okqtv"]
+[ext_resource type="PackedScene" uid="uid://cfqeitjv2wgs7" path="res://testNode.tscn" id="3_okqtv"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_qtvha")
 
 [node name="Wire" parent="." instance=ExtResource("2_aemxx")]
-position = Vector2(388, 173)
 
 [node name="Wire2" parent="." instance=ExtResource("2_aemxx")]
-position = Vector2(388, 173)
 
 [node name="Wire3" parent="." instance=ExtResource("2_aemxx")]
-position = Vector2(388, 173)
 
 [node name="Wire4" parent="." instance=ExtResource("2_aemxx")]
-position = Vector2(388, 173)
 
 [node name="Wire5" parent="." instance=ExtResource("2_aemxx")]
-position = Vector2(388, 173)
 
 [node name="Wire6" parent="." instance=ExtResource("2_aemxx")]
-position = Vector2(388, 173)
 
 [node name="Wire7" parent="." instance=ExtResource("2_aemxx")]
-position = Vector2(388, 173)
 
 [node name="Wire8" parent="." instance=ExtResource("2_aemxx")]
-position = Vector2(388, 173)
 
 [node name="TestNode" parent="." instance=ExtResource("3_okqtv")]
 position = Vector2(192, 89)
