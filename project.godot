@@ -23,3 +23,8 @@ TestNode="*res://testNode.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=800
+
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
