@@ -13,7 +13,13 @@ config_version=5
 config/name="Godot Prototype"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+boot_splash/bg_color=Color(0.0666667, 0.0666667, 0.0666667, 1)
+boot_splash/show_image=false
+boot_splash/image="res://SVG/0.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://icon.svg"
+boot_splash/defaults/default_clear_color=Color(0.0666667, 0.0666667, 0.0666667, 1)
 
 [autoload]
 
@@ -28,3 +34,8 @@ window/size/viewport_height=800
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.0666667, 0.0666667, 0.0666667, 1)
+anti_aliasing/quality/msaa_2d=3

@@ -1,13 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://c1ubg4xnqp7f7"]
+[gd_scene load_steps=4 format=3 uid="uid://c1ubg4xnqp7f7"]
 
 [ext_resource type="Script" path="res://wire.gd" id="1_q1emx"]
+[ext_resource type="Shader" path="res://shader.gdshader" id="2_x38py"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iermj"]
+shader = ExtResource("2_x38py")
 
 [node name="Wire" type="AnimatableBody2D"]
 script = ExtResource("1_q1emx")
 metadata/_edit_group_ = true
 
 [node name="Stroke" type="Line2D" parent="."]
+material = SubResource("ShaderMaterial_iermj")
 points = PackedVector2Array(0, 0, 0, 0)
+antialiased = true
 
 [node name="Hitbox" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
