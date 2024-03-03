@@ -1,10 +1,12 @@
 extends Node2D
 
 var rng = RandomNumberGenerator.new()
-
+var shader_material : ShaderMaterial
 const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const alphabest = "eeeeeeeeeeeetttttttttaaaaaaaaooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuuummmwwffggyyppbbvkjxqz"
-
+var vertices : Array
+var edges : Array
+var time : float
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var size = get_viewport().size
@@ -14,7 +16,7 @@ func _ready():
 	#$TestNode3.change_text(alpha[rng.randi_range(0, 25)])
 	#$TestNode4.change_text(alpha[rng.randi_range(0, 25)])
 	#$TestNode5.change_text(alpha[rng.randi_range(0, 25)])
-
+	time = 0.0
 
 	#$TestNode.change_text("1")
 	#$TestNode2.change_text("2")
@@ -34,7 +36,8 @@ func _ready():
 	$TestNode7.change_text(alphabest[randi() % alphabest.length()])
 	$TestNode8.change_text(alphabest[randi() % alphabest.length()])
 	$TestNode9.change_text(alphabest[randi() % alphabest.length()])
-	
+	vertices = [$TestNode, $TestNode2, $TestNode3, $TestNode4, $TestNode5, $TestNode6, $TestNode7, $TestNode8, $TestNode9]
+	edges = [$Wire, $Wire2, $Wire3, $Wire4, $Wire5, $Wire6, $Wire7, $Wire8]
 	$Wire.set_nodes($TestNode, $TestNode8)
 	$Wire2.set_nodes($TestNode, $TestNode4)
 	$Wire3.set_nodes($TestNode4, $TestNode6)
@@ -44,13 +47,23 @@ func _ready():
 	$Wire7.set_nodes($TestNode6, $TestNode9)
 	$Wire8.set_nodes($TestNode8, $TestNode7)
 	pop_in()
+	shader_material = ShaderMaterial.new()
+	shader_material.shader = load("res://shader.gdshader")
+	for e in edges:
+		e.get_node("Stroke").set_material(shader_material)
+		
+	for v in vertices:
+		v.get_node("Letter").set_material(shader_material)
+	
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	time += delta
+	shader_material.set_shader_parameter("time", time)
 	pass
 
 func pop_in():
-	var vertices : Array = [$TestNode, $TestNode2, $TestNode3, $TestNode4, $TestNode5, $TestNode6, $TestNode7, $TestNode8, $TestNode9]
 	for v in vertices:
 		v.scale = Vector2.ZERO
 		
@@ -60,7 +73,7 @@ func pop_in():
 		tween.tween_property(v, "scale", Vector2.ONE, randf()*.1)
 		tween.play()
 	
-	var edges : Array = [$Wire, $Wire2, $Wire3, $Wire4, $Wire5, $Wire6, $Wire7, $Wire8]
+
 	for v in edges:
 		v.pop_in(0)
 		

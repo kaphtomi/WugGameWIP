@@ -1,6 +1,6 @@
 extends AnimatableBody2D
 
-var _inNode: TestNode
+var _inNode: TestNode	
 var _outNode: TestNode
 
 # Called when the node enters the scene tree for the first time.
