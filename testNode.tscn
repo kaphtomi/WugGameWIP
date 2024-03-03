@@ -10,7 +10,6 @@ radius = 192.26
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kxg7j"]
 shader = ExtResource("3_4vn3k")
-shader_parameter/time = null
 
 [sub_resource type="FontVariation" id="FontVariation_yaqmt"]
 base_font = ExtResource("3_eqxnx")

@@ -6,17 +6,15 @@ const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const alphabest = "eeeeeeeeeeeetttttttttaaaaaaaaooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuuummmwwffggyyppbbvkjxqz"
 var vertices : Array
 var edges : Array
-var time : float
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var size = get_viewport().size
-#
+	
 	#$TestNode.change_text(alpha[rng.randi_range(0, 25)])
 	#$TestNode2.change_text(alpha[rng.randi_range(0, 25)])
 	#$TestNode3.change_text(alpha[rng.randi_range(0, 25)])
 	#$TestNode4.change_text(alpha[rng.randi_range(0, 25)])
 	#$TestNode5.change_text(alpha[rng.randi_range(0, 25)])
-	time = 0.0
 
 	#$TestNode.change_text("1")
 	#$TestNode2.change_text("2")
@@ -59,8 +57,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	time += delta
-	shader_material.set_shader_parameter("time", time)
 	pass
 
 func pop_in():

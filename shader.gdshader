@@ -1,5 +1,5 @@
 shader_type canvas_item;
-uniform float time;
+//uniform float time;
 
 void vertex() {
 	// Called for every vertex the material is visible on.
@@ -7,9 +7,9 @@ void vertex() {
 
 void fragment() {
 	float alpha = texture(TEXTURE, UV).a;
-	vec4 a = vec4(0,0.1*sin(SCREEN_UV*30.0 + time*.61),0);
-	vec4 b = vec4(0.1*sin(SCREEN_UV*27.0+1.0 + time*.49),0,0);
-	vec4 c = vec4(0,0.1*cos(SCREEN_UV*10.0 + time*.55),0);
+	vec4 a = vec4(0,0.1*sin(SCREEN_UV*30.0 + TIME*.61),0);
+	vec4 b = vec4(0.1*sin(SCREEN_UV*27.0+1.0 + TIME*.49),0,0);
+	vec4 c = vec4(0,0.1*cos(SCREEN_UV*10.0 + TIME*.55),0);
 	
 	COLOR = a+b+c+vec4(0.9,1.0,1.2,alpha);
 }
