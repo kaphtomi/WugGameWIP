@@ -36,3 +36,8 @@ func pop_in(t:float):
 	update(_inNode.position, _inNode.position+ t*(_outNode.position-_inNode.position))
 	
 	
+
+
+func _on_text_input_gui_input(event):
+	
+	pass # Replace with function body.

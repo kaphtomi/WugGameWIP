@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=5 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_qtvha"]
 [ext_resource type="PackedScene" uid="uid://c1ubg4xnqp7f7" path="res://wire.tscn" id="2_aemxx"]
 [ext_resource type="PackedScene" uid="uid://cfqeitjv2wgs7" path="res://testNode.tscn" id="3_okqtv"]
+[ext_resource type="Script" path="res://TextInput.gd" id="4_ehfig"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_qtvha")
@@ -49,3 +50,22 @@ position = Vector2(701, 97)
 
 [node name="TestNode9" parent="." instance=ExtResource("3_okqtv")]
 position = Vector2(606, 636)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1200.0
+offset_right = 1600.0
+offset_bottom = 50.0
+
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 50.0
+
+[node name="TextInput" type="LineEdit" parent="Control/PanelContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.960784, 0.960784, 0.960784, 1)
+theme_override_font_sizes/font_size = 40
+placeholder_text = "Type out your word!"
+script = ExtResource("4_ehfig")
