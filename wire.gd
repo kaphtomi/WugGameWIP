@@ -28,10 +28,10 @@ func _process(_delta):
 	pass
 	
 func update(start: Vector2, end: Vector2):
-	var _offset = 10*Vector2.from_angle(90+start.direction_to(end).angle())
+	var offset = 10*Vector2.from_angle(90+start.direction_to(end).angle())
 	$Stroke.set_point_position(0,start)
 	$Stroke.set_point_position(1,end)
-	#$Hitbox.polygon = PackedVector2Array([start+offset, end + offset, end -offset, start - offset])
+	$Hitbox.polygon = PackedVector2Array([start+offset, end + offset, end -offset, start - offset])
 	pass
 	
 func pop_in(t:float):

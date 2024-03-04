@@ -1,6 +1,5 @@
 extends Node2D
 
-#var rng = RandomNumberGenerator.new()
 var shader_material : ShaderMaterial
 const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const alphabest = "eeeeeeeeeeeetttttttttaaaaaaaaooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuuummmwwffggyyppbbvkjxqz"
@@ -14,30 +13,29 @@ const SPRING_LENGTH : float = 400
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	size = get_viewport().content_scale_size
-	var numVertices : int = randi() % 3 + 10
-	var numEdges : int = randi() % 5 + 9
-	var vertexScene = preload("res://testNode.tscn")
-	var edgeScene = preload("res://wire.tscn")
+	var num_vertices : int = randi() % 3 + 10
+	var num_edges : int = randi() % 5 + 9
+	var vertex_scene = preload("res://testNode.tscn")
+	var edge_scene = preload("res://wire.tscn")
 	shader_material = ShaderMaterial.new()
 	shader_material.shader = load("res://shader.gdshader")
-	for i in numVertices:
+	for i in num_vertices:
 		var letter = alphabest[randi() % alphabest.length()]
-		var vertex = vertexScene.instantiate()
+		var vertex = vertex_scene.instantiate()
 		vertex.change_text(letter)
 		vertex.position = Vector2(size.x*(.1+.9*randf()), size.y*(.1+.9*randf()))
 		add_child(vertex)
 		vertices.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
-		vertex.set_size(size)
 	
-	for i in numEdges:
+	for i in num_edges:
 		var fromIndex = randi() % vertices.size()
 		var toIndex = randi() % vertices.size()
 		while (fromIndex == toIndex):
 			toIndex = randi() % vertices.size()
 		var from = vertices[fromIndex]
 		var to = vertices[toIndex]
-		var edge = edgeScene.instantiate()
+		var edge = edge_scene.instantiate()
 		to.add_incoming(edge)
 		from.add_outgoing(edge)
 		add_child(edge)
@@ -46,27 +44,22 @@ func _ready():
 		edges.append(edge)
 		edge.get_node("Stroke").set_material(shader_material)
 	
-	for i in numVertices:
+	for i in num_vertices:
 		var vertex = vertices[i]
 		pop_in_vertex(vertex, i)
-	
-	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	for i in vertices.size():
 		for j in range(i,vertices.size()):
 			coolombs(vertices[i],vertices[j], delta)
-	#var size = get_viewport().content_scale_size
 	for e in edges:
 		hookes(e,delta)
 	for v in vertices:
 		border_force(v,delta)
 		v.position = v.position + v.get_velocity()*delta*10
 		v.position = Vector2(clamp(v.position.x,0,size.x),clamp(v.position.y,0,size.y))
-	pass
-			
-			
+	
 func coolombs(v1 : TestNode, v2 : TestNode, delta : float):
 	var p1 : Vector2 = v1.position
 	var p2 : Vector2 = v2.position
@@ -90,8 +83,6 @@ func border_force(v : TestNode, delta):
 	var p : Vector2 = v.position
 	var k = ELECTRIC_CONSTANT
 	v.force(Vector2(k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1)),k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))))
-	
-
 
 func pop_in_vertex(v, i:int):
 	v.scale = Vector2.ZERO

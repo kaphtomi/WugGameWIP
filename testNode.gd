@@ -7,16 +7,11 @@ var size : Vector2
 
 func _ready():
 	velocity = Vector2.ZERO
-	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	velocity *= exp(-_delta)
-	
-	pass
-	#position += velocity*delta
-	#position = position.clamp(Vector2.ZERO,size)
 	
 func get_outgoing_edges():
 	return outgoing_edges
@@ -46,9 +41,6 @@ func pop_in_edge(e):
 	
 func force(amt : Vector2):
 	velocity += amt
-
-func set_size(viewportSize : Vector2):
-	size = viewportSize
 	
 func get_velocity():
 	return velocity
