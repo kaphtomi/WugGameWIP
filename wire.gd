@@ -1,30 +1,24 @@
 extends AnimatableBody2D
 
-var _inNode: TestNode	
-var _outNode: TestNode
+var _in_node: TestNode	
+var _out_node: TestNode
 var done = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	
-	#var originPos = _originNode.position
-	#var destPos = _destinationNode.position
+	pass
 
-	pass # Replace with function body.
-
-func set_nodes(inNode: TestNode, outNode: TestNode):
-	_inNode = inNode
-	_outNode = outNode
-	var start = _inNode.position
-	var end = _outNode.position
+func set_nodes(in_node: TestNode, out_node: TestNode):
+	_in_node = in_node
+	_out_node = out_node
+	var start = _in_node.position
+	var end = _out_node.position
 	update(start,end)
-	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if (done):
-		update(_inNode.position, _outNode.position)
+		update(_in_node.position, _out_node.position)
 	pass
 	
 func update(start: Vector2, end: Vector2):
@@ -35,13 +29,13 @@ func update(start: Vector2, end: Vector2):
 	pass
 	
 func pop_in(t:float):
-	update(_inNode.position, _inNode.position+ t*(_outNode.position-_inNode.position))
+	update(_in_node.position, _in_node.position+ t*(_out_node.position-_in_node.position))
 	
 func popped_in():
 	done = true
 
 func get_start():
-	return _inNode
+	return _in_node
 
 func get_end():
-	return _outNode
+	return _out_node

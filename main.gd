@@ -1,13 +1,12 @@
 extends Node2D
 
 var shader_material : ShaderMaterial
-const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const alphabest = "eeeeeeeeeeeetttttttttaaaaaaaaooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuuummmwwffggyyppbbvkjxqz"
 var vertices : Array
 var edges : Array
 var size : Vector2
-const ELECTRIC_CONSTANT : float = 200000
-const SPRING_CONSTANT : float = .01
+const ELECTRIC_CONSTANT : float = 2000000
+const SPRING_CONSTANT : float = .1
 const SPRING_LENGTH : float = 400
 
 # Called when the node enters the scene tree for the first time.
@@ -19,6 +18,8 @@ func _ready():
 	var edge_scene = preload("res://wire.tscn")
 	shader_material = ShaderMaterial.new()
 	shader_material.shader = load("res://shader.gdshader")
+	
+	#generates num_vertices
 	for i in num_vertices:
 		var letter = alphabest[randi() % alphabest.length()]
 		var vertex = vertex_scene.instantiate()
@@ -28,6 +29,7 @@ func _ready():
 		vertices.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
 	
+	#generates num_edges
 	for i in num_edges:
 		var fromIndex = randi() % vertices.size()
 		var toIndex = randi() % vertices.size()
@@ -44,11 +46,14 @@ func _ready():
 		edges.append(edge)
 		edge.get_node("Stroke").set_material(shader_material)
 	
+	#creates the animation for each vertex (and after the animations for each
+	#vertex completes, it animates out its edges)
 	for i in num_vertices:
 		var vertex = vertices[i]
 		pop_in_vertex(vertex, i)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+#does electric force on each pair of vertices, then spring force
+#on each wire, then calculates the vertices movements
 func _process(delta):
 	for i in vertices.size():
 		for j in range(i,vertices.size()):
@@ -57,9 +62,10 @@ func _process(delta):
 		hookes(e,delta)
 	for v in vertices:
 		border_force(v,delta)
-		v.position = v.position + v.get_velocity()*delta*10
+		v.position = v.position + v.get_velocity()*delta
 		v.position = Vector2(clamp(v.position.x,0,size.x),clamp(v.position.y,0,size.y))
 	
+#electric force
 func coolombs(v1 : TestNode, v2 : TestNode, delta : float):
 	var p1 : Vector2 = v1.position
 	var p2 : Vector2 = v2.position
@@ -68,6 +74,7 @@ func coolombs(v1 : TestNode, v2 : TestNode, delta : float):
 	v1.force(-f*delta)
 	v2.force(f*delta)
 
+#spring force
 func hookes(e, delta : float):
 	var v1 = e.get_start()
 	var v2 = e.get_end()
@@ -79,11 +86,13 @@ func hookes(e, delta : float):
 	v1.force(-f*delta)
 	v2.force(f*delta)
 
+#border_force
 func border_force(v : TestNode, delta):
 	var p : Vector2 = v.position
 	var k = ELECTRIC_CONSTANT
 	v.force(Vector2(k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1)),k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))))
 
+#animation
 func pop_in_vertex(v, i:int):
 	v.scale = Vector2.ZERO
 	var tween = create_tween()
