@@ -3,10 +3,13 @@ extends AnimatableBody2D
 var _in_node: TestNode	
 var _out_node: TestNode
 var done = false
+var thickness: int = 1
+const WIDTH_SCALE: int = 5
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	thickness = randi() % 5 + 1 #Sets thickness to a random number between 1 and 5
+	$Stroke.width = thickness * WIDTH_SCALE
 
 func set_nodes(in_node: TestNode, out_node: TestNode):
 	_in_node = in_node
@@ -22,11 +25,13 @@ func _process(_delta):
 	pass
 	
 func update(start: Vector2, end: Vector2):
+	$Stroke.width = thickness * WIDTH_SCALE
+	
 	var offset = 10*Vector2.from_angle(90+start.direction_to(end).angle())
 	$Stroke.set_point_position(0,start)
 	$Stroke.set_point_position(1,end)
 	$Hitbox.polygon = PackedVector2Array([start+offset, end + offset, end -offset, start - offset])
-	pass
+	
 	
 func pop_in(t:float):
 	update(_in_node.position, _in_node.position+ t*(_out_node.position-_in_node.position))
@@ -39,3 +44,9 @@ func get_start():
 
 func get_end():
 	return _out_node
+	
+func get_thickness():
+	return thickness
+	
+func set_thickness(width: int):
+	thickness = width
