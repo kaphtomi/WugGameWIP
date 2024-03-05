@@ -83,7 +83,7 @@ func hookes(e, delta : float):
 	var p2 : Vector2 = v2.position
 	var d : Vector2 = p2 - p1
 	var s = d.length()-SPRING_LENGTH
-	var f : Vector2 = -SPRING_CONSTANT * s * d.normalized()
+	var f : Vector2 = -(SPRING_CONSTANT * e.thickness * e.thickness)* s * d.normalized()
 	v1.force(-f*delta)
 	v2.force(f*delta)
 
@@ -108,7 +108,7 @@ func pop_in_vertex(v, i:int):
 	tween.play()
 
 # Called when text is submitted in TextField
-func _on_text_field_text_submitted(new_text):
+func _on_text_field_text_submitted(_new_text):
 	var letterArray = $TextBoxContainer/TextField.text.split("", false, 0)
 	for i in (letterArray.size() - 1):
 		var wire = get_wire(letterArray[i], letterArray[i+1])
