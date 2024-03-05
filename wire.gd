@@ -10,6 +10,9 @@ const WIDTH_SCALE: int = 5
 func _ready():
 	thickness = randi() % 5 + 1 #Sets thickness to a random number between 1 and 5
 	$Stroke.width = thickness * WIDTH_SCALE
+	
+	var new_red := Color(1, 1 - (thickness*0.08), 1 - (thickness*0.08), 1)
+	$Stroke.set_default_color(new_red)
 
 func set_nodes(in_node: TestNode, out_node: TestNode):
 	_in_node = in_node
