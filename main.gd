@@ -1,7 +1,7 @@
 extends Node2D
 
 var shader_material : ShaderMaterial
-const alphabest = "eeeeeeeeeeeetttttttttaaaaaaaaooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuuummmwwffggyyppbbvkjxqz"
+var alphabetter = "etaoinshrdlcumwfgypbvkjxqz".split("", true, 0)
 var vertices : Array
 var edges : Array
 var size : Vector2
@@ -21,7 +21,8 @@ func _ready():
 	
 	#generates num_vertices
 	for i in num_vertices:
-		var letter = alphabest[randi() % alphabest.length()]
+		var letter = alphabetter[randi() % alphabetter.size()]
+		alphabetter.remove_at(alphabetter.find(letter))
 		var vertex = vertex_scene.instantiate()
 		vertex.change_text(letter)
 		vertex.position = Vector2(size.x*(.1+.9*randf()), size.y*(.1+.9*randf()))
