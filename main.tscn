@@ -58,12 +58,12 @@ offset_left = 1200.0
 offset_right = 1600.0
 offset_bottom = 50.0
 
-[node name="PanelContainer" type="PanelContainer" parent="Control"]
+[node name="TextInputBox" type="PanelContainer" parent="Control"]
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 50.0
 
-[node name="TextInput" type="LineEdit" parent="Control/PanelContainer"]
+[node name="TextInput" type="LineEdit" parent="Control/TextInputBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.960784, 0.960784, 0.960784, 1)
 theme_override_font_sizes/font_size = 40

@@ -4,6 +4,7 @@ extends LineEdit
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	shortcut_keys_enabled = false 
+	grab_focus()
 	
 	# Replace with function body.
 
