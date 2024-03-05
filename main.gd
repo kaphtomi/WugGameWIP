@@ -105,3 +105,20 @@ func pop_in_vertex(v, i:int):
 	tween.tween_property(v, "scale", Vector2.ONE, randf()*.1)
 	tween.tween_callback(v.pop_in_edges)
 	tween.play()
+
+# Called when text is submitted in TextField
+func _on_text_field_text_submitted(new_text):
+	var letterArray = $TextBoxContainer/TextField.text.split("", false, 0)
+	for i in (letterArray.size() - 1):
+		var wire = get_wire(letterArray[i], letterArray[i+1])
+		if wire != null:
+			wire.increment_thickness()
+	
+	$TextBoxContainer/TextField.clear()	
+		
+# Gets a wire based on its start and end letter (does not depend on direction, at the moment)
+func get_wire(startNodeLetter: String, endNodeLetter: String):
+	for wire in edges:
+		if wire.check_connecting_letters(startNodeLetter, endNodeLetter):
+			return wire
+	return null

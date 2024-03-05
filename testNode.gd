@@ -4,6 +4,7 @@ var outgoing_edges : Array
 var incoming_edges : Array
 var velocity : Vector2
 var size : Vector2
+var letter: String = ""
 
 func _ready():
 	velocity = Vector2.ZERO
@@ -27,6 +28,7 @@ func add_incoming(from):
 	
 func change_text(text):
 	$Letter.text = text
+	letter = text
 
 func pop_in_edges():
 	for e in outgoing_edges:
