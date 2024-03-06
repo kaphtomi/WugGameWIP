@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://bvysw3gfc4ply"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bvysw3gfc4ply"]
 
 [ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="1_jqgrn"]
 
@@ -13,8 +13,21 @@ corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
 
+[sub_resource type="FontVariation" id="FontVariation_nim1x"]
+base_font = ExtResource("1_jqgrn")
+variation_opentype = {
+2003265652: 700
+}
+
 [resource]
-default_font = ExtResource("1_jqgrn")
-default_font_size = 40
+default_font = SubResource("FontVariation_nim1x")
+default_font_size = 38
+LineEdit/colors/caret_color = Color(0, 0, 0, 1)
+LineEdit/colors/font_color = Color(0, 0, 0, 1)
+LineEdit/colors/font_outline_color = Color(0, 0, 0, 1)
+LineEdit/colors/font_placeholder_color = Color(0, 0, 0, 1)
+LineEdit/colors/font_selected_color = Color(0, 0, 0, 1)
+LineEdit/colors/selection_color = Color(0, 0, 0, 1)
+LineEdit/constants/caret_width = 3
 LineEdit/styles/focus = SubResource("StyleBoxEmpty_u7rwm")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_aht6l")

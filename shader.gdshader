@@ -25,10 +25,15 @@ float noise(vec2 uv) {
 
 void fragment() {
 	float alpha = texture(TEXTURE, UV).a;
-	float red = noise(SCREEN_UV+TIME*.5);
-	float green = noise(SCREEN_UV-TIME*.5);
-	float blue = noise(SCREEN_UV+TIME*.2);
-	COLOR = vec4(0.9+red*.1,.5+ .5*green,.5 + .5*blue,alpha);
+	if (COLOR.r+COLOR.g+COLOR.b<.25) {
+		COLOR=vec4(.2/3.0,.2/3.0,.2/3.0,COLOR.a);
+	} else {
+		float red = noise(SCREEN_UV+TIME*.5);
+		float green = noise(SCREEN_UV-TIME*.5);
+		float blue = noise(SCREEN_UV+TIME*.2);
+		COLOR = vec4(0.9+red*.1,.5+ .5*green,.5 + .5*blue,alpha);
+	}
+	
 }
 
 void light() {

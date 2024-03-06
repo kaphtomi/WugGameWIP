@@ -1,19 +1,19 @@
 extends Node2D
 
 var shader_material : ShaderMaterial
-var alphabetter = "etaoinshrdlcumwfgypbvkjxqz".split("", true, 0)
+var alphabetter = "etaonshrdlcumwfgypbvkjxqz".split("", true, 0)
 var vertices : Array
 var edges : Array
 var size : Vector2
-const ELECTRIC_CONSTANT : float = 2000000
+const ELECTRIC_CONSTANT : float = 3000000
 const SPRING_CONSTANT : float = .1
-const SPRING_LENGTH : float = 400
+const SPRING_LENGTH : float = 600
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	size = get_viewport().content_scale_size
+	size = get_viewport().content_scale_size - Vector2i(300,0)
 	var num_vertices : int = randi() % 3 + 10
-	var num_edges : int = randi() % 5 + 9
+	var num_edges : int = randi() % 7 + 12
 	var vertex_scene = preload("res://testNode.tscn")
 	var edge_scene = preload("res://wire.tscn")
 	shader_material = ShaderMaterial.new()
@@ -25,7 +25,7 @@ func _ready():
 		alphabetter.remove_at(alphabetter.find(letter))
 		var vertex = vertex_scene.instantiate()
 		vertex.change_text(letter)
-		vertex.position = Vector2(size.x*(.1+.9*randf()), size.y*(.1+.9*randf()))
+		vertex.position = Vector2(size.x*nice_rand(i,num_vertices), size.y*nice_rand(i,num_vertices))
 		add_child(vertex)
 		vertices.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
@@ -36,8 +36,19 @@ func _ready():
 		var toIndex = randi() % vertices.size()
 		while (fromIndex == toIndex):
 			toIndex = randi() % vertices.size()
+		if (fromIndex > toIndex):
+			var blah = toIndex
+			toIndex = fromIndex
+			fromIndex = blah
 		var from = vertices[fromIndex]
 		var to = vertices[toIndex]
+		if (!edges.is_empty()):
+			var continue_bool = false
+			for e in edges:
+				if (e.get_start()==from&&e.get_end()==to):
+					continue_bool=true
+			if (continue_bool):
+				continue
 		var edge = edge_scene.instantiate()
 		to.add_incoming(edge)
 		from.add_outgoing(edge)
@@ -50,7 +61,7 @@ func _ready():
 	#creates the animation for each vertex (and after the animations for each
 	#vertex completes, it animates out its edges)
 	for i in num_vertices:
-		var vertex = vertices[i]
+		var vertex = vertices[num_vertices-1-i]
 		pop_in_vertex(vertex, i)
 
 #does electric force on each pair of vertices, then spring force
@@ -82,8 +93,8 @@ func hookes(e, delta : float):
 	var p1 : Vector2 = v1.position
 	var p2 : Vector2 = v2.position
 	var d : Vector2 = p2 - p1
-	var s = d.length()-SPRING_LENGTH
-	var f : Vector2 = -(SPRING_CONSTANT * e.thickness * e.thickness)* s * d.normalized()
+	var s = d.length()-SPRING_LENGTH / sqrt(e.thickness) 
+	var f : Vector2 = -(SPRING_CONSTANT * e.thickness * e.thickness)* s * d.normalized() * sqrt(e.done)
 	v1.force(-f*delta)
 	v2.force(f*delta)
 
@@ -97,8 +108,8 @@ func border_force(v : TestNode, delta):
 func pop_in_vertex(v, i:int):
 	v.scale = Vector2.ZERO
 	var tween = create_tween()
-	var wait = .3*i
-	var dur = .2
+	var wait = .15*i
+	var dur = .25
 	var callable = Callable(self, "pop_in_edges")
 	callable.bind(v,wait+dur)
 	tween.tween_interval(wait)
@@ -109,13 +120,18 @@ func pop_in_vertex(v, i:int):
 
 # Called when text is submitted in TextField
 func _on_text_field_text_submitted(_new_text):
-	var letterArray = $TextBoxContainer/TextField.text.split("", false, 0)
+	var letterArray = $Control/TextField.text.split("", false, 0)
+	var update_wires : Dictionary
 	for i in (letterArray.size() - 1):
 		var wire = get_wire(letterArray[i], letterArray[i+1])
-		if wire != null:
-			wire.increment_thickness()
-	
-	$TextBoxContainer/TextField.clear()	
+		if wire == null:
+			$Control/TextField.clear()
+			return
+		update_wires[wire]=null
+	for w in update_wires.keys():
+		w.increment_thickness()
+	$Control/Label.text = $Control/Label.text + $Control/TextField.text + "\n "
+	$Control/TextField.clear()	
 		
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
 func get_wire(startNodeLetter: String, endNodeLetter: String):
@@ -123,3 +139,6 @@ func get_wire(startNodeLetter: String, endNodeLetter: String):
 		if wire.check_connecting_letters(startNodeLetter, endNodeLetter):
 			return wire
 	return null
+	
+func nice_rand(i: float, n : float):
+	return .15 + .4*(i/n) +.3*randf()

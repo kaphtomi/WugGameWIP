@@ -12,7 +12,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	velocity *= exp(-_delta)
+	velocity *= exp(-_delta*2)
 	
 func get_outgoing_edges():
 	return outgoing_edges
@@ -37,8 +37,7 @@ func pop_in_edges():
 func pop_in_edge(e):
 	e.pop_in(0)	
 	var tween = create_tween()
-	tween.tween_method(e.pop_in,0.0,1.0,.3)
-	tween.tween_callback(e.popped_in)
+	tween.tween_method(e.pop_in,0.0,1.0,.3+.1*randf())
 	tween.play()
 	
 func force(amt : Vector2):

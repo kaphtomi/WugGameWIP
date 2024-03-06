@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cfqeitjv2wgs7"]
+[gd_scene load_steps=10 format=3 uid="uid://cfqeitjv2wgs7"]
 
 [ext_resource type="Script" path="res://testNode.gd" id="1_kut2j"]
 [ext_resource type="Texture2D" uid="uid://doo6d5ytb3bpa" path="res://SVG/Asset 1.svg" id="1_q6rhg"]
@@ -7,6 +7,9 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nw3pw"]
 radius = 192.26
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_82krl"]
+shader = ExtResource("3_4vn3k")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kxg7j"]
 shader = ExtResource("3_4vn3k")
@@ -18,7 +21,7 @@ variation_opentype = {
 2003265652: 666
 }
 opentype_features = {
-1936928821: 1
+1936928821: 0
 }
 
 [sub_resource type="Theme" id="Theme_fikdo"]
@@ -33,6 +36,11 @@ metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_nw3pw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_82krl")
+scale = Vector2(0.32, 0.32)
+texture = ExtResource("1_q6rhg")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.0666667, 0.0666667, 0.0666667, 1)

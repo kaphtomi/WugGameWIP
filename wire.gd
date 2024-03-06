@@ -2,10 +2,10 @@ extends AnimatableBody2D
 
 var _in_node: TestNode	
 var _out_node: TestNode
-var done = false
+var done = 0.0
 var connecting_letters: Array[String] = []
 var thickness: int = 1
-const WIDTH_SCALE: int = 5
+const WIDTH_SCALE: int = 3
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -28,7 +28,7 @@ func set_nodes(in_node: TestNode, out_node: TestNode):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if (done):
+	if (done>.99):
 		update(_in_node.position, _out_node.position)
 	pass
 	
@@ -43,9 +43,7 @@ func update(start: Vector2, end: Vector2):
 	
 func pop_in(t:float):
 	update(_in_node.position, _in_node.position+ t*(_out_node.position-_in_node.position))
-	
-func popped_in():
-	done = true
+	done = t
 
 func get_start():
 	return _in_node
