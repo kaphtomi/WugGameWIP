@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://d131rr68ofj5a"]
+
+[node name="UsedWordsRows" type="VBoxContainer"]
+
+[node name="WordsYouMade" type="Label" parent="."]
+layout_mode = 2
+text = "Your words:"

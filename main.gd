@@ -44,6 +44,7 @@ func _ready():
 	$Wire7.set_nodes($TestNode6, $TestNode9)
 	$Wire8.set_nodes($TestNode8, $TestNode7)
 	pop_in()
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -68,5 +69,15 @@ func pop_in():
 		tween.tween_interval(.9+randf()*.3)
 		tween.tween_method(v.pop_in,0.0,1.0,.3)
 		tween.play()
+		
+		
+	const InputResonse = preload("res://used_words_rows.tscn")
+	 
+	onready var used_word_rows = $Control/UsedWordsList/UsedWordsRows/WordsYouMade
+	
+	func _on_Input_text_entered(new_text: String) -> void:
+		var input_response = InputResonse.instance()
+		used_word_rows.add_child(input_response)
+	
 		
 
