@@ -6,6 +6,7 @@ var done = 0.0
 var connecting_letters: Array[String] = []
 var thickness: float = 1
 const WIDTH_SCALE: int = 3
+const MAX_THICKNESS: int = 7
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -67,7 +68,7 @@ func decay(delta):
 		return true
 	
 func increment_thickness():
-	if thickness < 5:
+	if thickness < MAX_THICKNESS:
 		thickness += 1
 	pass
 	
