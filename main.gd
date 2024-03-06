@@ -8,6 +8,7 @@ var size : Vector2
 const ELECTRIC_CONSTANT : float = 3000000
 const SPRING_CONSTANT : float = .1
 const SPRING_LENGTH : float = 600
+var score : int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -71,6 +72,15 @@ func _process(delta):
 		for j in range(i,vertices.size()):
 			coolombs(vertices[i],vertices[j], delta)
 	for e in edges:
+		if (score>5&&e.decay(delta)):
+			var v1 = e.get_start()
+			var v2 = e.get_end()
+			var s = v2.position-v1.position
+			v1.force(-s.normalized()*100)
+			v2.force(s.normalized()*100)
+			edges.remove_at(edges.find(e))
+			e.queue_free()
+			break
 		hookes(e,delta)
 	for v in vertices:
 		border_force(v,delta)
@@ -130,6 +140,7 @@ func _on_text_field_text_submitted(_new_text):
 		update_wires[wire]=null
 	for w in update_wires.keys():
 		w.increment_thickness()
+	score += $Control/TextField.text.length()
 	$Control/Label.text = $Control/Label.text + $Control/TextField.text + "\n "
 	$Control/TextField.clear()	
 		
@@ -141,4 +152,6 @@ func get_wire(startNodeLetter: String, endNodeLetter: String):
 	return null
 	
 func nice_rand(i: float, n : float):
+	print("nice rand! :)")
 	return .15 + .4*(i/n) +.3*randf()
+	

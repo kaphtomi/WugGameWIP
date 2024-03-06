@@ -4,7 +4,7 @@ var _in_node: TestNode
 var _out_node: TestNode
 var done = 0.0
 var connecting_letters: Array[String] = []
-var thickness: int = 1
+var thickness: float = 1
 const WIDTH_SCALE: int = 3
 
 # Called when the node enters the scene tree for the first time.
@@ -33,7 +33,7 @@ func _process(_delta):
 	pass
 	
 func update(start: Vector2, end: Vector2):
-	$Stroke.width = thickness * WIDTH_SCALE  # Update stroke width based on thickness
+	$Stroke.width = clamp(thickness * WIDTH_SCALE, 1, 20)  # Update stroke width based on thickness
 	
 	var offset = 10*Vector2.from_angle(90+start.direction_to(end).angle())
 	$Stroke.set_point_position(0,start)
@@ -54,8 +54,17 @@ func get_end():
 func get_thickness():
 	return thickness
 	
-func set_thickness(width: int):
+func set_thickness(width: float):
 	thickness = width
+	
+func decay(delta):
+	if (thickness>.05):
+		thickness -= delta*.3*randf()
+		return false
+	else:
+		_out_node.remove_outgoing(self)
+		_in_node.remove_incoming(self)
+		return true
 	
 func increment_thickness():
 	if thickness < 5:

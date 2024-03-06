@@ -26,6 +26,12 @@ func add_outgoing(to):
 func add_incoming(from):
 	incoming_edges.append(from)
 	
+func remove_outgoing(to):
+	outgoing_edges.remove_at(outgoing_edges.find(to))
+
+func remove_incoming(from):
+	incoming_edges.remove_at(incoming_edges.find(from))
+	
 func change_text(text):
 	$Letter.text = text
 	letter = text
