@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0hw5ra8b0p6w"]
+
+[ext_resource type="Script" path="res://start_screen.gd" id="1_kvdat"]
+
+[node name="StartScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kvdat")
+
+[node name="StartButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.714
+anchor_bottom = 1.764
+offset_left = 358.0
+offset_top = 432.0
+offset_right = -1550.4
+offset_bottom = -806.6
+text = "START"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 204.0
+offset_right = 1151.0
+offset_bottom = 411.0
+theme_override_font_sizes/font_size = 100
+text = "SAVE THE WUG"
+
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
