@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://6ens0ei5438y"]
+
+[ext_resource type="Script" path="res://HUD.gd" id="1_o87na"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_o87na")
+
+[node name="Message" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "SAVE THE WUG"
+
+[node name="Button" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+text = "START"
