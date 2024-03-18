@@ -129,20 +129,19 @@ func pop_in_vertex(v, i:int):
 	tween.play()
 
 # Called when text is submitted in TextField
-func _on_text_field_text_submitted(_new_text):
-	var letterArray = $Control/TextField.text.split("", false, 0)
+func check_word(new_text):
+	var letterArray = new_text.split("", false, 0)
 	var update_wires : Dictionary
 	for i in (letterArray.size() - 1):
 		var wire = get_wire(letterArray[i], letterArray[i+1])
 		if wire == null:
-			$Control/TextField.clear()
-			return
+			return false
 		update_wires[wire]=null
 	for w in update_wires.keys():
 		w.increment_thickness()
-	score += $Control/TextField.text.length()
-	$Control/Label.text = $Control/Label.text + $Control/TextField.text + "\n "
-	$Control/TextField.clear()	
+	score += new_text.length()
+	return true
+
 		
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
 func get_wire(startNodeLetter: String, endNodeLetter: String):
