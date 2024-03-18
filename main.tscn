@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=8 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_qtvha"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://text_theme.tres" id="2_5wik3"]
 [ext_resource type="Script" path="res://LineEdit.gd" id="3_26tbt"]
 [ext_resource type="Shader" path="res://shader.gdshader" id="4_6bebc"]
+[ext_resource type="PackedScene" uid="uid://cfqeitjv2wgs7" path="res://testNode.tscn" id="5_u3mxg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t83po"]
 shader = ExtResource("4_6bebc")
@@ -49,5 +50,14 @@ theme = ExtResource("2_5wik3")
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/line_spacing = -20
 text = " "
+
+[node name="OriginNode1" parent="." instance=ExtResource("5_u3mxg")]
+position = Vector2(148, 741)
+
+[node name="OriginNode2" parent="." instance=ExtResource("5_u3mxg")]
+position = Vector2(204, 456)
+
+[node name="OriginNode3" parent="." instance=ExtResource("5_u3mxg")]
+position = Vector2(153, 181)
 
 [connection signal="text_submitted" from="Control/TextField" to="." method="_on_text_field_text_submitted"]

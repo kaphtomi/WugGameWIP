@@ -2,7 +2,7 @@ extends Node2D
 
 var shader_material : ShaderMaterial
 var alphabetter = "etaonshrdlcumwfgypbvkjxqz".split("", true, 0)
-var vertices : Array
+var vertices : Array = [$OriginNode1, $OriginNode2, $OriginNode3]
 var edges : Array
 var size : Vector2
 const ELECTRIC_CONSTANT : float = 3000000
