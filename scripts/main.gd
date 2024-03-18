@@ -15,10 +15,10 @@ func _ready():
 	size = get_viewport().content_scale_size - Vector2i(300,0)
 	var num_junctions : int = randi() % 3 + 10
 	var num_wires : int = randi() % 7 + 12
-	var junction_scene = preload("res://testNode.tscn")
-	var wire_scene = preload("res://wire.tscn")
+	var junction_scene = preload("res://scenes/testNode.tscn")
+	var wire_scene = preload("res://scenes/wire.tscn")
 	shader_material = ShaderMaterial.new()
-	shader_material.shader = load("res://shader.gdshader")
+	shader_material.shader = load("res://assets/shader.gdshader")
 	
 	#generates num_vertices
 	for i in num_junctions:
