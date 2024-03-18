@@ -15,7 +15,7 @@ func _ready():
 	size = get_viewport().content_scale_size - Vector2i(300,0)
 	var num_junctions : int = randi() % 3 + 10
 	var num_wires : int = randi() % 7 + 12
-	var junction_scene = preload("res://scenes/testNode.tscn")
+	var junction_scene = preload("res://scenes/junction.tscn")
 	var wire_scene = preload("res://scenes/wire.tscn")
 	shader_material = ShaderMaterial.new()
 	shader_material.shader = load("res://assets/shader.gdshader")
@@ -62,7 +62,7 @@ func _ready():
 	#creates the animation for each vertex (and after the animations for each
 	#vertex completes, it animates out its wires)
 	for i in num_junctions:
-		var vertex = junctions[num_vertices-1-i]
+		var vertex = junctions[num_junctions-1-i]
 		pop_in_vertex(vertex, i)
 
 #does electric force on each pair of junctions, then spring force

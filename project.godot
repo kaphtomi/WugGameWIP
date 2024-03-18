@@ -23,7 +23,7 @@ boot_splash/defaults/default_clear_color=Color(0.0666667, 0.0666667, 0.0666667, 
 
 [autoload]
 
-TestNode="*res://scripts/testNode.gd"
+Junction="*res://scripts/junction.gd"
 
 [display]
 
