@@ -1,18 +1,18 @@
 [gd_scene load_steps=7 format=3 uid="uid://b7kr8ic08u4od"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_qtvha"]
-[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="2_5wik3"]
-[ext_resource type="Script" path="res://scripts/LineEdit.gd" id="3_26tbt"]
-[ext_resource type="Shader" path="res://assets/shader.gdshader" id="4_6bebc"]
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_m6yrp"]
+[ext_resource type="Shader" path="res://assets/shader.gdshader" id="2_7ouyd"]
+[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="3_e7gwq"]
+[ext_resource type="Script" path="res://scripts/LineEdit.gd" id="4_2g4u5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t83po"]
-shader = ExtResource("4_6bebc")
+shader = ExtResource("2_7ouyd")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sm682"]
-shader = ExtResource("4_6bebc")
+shader = ExtResource("2_7ouyd")
 
-[node name="Main" type="Node2D"]
-script = ExtResource("1_qtvha")
+[node name="Game" type="Node2D"]
+script = ExtResource("1_m6yrp")
 
 [node name="Control" type="BoxContainer" parent="."]
 offset_left = 1285.0
@@ -28,7 +28,7 @@ material = SubResource("ShaderMaterial_t83po")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
-theme = ExtResource("2_5wik3")
+theme = ExtResource("3_e7gwq")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/caret_color = Color(0, 0, 0, 1)
 placeholder_text = "WORDSSSSSS"
@@ -39,13 +39,13 @@ selecting_enabled = false
 deselect_on_focus_loss_enabled = false
 drag_and_drop_selection_enabled = false
 caret_blink = true
-script = ExtResource("3_26tbt")
+script = ExtResource("4_2g4u5")
 
 [node name="Label" type="Label" parent="Control"]
 material = SubResource("ShaderMaterial_sm682")
 layout_mode = 2
 size_flags_vertical = 2
-theme = ExtResource("2_5wik3")
+theme = ExtResource("3_e7gwq")
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/line_spacing = -20
 text = " "
