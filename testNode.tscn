@@ -29,7 +29,7 @@ default_font = SubResource("FontVariation_yaqmt")
 default_font_size = 95
 Label/colors/font_color = Color(1, 1, 1, 1)
 
-[node name="TestNode" type="Area2D"]
+[node name="Junction" type="Area2D"]
 z_index = 1
 script = ExtResource("1_kut2j")
 metadata/_edit_group_ = true

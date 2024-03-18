@@ -2,8 +2,8 @@ extends Node2D
 
 var shader_material : ShaderMaterial
 var alphabetter = "etaonshrdlcumwfgypbvkjxqz".split("", true, 0)
-var vertices : Array
-var edges : Array
+var junctions : Array
+var wires : Array
 var size : Vector2
 const ELECTRIC_CONSTANT : float = 3000000
 const SPRING_CONSTANT : float = .1
@@ -13,82 +13,82 @@ var score : int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	size = get_viewport().content_scale_size - Vector2i(300,0)
-	var num_vertices : int = randi() % 3 + 10
-	var num_edges : int = randi() % 7 + 12
-	var vertex_scene = preload("res://testNode.tscn")
-	var edge_scene = preload("res://wire.tscn")
+	var num_junctions : int = randi() % 3 + 10
+	var num_wires : int = randi() % 7 + 12
+	var junction_scene = preload("res://testNode.tscn")
+	var wire_scene = preload("res://wire.tscn")
 	shader_material = ShaderMaterial.new()
 	shader_material.shader = load("res://shader.gdshader")
 	
 	#generates num_vertices
-	for i in num_vertices:
+	for i in num_junctions:
 		var letter = alphabetter[randi() % alphabetter.size()]
 		alphabetter.remove_at(alphabetter.find(letter))
-		var vertex = vertex_scene.instantiate()
+		var vertex = junction_scene.instantiate()
 		vertex.change_text(letter)
-		vertex.position = Vector2(size.x*nice_rand(i,num_vertices), size.y*nice_rand(i,num_vertices))
+		vertex.position = Vector2(size.x*nice_rand(i,num_junctions), size.y*nice_rand(i,num_junctions))
 		add_child(vertex)
-		vertices.append(vertex)
+		junctions.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
 	
 	#generates num_edges
-	for i in num_edges:
-		var fromIndex = randi() % vertices.size()
-		var toIndex = randi() % vertices.size()
+	for i in num_wires:
+		var fromIndex = randi() % junctions.size()
+		var toIndex = randi() % junctions.size()
 		while (fromIndex == toIndex):
-			toIndex = randi() % vertices.size()
+			toIndex = randi() % junctions.size()
 		if (fromIndex > toIndex):
 			var blah = toIndex
 			toIndex = fromIndex
 			fromIndex = blah
-		var from = vertices[fromIndex]
-		var to = vertices[toIndex]
-		if (!edges.is_empty()):
+		var from = junctions[fromIndex]
+		var to = junctions[toIndex]
+		if (!wires.is_empty()):
 			var continue_bool = false
-			for e in edges:
+			for e in wires:
 				if (e.get_start()==from&&e.get_end()==to):
 					continue_bool=true
 			if (continue_bool):
 				continue
-		var edge = edge_scene.instantiate()
+		var edge = wire_scene.instantiate()
 		to.add_incoming(edge)
 		from.add_outgoing(edge)
 		add_child(edge)
 		edge.set_nodes(from,to)
 		edge.pop_in(0)
-		edges.append(edge)
+		wires.append(edge)
 		edge.get_node("Stroke").set_material(shader_material)
 	
 	#creates the animation for each vertex (and after the animations for each
-	#vertex completes, it animates out its edges)
-	for i in num_vertices:
-		var vertex = vertices[num_vertices-1-i]
+	#vertex completes, it animates out its wires)
+	for i in num_junctions:
+		var vertex = junctions[num_vertices-1-i]
 		pop_in_vertex(vertex, i)
 
-#does electric force on each pair of vertices, then spring force
-#on each wire, then calculates the vertices movements
+#does electric force on each pair of junctions, then spring force
+#on each wire, then calculates the junctions movements
 func _process(delta):
-	for i in vertices.size():
-		for j in range(i,vertices.size()):
-			coolombs(vertices[i],vertices[j], delta)
-	for e in edges:
+	for i in junctions.size():
+		for j in range(i,junctions.size()):
+			coolombs(junctions[i],junctions[j], delta)
+	for e in wires:
 		if (score>5&&e.decay(delta)):
 			var v1 = e.get_start()
 			var v2 = e.get_end()
 			var s = v2.position-v1.position
 			v1.force(-s.normalized()*100)
 			v2.force(s.normalized()*100)
-			edges.remove_at(edges.find(e))
+			wires.remove_at(wires.find(e))
 			e.queue_free()
 			break
 		hookes(e,delta)
-	for v in vertices:
+	for v in junctions:
 		border_force(v,delta)
 		v.position = v.position + v.get_velocity()*delta
 		v.position = Vector2(clamp(v.position.x,0,size.x),clamp(v.position.y,0,size.y))
 	
 #electric force
-func coolombs(v1 : TestNode, v2 : TestNode, delta : float):
+func coolombs(v1 : Junction, v2 : Junction, delta : float):
 	var p1 : Vector2 = v1.position
 	var p2 : Vector2 = v2.position
 	var r : Vector2 = p2 - p1
@@ -109,7 +109,7 @@ func hookes(e, delta : float):
 	v2.force(f*delta)
 
 #border_force
-func border_force(v : TestNode, delta):
+func border_force(v : Junction, delta):
 	var p : Vector2 = v.position
 	var k = ELECTRIC_CONSTANT
 	v.force(Vector2(k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1)),k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))))
@@ -146,7 +146,7 @@ func _on_text_field_text_submitted(_new_text):
 		
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
 func get_wire(startNodeLetter: String, endNodeLetter: String):
-	for wire in edges:
+	for wire in wires:
 		if wire.check_connecting_letters(startNodeLetter, endNodeLetter):
 			return wire
 	return null
