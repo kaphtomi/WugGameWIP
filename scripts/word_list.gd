@@ -15,4 +15,4 @@ func _on_text_field_text_submitted(_new_text):
 	var letterArray = $WordList/TextField.text.split("", false, 0)
 	var update_wires : Dictionary
 	$WordList/Label.text = $WordList/Label.text + $WordList/TextField.text + "\n "
-	$WordList/TextField.clear()	
+	$WordList/TextField.clear()
