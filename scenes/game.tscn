@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_m6yrp"]
 [ext_resource type="Shader" path="res://assets/shader.gdshader" id="2_7ouyd"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="3_e7gwq"]
-[ext_resource type="Script" path="res://scripts/LineEdit.gd" id="4_2g4u5"]
+[ext_resource type="Script" path="res://scripts/line_edit.gd" id="4_2g4u5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t83po"]
 shader = ExtResource("2_7ouyd")
