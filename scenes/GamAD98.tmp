@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://dj4v5021f26wl"]
+
+[ext_resource type="Script" path="res://scripts/Game_Screen.gd" id="1_ypyvj"]
+[ext_resource type="Script" path="res://scripts/Circuit.gd" id="2_qiron"]
+[ext_resource type="Script" path="res://scripts/Line_Edit.gd" id="3_mc8g7"]
+
+[node name="GameScreen" type="HSplitContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ypyvj")
+
+[node name="Circuit" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_qiron")
+metadata/_edit_use_anchors_ = true
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Circuit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Blackboard" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+script = ExtResource("3_mc8g7")
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Blackboard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+border_color = Color(0, 0.588235, 0.756863, 1)
+
+[connection signal="word_submitted" from="Blackboard" to="." method="_on_blackboard_word_submitted"]

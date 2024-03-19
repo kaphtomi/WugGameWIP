@@ -1,7 +1,11 @@
+class_name StartScreen
 extends Control
 
+signal start
 
+func _ready():
+	pass
 
 func _on_start_button_pressed():
-	get_tree().change_scene_to_file("res://scenes/game.tscn")
+	start.emit()
 	pass # Replace with function body.
