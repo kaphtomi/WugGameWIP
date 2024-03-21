@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://dby7xi10qcr1u"]
+
+[ext_resource type="Script" path="res://scripts/timer.gd" id="1_wlg0q"]
+[ext_resource type="Texture2D" uid="uid://cbj6ejdkxw26b" path="res://assets/score_board.png" id="2_vya2q"]
+
+[node name="Timer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wlg0q")
+
+[node name="Board" type="Sprite2D" parent="."]
+position = Vector2(168, 140)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_vya2q")
+
+[node name="Timer" type="Timer" parent="Board"]
+
+[node name="TimeRemaining" type="Label" parent="Board"]
+offset_left = -328.0
+offset_top = -144.0
+offset_right = 304.0
+offset_bottom = 200.0
+text = "00: 00"
+
+[connection signal="timeout" from="Board/Timer" to="." method="_on_timer_timeout"]

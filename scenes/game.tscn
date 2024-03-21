@@ -1,9 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=4 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_m6yrp"]
 [ext_resource type="PackedScene" uid="uid://c2qupclfjgade" path="res://scenes/word_list.tscn" id="2_ukvss"]
+[ext_resource type="PackedScene" uid="uid://dby7xi10qcr1u" path="res://scenes/timer.tscn" id="3_ymlce"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_m6yrp")
 
 [node name="WordList" parent="." instance=ExtResource("2_ukvss")]
+
+[node name="Timer" parent="." instance=ExtResource("3_ymlce")]
