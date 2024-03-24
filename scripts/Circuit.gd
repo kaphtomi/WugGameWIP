@@ -1,6 +1,8 @@
 class_name Circuit
 extends Control
 
+signal decay_started
+
 const Junction = preload("res://scenes/Junction.tscn")
 const Wire = preload("res://scenes/Wire.tscn")
 var shader_material : ShaderMaterial = ShaderMaterial.new()

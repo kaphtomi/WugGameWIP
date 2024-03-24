@@ -10,7 +10,6 @@ func _ready():
 	
 	pass
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	
@@ -28,6 +27,8 @@ func _on_timer_timeout():
 	#$TimeRemaining.text = "%s" % $Timer.time_left
 	#$TimeRemaining.text = str(minutes)+ ": " + str(seconds)
 	pass # Replace with function body.
+
+
 
 func Reset_Timer():
 	seconds = Dseconds
