@@ -1,6 +1,6 @@
 extends Node
 
-const NewStartScreen = preload("res://scenes/StartScreen.tscn")
+const NewStartScreen = preload("res://scenes/start_screen.tscn")
 const NewGameScreen = preload("res://scenes/GameScreen.tscn")
 
 

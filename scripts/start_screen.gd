@@ -1,4 +1,4 @@
-class_name StartScreen
+#class_name StartScreen
 extends Control
 
 signal start

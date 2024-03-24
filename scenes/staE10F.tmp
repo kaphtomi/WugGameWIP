@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://b0hw5ra8b0p6w"]
 
-[ext_resource type="Script" path="res://scripts/Start_Screen.gd" id="1_wwo24"]
-[ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="2_wben2"]
-[ext_resource type="Texture2D" uid="uid://qhwu1r1ywfgy" path="res://assets/wugImageStart.png" id="3_w8w1t"]
-[ext_resource type="Texture2D" uid="uid://brl77y1xodabt" path="res://assets/outletImage.png" id="4_ktwqb"]
+[ext_resource type="Script" path="res://scripts/Start_Screen.gd" id="1_wkffx"]
+[ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="2_aue2l"]
+[ext_resource type="Texture2D" uid="uid://qhwu1r1ywfgy" path="res://assets/wugImageStart.png" id="3_25gwa"]
+[ext_resource type="Texture2D" uid="uid://brl77y1xodabt" path="res://assets/outletImage.png" id="4_hcecr"]
 
 [node name="StartScreen" type="Control"]
 layout_mode = 3
@@ -16,7 +16,7 @@ offset_right = 12.0
 offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_wwo24")
+script = ExtResource("1_wkffx")
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 1
@@ -35,17 +35,17 @@ offset_left = 260.0
 offset_top = 144.0
 offset_right = 1065.0
 offset_bottom = 351.0
-theme_override_fonts/font = ExtResource("2_wben2")
+theme_override_fonts/font = ExtResource("2_aue2l")
 theme_override_font_sizes/font_size = 100
 text = "SAVE THE WUG"
 
 [node name="Wug" type="Sprite2D" parent="."]
 position = Vector2(292, 584)
 scale = Vector2(0.502778, 0.511111)
-texture = ExtResource("3_w8w1t")
+texture = ExtResource("3_25gwa")
 
 [node name="Outlet" type="Sprite2D" parent="."]
 position = Vector2(1284, 512)
-texture = ExtResource("4_ktwqb")
+texture = ExtResource("4_hcecr")
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
