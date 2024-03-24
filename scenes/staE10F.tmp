@@ -1,11 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://b0hw5ra8b0p6w"]
+[gd_scene load_steps=5 format=3 uid="uid://b0hw5ra8b0p6w"]
 
 [ext_resource type="Script" path="res://scripts/Start_Screen.gd" id="1_wkffx"]
 [ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="2_aue2l"]
 [ext_resource type="Texture2D" uid="uid://qhwu1r1ywfgy" path="res://assets/wugImageStart.png" id="3_25gwa"]
 [ext_resource type="Texture2D" uid="uid://brl77y1xodabt" path="res://assets/outletImage.png" id="4_hcecr"]
-
-[sub_resource type="Theme" id="Theme_iewqq"]
 
 [node name="StartScreen" type="Control"]
 layout_mode = 3
@@ -25,14 +23,10 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.714
 anchor_bottom = 1.764
-offset_left = 610.0
-offset_top = 546.0
-offset_right = -1878.4
-offset_bottom = -903.6
-theme = SubResource("Theme_iewqq")
-theme_override_colors/font_color = Color(0.0705882, 0.694118, 0.996078, 1)
-theme_override_fonts/font = ExtResource("2_o5s7l")
-theme_override_font_sizes/font_size = 53
+offset_left = 484.0
+offset_top = 448.0
+offset_right = -1778.4
+offset_bottom = -915.6
 text = "START"
 
 [node name="Label" type="Label" parent="."]
