@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dj4v5021f26wl"]
+
+[ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
+[ext_resource type="PackedScene" uid="uid://rec4fik43muc" path="res://app/game_screen/blackboard/blackboard.tscn" id="3_pedhp"]
+[ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
+[ext_resource type="PackedScene" uid="uid://dby7xi10qcr1u" path="res://app/game_screen/timer/timer.tscn" id="4_84h7k"]
+
+[node name="GameScreen" type="HSplitContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_64wdv")
+
+[node name="Control" parent="." instance=ExtResource("3_pedhp")]
+layout_mode = 2
+
+[node name="Timer" parent="." instance=ExtResource("4_84h7k")]
+layout_mode = 2
+
+[node name="Circuit" parent="." instance=ExtResource("4_0o6or")]
+layout_mode = 2

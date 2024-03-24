@@ -1,4 +1,3 @@
-class_name GameScreen
 extends Control
 	
 func _ready():

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="WugGameWIP"
-run/main_scene="res://scenes/App.tscn"
+run/main_scene="res://app/app.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/bg_color=Color(0.0666667, 0.0666667, 0.0666667, 1)
 boot_splash/show_image=false
@@ -23,7 +23,12 @@ boot_splash/defaults/default_clear_color=Color(0.0666667, 0.0666667, 0.0666667, 
 
 [autoload]
 
-Junction="*res://scripts/Junction.gd"
+StartScreen="*res://app/start_screen/start_screen.tscn"
+Wire="*res://app/game_screen/circuit/wire.tscn"
+GameScreen="*res://app/game_screen/game_screen.tscn"
+Circuit="*res://app/game_screen/circuit/circuit.tscn"
+GlobalTimer="*res://app/game_screen/timer/timer.tscn"
+Junction="*res://app/game_screen/circuit/junction.tscn"
 
 [display]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b7kr8ic08u4od"]
 
-[ext_resource type="Script" path="res://scripts/Circuit.gd" id="1_tyd7i"]
+[ext_resource type="Script" path="res://app/game_screen/circuit/circuit.gd" id="1_tyd7i"]
 
 [node name="Circuit" type="Control"]
 layout_mode = 3

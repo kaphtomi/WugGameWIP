@@ -1,4 +1,3 @@
-#class_name StartScreen
 extends Control
 
 signal start
