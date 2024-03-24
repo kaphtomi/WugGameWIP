@@ -47,3 +47,5 @@ theme = ExtResource("2_xwml0")
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/line_spacing = -20
 text = " "
+
+[connection signal="text_submitted" from="TextField" to="." method="_on_text_field_text_submitted"]

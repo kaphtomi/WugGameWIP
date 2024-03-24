@@ -10,9 +10,9 @@ func _ready():
 func _process(delta):
 	pass
 
-# Called when text is submitted in TextField
+#Connected to a signal from the textfield. Runs when enter is pressed
 func _on_text_field_text_submitted(_new_text):
-	var letterArray = $WordList/TextField.text.split("", false, 0)
+	var letterArray = $TextField.text.split("", false, 0)
 	var update_wires : Dictionary
-	$WordList/Label.text = $WordList/Label.text + $WordList/TextField.text + "\n "
-	$WordList/TextField.clear()
+	$Label.text = $Label.text + $TextField.text + "\n "
+	$TextField.clear()
