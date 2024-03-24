@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dby7xi10qcr1u"]
+[gd_scene load_steps=3 format=3 uid="uid://dby7xi10qcr1u"]
 
 [ext_resource type="Script" path="res://scripts/timer.gd" id="1_wlg0q"]
 [ext_resource type="Texture2D" uid="uid://cbj6ejdkxw26b" path="res://assets/score_board.png" id="2_vya2q"]
-[ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="3_x7nuh"]
 
 [node name="Timer" type="Control"]
 layout_mode = 3
@@ -13,28 +12,14 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_wlg0q")
 
-[node name="Board" type="Sprite2D" parent="."]
-position = Vector2(168, 140)
-scale = Vector2(0.25, 0.25)
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(247, 148)
+scale = Vector2(0.298148, 0.277778)
 texture = ExtResource("2_vya2q")
 
-[node name="TimeRemaining" type="Label" parent="Board"]
-custom_minimum_size = Vector2(10, 10)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -983.0
-offset_top = -729.0
-offset_right = -97.0
-offset_bottom = -351.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("3_x7nuh")
-theme_override_font_sizes/font_size = 250
-text = "00: 00"
+[node name="Timer" type="Timer" parent="."]
 
-[node name="Timer" type="Timer" parent="Board"]
-
-[connection signal="timeout" from="Board/Timer" to="." method="_on_timer_timeout"]
+[node name="TimeRemaining" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
