@@ -39,7 +39,6 @@ func _ready():
 		add_child(vertex)
 		vertices.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
-		print(letter, vertex.position)
 	
 	#generates num_edges
 	for i in num_edges:
