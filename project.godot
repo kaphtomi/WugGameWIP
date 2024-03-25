@@ -21,11 +21,6 @@ boot_splash/use_filter=false
 config/icon="res://icon.svg"
 boot_splash/defaults/default_clear_color=Color(0.0666667, 0.0666667, 0.0666667, 1)
 
-[autoload]
-
-StartScreen="*res://app/start_screen/start_screen.tscn"
-GameScreen1="*res://app/game_screen/game_screen.tscn"
-
 [display]
 
 window/size/viewport_width=1600

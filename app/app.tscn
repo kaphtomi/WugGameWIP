@@ -1,12 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwdl768uo7clk"]
+[gd_scene load_steps=3 format=3 uid="uid://cwdl768uo7clk"]
 
 [ext_resource type="Script" path="res://app/app.gd" id="1_w0k6m"]
 [ext_resource type="PackedScene" uid="uid://b0hw5ra8b0p6w" path="res://app/start_screen/start_screen.tscn" id="2_kd2c7"]
-[ext_resource type="PackedScene" uid="uid://dj4v5021f26wl" path="res://app/game_screen/game_screen.tscn" id="2_l6n1t"]
 
 [node name="App" type="Node"]
 script = ExtResource("1_w0k6m")
 
 [node name="StartScreen" parent="." instance=ExtResource("2_kd2c7")]
-
-[node name="GameScreen" parent="." instance=ExtResource("2_l6n1t")]
