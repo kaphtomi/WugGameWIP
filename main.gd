@@ -2,7 +2,9 @@ extends Node2D
 
 var shader_material : ShaderMaterial
 var alphabetter = "etaonshrdlcumwfgypbvkjxqz".split("", true, 0)
-var vertices : Array = [$OriginNode1, $OriginNode2, $OriginNode3]
+var vertices : Array
+var start_nodes : Array
+var end_nodes : Array
 var edges : Array
 var size : Vector2
 const ELECTRIC_CONSTANT : float = 3000000
@@ -26,10 +28,18 @@ func _ready():
 		alphabetter.remove_at(alphabetter.find(letter))
 		var vertex = vertex_scene.instantiate()
 		vertex.change_text(letter)
-		vertex.position = Vector2(size.x*nice_rand(i,num_vertices), size.y*nice_rand(i,num_vertices))
+		if i < 3:
+			vertex.make_start_node()
+			vertex.position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
+		elif i > (num_vertices - 4):
+			vertex.make_end_node()
+			vertex.position = Vector2(size.x*0.9, size.y*(num_vertices-i-1)*0.35+(size.y*0.15))
+		else:
+			vertex.position = Vector2(size.x*nice_rand(i,num_vertices), size.y*nice_rand(i,num_vertices))
 		add_child(vertex)
 		vertices.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
+		print(letter, vertex.position)
 	
 	#generates num_edges
 	for i in num_edges:
@@ -131,7 +141,7 @@ func pop_in_vertex(v, i:int):
 # Called when text is submitted in TextField
 func _on_text_field_text_submitted(_new_text):
 	var letterArray = $Control/TextField.text.split("", false, 0)
-	var update_wires : Dictionary
+	var update_wires : Dictionary 
 	for i in (letterArray.size() - 1):
 		var wire = get_wire(letterArray[i], letterArray[i+1])
 		if wire == null:
@@ -152,6 +162,5 @@ func get_wire(startNodeLetter: String, endNodeLetter: String):
 	return null
 	
 func nice_rand(i: float, n : float):
-	print("nice rand! :)")
 	return .15 + .4*(i/n) +.3*randf()
 	
