@@ -25,7 +25,7 @@ func generate_junctions():
 	for i in num_junctions:
 		var letter = alphabetter[randi() % alphabetter.size()]
 		alphabetter.remove_at(alphabetter.find(letter))
-		var vertex = Junction.instantiate()
+		var vertex = Junction
 		vertex.change_text(letter)
 		vertex.position = Vector2(size.x * nice_rand(i,num_junctions), size.y * nice_rand(i,num_junctions))
 		add_child(vertex)
@@ -53,7 +53,7 @@ func generate_wires():
 					continue_bool=true
 			if (continue_bool):
 				continue
-		var edge = Wire.instantiate()
+		var edge = Wire.new()
 		to.add_incoming(edge)
 		from.add_outgoing(edge)
 		add_child(edge)

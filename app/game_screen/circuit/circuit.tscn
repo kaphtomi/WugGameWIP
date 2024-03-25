@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=3 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/circuit.gd" id="1_tyd7i"]
+[ext_resource type="PackedScene" uid="uid://c1ubg4xnqp7f7" path="res://app/game_screen/circuit/wire.tscn" id="2_0u3ig"]
 
 [node name="Circuit" type="Control"]
 layout_mode = 3
@@ -14,3 +15,5 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_tyd7i")
+
+[node name="Wire" parent="." instance=ExtResource("2_0u3ig")]
