@@ -1,17 +1,36 @@
 extends Area2D
-
+# Called when the node enters the scene tree for the first time.
 var outgoing_edges : Array
 var incoming_edges : Array
 var velocity : Vector2
 var size : Vector2
 var letter: String = ""
 
-# Called when the node enters the scene tree for the first time.
+var is_start_node = false
+var is_end_node = false
+var has_physics = true
+
 func _ready():
 	velocity = Vector2.ZERO
 
+func make_start_node():
+	is_start_node = true
+	has_physics = false
+	
+func make_end_node():
+	is_end_node = true
+	has_physics = false
+
+func is_a_start_node():
+	return is_start_node
+	
+func is_a_end_node():
+	return is_end_node
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	velocity *= exp(-_delta*2)
+	if has_physics:
+		velocity *= exp(-_delta*2)
 	
 func get_outgoing_edges():
 	return outgoing_edges
@@ -46,7 +65,8 @@ func pop_in_edge(e):
 	tween.play()
 	
 func force(amt : Vector2):
-	velocity += amt
+	if has_physics:
+		velocity += amt
 	
 func get_velocity():
 	return velocity
