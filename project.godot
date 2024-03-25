@@ -23,12 +23,10 @@ boot_splash/defaults/default_clear_color=Color(0.0666667, 0.0666667, 0.0666667, 
 
 [autoload]
 
-StartScreen="*res://app/start_screen/start_screen.tscn"
-Wire="*res://app/game_screen/circuit/wire.tscn"
-GameScreen="*res://app/game_screen/game_screen.tscn"
-Circuit="*res://app/game_screen/circuit/circuit.tscn"
-GlobalTimer="*res://app/game_screen/timer/timer.tscn"
 Junction="*res://app/game_screen/circuit/junction.tscn"
+StartScreen="*res://app/start_screen/start_screen.tscn"
+GameScreen="*res://app/game_screen/game_screen.tscn"
+Wire="*res://app/game_screen/circuit/wire.tscn"
 
 [display]
 

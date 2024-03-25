@@ -1,6 +1,6 @@
 extends AnimatableBody2D
 
-var _in_node: Junction	
+var _in_node: Junction
 var _out_node: Junction
 var done = 0.0
 var connecting_letters: Array[String] = []
