@@ -1,7 +1,8 @@
 extends Control
 
-const Junction = preload("res://app/game_screen/circuit/junction.tscn")
 const Wire = preload("res://app/game_screen/circuit/wire.tscn")
+const Junction = preload("res://app/game_screen/circuit/junction.tscn")
+
 var shader_material : ShaderMaterial = ShaderMaterial.new()
 var alphabetter = "etaonshrdlcumwfgypbvkjxqz".split("", true, 0)
 var junctions : Array
@@ -27,7 +28,14 @@ func generate_junctions():
 		alphabetter.remove_at(alphabetter.find(letter))
 		var vertex = Junction.instantiate()
 		vertex.change_text(letter)
-		vertex.position = Vector2(size.x * nice_rand(i,num_junctions), size.y * nice_rand(i,num_junctions))
+		if i < 3:
+			vertex.make_start_node()
+			vertex.position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
+		elif i > (num_junctions - 4):
+			vertex.make_end_node()
+			vertex.position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
+		else:
+			vertex.position = Vector2(size.x*nice_rand(i,num_junctions), size.y*nice_rand(i,num_junctions))
 		add_child(vertex)
 		junctions.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)

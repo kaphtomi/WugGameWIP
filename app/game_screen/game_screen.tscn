@@ -13,11 +13,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_64wdv")
 
-[node name="Control" parent="." instance=ExtResource("3_pedhp")]
-layout_mode = 2
-
 [node name="Timer" parent="." instance=ExtResource("4_84h7k")]
 layout_mode = 2
 
 [node name="Circuit" parent="." instance=ExtResource("4_0o6or")]
+layout_mode = 2
+
+[node name="Blackboard" parent="." instance=ExtResource("3_pedhp")]
 layout_mode = 2

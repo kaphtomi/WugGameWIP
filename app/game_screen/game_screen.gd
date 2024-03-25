@@ -5,6 +5,7 @@ func _ready():
 	
 func ready_circuit():
 	$Circuit.generate()
+	$Circuit.position = Vector2()
 
 func _on_blackboard_word_submitted(word : String):
 	if $Circuit.is_word_in_circuit(word):
