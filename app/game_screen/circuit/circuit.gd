@@ -40,6 +40,7 @@ func generate_junctions():
 		junctions.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
 
+
 		
 func generate_wires():
 	var num_wires : int = randi() % 7 + 12
@@ -159,3 +160,12 @@ func get_wire(startNodeLetter: String, endNodeLetter: String):
 	
 func nice_rand(i: float, n : float):
 	return .15 + .4*(i/n) +.3*randf()
+
+func _on_item_rect_changed():
+	var num_junctions = junctions.size()
+	for i in range(num_junctions):
+		if i < 3:
+			junctions[i].position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
+		elif i > (num_junctions - 4):
+			junctions[i].position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
+	pass # Replace with function body.
