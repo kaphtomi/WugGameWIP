@@ -1,7 +1,7 @@
 extends Control
 
-signal decay_started
-
+const Junction = preload("res://app/game_screen/circuit/junction.tscn")
+const Wire = preload("res://app/game_screen/circuit/wire.tscn")
 var shader_material : ShaderMaterial = ShaderMaterial.new()
 var alphabetter = "etaonshrdlcumwfgypbvkjxqz".split("", true, 0)
 var junctions : Array
@@ -151,4 +151,3 @@ func get_wire(startNodeLetter: String, endNodeLetter: String):
 	
 func nice_rand(i: float, n : float):
 	return .15 + .4*(i/n) +.3*randf()
-	
