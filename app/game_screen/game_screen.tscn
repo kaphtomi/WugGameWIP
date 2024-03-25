@@ -5,7 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
 [ext_resource type="PackedScene" uid="uid://dby7xi10qcr1u" path="res://app/game_screen/timer/timer.tscn" id="4_84h7k"]
 
-[node name="GameScreen" type="HSplitContainer"]
+[node name="GameScreen" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -14,10 +15,23 @@ grow_vertical = 2
 script = ExtResource("1_64wdv")
 
 [node name="Timer" parent="." instance=ExtResource("4_84h7k")]
+z_index = 2
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_bottom = 900.0
+
+[node name="CircuitAndBlackboard" type="HSplitContainer" parent="."]
+layout_mode = 2
+offset_left = 12.0
+offset_right = 1600.0
+offset_bottom = 900.0
+
+[node name="Circuit" parent="CircuitAndBlackboard" instance=ExtResource("4_0o6or")]
+z_as_relative = false
 layout_mode = 2
 
-[node name="Circuit" parent="." instance=ExtResource("4_0o6or")]
-layout_mode = 2
-
-[node name="Blackboard" parent="." instance=ExtResource("3_pedhp")]
+[node name="Blackboard" parent="CircuitAndBlackboard" instance=ExtResource("3_pedhp")]
+z_as_relative = false
 layout_mode = 2

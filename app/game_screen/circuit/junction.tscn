@@ -30,6 +30,7 @@ default_font_size = 95
 Label/colors/font_color = Color(1, 1, 1, 1)
 
 [node name="Junction" type="Area2D"]
+z_index = 1
 script = ExtResource("1_f0j0a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
