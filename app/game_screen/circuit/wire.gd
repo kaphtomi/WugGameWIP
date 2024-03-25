@@ -1,7 +1,7 @@
 extends AnimatableBody2D
 
-var _in_node: Junction
-var _out_node: Junction
+var _in_node
+var _out_node
 var done = 0.0
 var connecting_letters: Array[String] = []
 var thickness: float = 1
@@ -18,7 +18,7 @@ func _ready():
 	#var new_red := Color(1, 1 - (thickness*0.08), 1 - (thickness*0.08), 1)
 	#$Stroke.set_default_color(new_red)
 
-func set_nodes(in_node: Junction, out_node: Junction):
+func set_nodes(in_node, out_node):
 	_in_node = in_node
 	_out_node = out_node
 	var start = _in_node.position

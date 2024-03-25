@@ -88,7 +88,7 @@ func _process(delta):
 		v.position = Vector2(clamp(v.position.x,0,size.x),clamp(v.position.y,0,size.y))
 	
 #electric force
-func coolombs(v1 : Junction, v2 : Junction, delta : float):
+func coolombs(v1, v2, delta : float):
 	var p1 : Vector2 = v1.position
 	var p2 : Vector2 = v2.position
 	var r : Vector2 = p2 - p1
@@ -109,7 +109,7 @@ func hookes(e, delta : float):
 	v2.force(f*delta)
 
 #border_force
-func border_force(v : Junction, delta):
+func border_force(v, delta):
 	var p : Vector2 = v.position
 	var k = ELECTRIC_CONSTANT
 	v.force(Vector2(k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1)),k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))))
