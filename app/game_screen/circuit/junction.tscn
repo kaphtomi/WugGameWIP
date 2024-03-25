@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://bjks1kiocgde7"]
+[gd_scene load_steps=10 format=3 uid="uid://bjks1kiocgde7"]
 
+[ext_resource type="Script" path="res://app/game_screen/circuit/junction.gd" id="1_f0j0a"]
 [ext_resource type="Shader" path="res://assets/shader.gdshader" id="1_vdbjy"]
 [ext_resource type="Texture2D" uid="uid://doo6d5ytb3bpa" path="res://assets/SVG/Asset 1.svg" id="2_6f8t3"]
 [ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="3_e5nsi"]
@@ -28,7 +29,8 @@ default_font = SubResource("FontVariation_yaqmt")
 default_font_size = 95
 Label/colors/font_color = Color(1, 1, 1, 1)
 
-[node name="NewJunction" type="Area2D"]
+[node name="Junction" type="Area2D"]
+script = ExtResource("1_f0j0a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2jd3n")
