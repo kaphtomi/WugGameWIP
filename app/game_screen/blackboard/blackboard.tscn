@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://rec4fik43muc"]
+[gd_scene load_steps=3 format=3 uid="uid://rec4fik43muc"]
 
 [ext_resource type="Script" path="res://app/game_screen/blackboard/blackboard.gd" id="1_i6mxe"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="2_tx2cj"]
-[ext_resource type="Script" path="res://app/game_screen/blackboard/word_list.gd" id="3_w37uy"]
 
 [node name="Blackboard" type="VBoxContainer"]
 anchors_preset = 15
@@ -33,7 +32,6 @@ caret_blink = true
 [node name="WordList" type="ScrollContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
-script = ExtResource("3_w37uy")
 
 [node name="Label" type="Label" parent="WordList"]
 layout_mode = 2
