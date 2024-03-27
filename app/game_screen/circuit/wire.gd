@@ -16,8 +16,9 @@ func _ready():
 	
 	
 	# Attempting to vary color by thickness, but might not work bc of shader?
-	var new_red := Color(1, 1 - (thickness*0.08), 1 - (thickness*0.08), 1)
-	$Stroke.set_default_color(new_red)
+	#var new_red := Color(1, 1 - (thickness*0.08), 1 - (thickness*0.08), 1)
+	#$Stroke.set_default_color(new_red)
+	$Stroke.set_default_color(Color(randf(), randf(), randf()))
 
 func set_nodes(in_node, out_node):
 	_in_node = in_node
