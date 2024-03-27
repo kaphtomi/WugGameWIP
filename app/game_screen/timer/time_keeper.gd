@@ -11,18 +11,15 @@ const ONE_SECOND = 1
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	z_index = 0  #Makes the timer get drawn in the background
-	Reset_Timer()
-	$TimeKeeper.start(ONE_SECOND)
+	reset_timer()
+	$TimeRemaining.text = str(current_minutes)+ ":" + str(current_seconds)
+	$Timer.start(ONE_SECOND)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	
-	#$TimeRemaining.text = str(current_minutes)+ ": " + str(current_seconds)
-	#$TimeRemaining.text = "%s" % $Timer.time_left
-	#$TimeRemaining.text = String(minutes)+ ": " + String(seconds)
 	pass
 
-func Reset_Timer():
+func reset_timer():
 	current_seconds = MAX_SECONDS
 	current_minutes = MAX_MINUTES
 
@@ -34,7 +31,8 @@ func _on_time_keeper_timeout():
 			current_seconds = 60
 		else:
 			current_minutes = 0
-			current_seconds = 0
+			current_seconds = 1
 			time_up.emit()
+			$Timer.stop()
 	current_seconds -= ONE_SECOND
 	$TimeRemaining.text = str(current_minutes)+ ":" + str(current_seconds)

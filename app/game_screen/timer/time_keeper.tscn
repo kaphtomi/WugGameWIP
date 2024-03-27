@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://dby7xi10qcr1u"]
 
-[ext_resource type="Script" path="res://app/game_screen/timer/timer.gd" id="1_2au47"]
+[ext_resource type="Script" path="res://app/game_screen/timer/time_keeper.gd" id="1_2au47"]
 [ext_resource type="Texture2D" uid="uid://cbj6ejdkxw26b" path="res://assets/score_board.png" id="2_ookb5"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="3_6m10h"]
 
-[node name="Timer" type="CenterContainer"]
+[node name="TimeKeeper" type="CenterContainer"]
 offset_left = 800.0
 offset_top = 100.0
 offset_right = 800.0
@@ -17,7 +17,7 @@ script = ExtResource("1_2au47")
 scale = Vector2(0.298148, 0.277778)
 texture = ExtResource("2_ookb5")
 
-[node name="TimeKeeper" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="."]
 
 [node name="TimeRemaining" type="Label" parent="."]
 layout_mode = 2
@@ -26,4 +26,4 @@ theme_override_font_sizes/font_size = 70
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="timeout" from="TimeKeeper" to="." method="_on_time_keeper_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_time_keeper_timeout"]
