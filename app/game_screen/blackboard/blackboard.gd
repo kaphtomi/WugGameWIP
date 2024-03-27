@@ -18,22 +18,10 @@ func _on_text_submitted(_new_text : String):
 	
 func add_word(word : String):
 	word_array.append(word)
-	$WordList/Label.text = ""
 	word_array.reverse()
 	$WordList/Label.text = "\n".join(word_array)
 	word_array.reverse()
-
-func _on_word_array_changed():
-	render_words()
 	
 func _on_text_changed(_new_text : String):
 	text_field_changed.emit(_new_text)
 	# render_words() if we want to filter
-
-func render_words():
-	var list : ItemList = $WordList
-	list.clear() # we rerender the whole list so that later on we can 
-	# filter the list according to the current word being typed, or
-	# change its color to show potential collisions
-	for word : String in word_array:
-		list.add_item(word)
