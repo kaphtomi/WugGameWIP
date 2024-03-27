@@ -18,6 +18,7 @@ func _on_text_submitted(_new_text : String):
 	
 func add_word(word : String):
 	word_array.append(word)
+	$WordList.word_list_updated(word_array)
 	word_array_changed.emit()
 
 func _on_word_array_changed():
