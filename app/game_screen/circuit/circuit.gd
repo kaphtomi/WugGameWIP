@@ -93,7 +93,7 @@ func _process(delta):
 		hookes(e,delta)
 	for v in junctions:
 		border_force(v,delta)
-		v.position = v.position + v.get_velocity()*delta
+		v.position = v.position + v.get_velocity()*delta*randf_range(0.99, 1.01)
 		v.position = Vector2(clamp(v.position.x,0,size.x),clamp(v.position.y,0,size.y))
 	
 #electric force
