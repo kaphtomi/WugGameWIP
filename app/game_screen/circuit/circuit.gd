@@ -1,10 +1,8 @@
-class_name Circuit
 extends Control
 
-signal decay_started
+const Wire = preload("res://app/game_screen/circuit/wire.tscn")
+const Junction = preload("res://app/game_screen/circuit/junction.tscn")
 
-const Junction = preload("res://scenes/Junction.tscn")
-const Wire = preload("res://scenes/Wire.tscn")
 var shader_material : ShaderMaterial = ShaderMaterial.new()
 var alphabetter = "etaonshrdlcumwfgypbvkjxqz".split("", true, 0)
 var junctions : Array
@@ -30,10 +28,18 @@ func generate_junctions():
 		alphabetter.remove_at(alphabetter.find(letter))
 		var vertex = Junction.instantiate()
 		vertex.change_text(letter)
-		vertex.position = Vector2(size.x * nice_rand(i,num_junctions), size.y * nice_rand(i,num_junctions))
+		if i < 3:
+			vertex.make_start_node()
+			vertex.position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
+		elif i > (num_junctions - 4):
+			vertex.make_end_node()
+			vertex.position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
+		else:
+			vertex.position = Vector2(size.x*nice_rand(i,num_junctions), size.y*nice_rand(i,num_junctions))
 		add_child(vertex)
 		junctions.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
+
 
 		
 func generate_wires():
@@ -91,7 +97,7 @@ func _process(delta):
 		v.position = Vector2(clamp(v.position.x,0,size.x),clamp(v.position.y,0,size.y))
 	
 #electric force
-func coolombs(v1 : Junction, v2 : Junction, delta : float):
+func coolombs(v1, v2, delta : float):
 	var p1 : Vector2 = v1.position
 	var p2 : Vector2 = v2.position
 	var r : Vector2 = p2 - p1
@@ -112,7 +118,7 @@ func hookes(e, delta : float):
 	v2.force(f*delta)
 
 #border_force
-func border_force(v : Junction, delta):
+func border_force(v, delta):
 	var p : Vector2 = v.position
 	var k = ELECTRIC_CONSTANT
 	v.force(Vector2(k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1)),k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))))
@@ -154,4 +160,12 @@ func get_wire(startNodeLetter: String, endNodeLetter: String):
 	
 func nice_rand(i: float, n : float):
 	return .15 + .4*(i/n) +.3*randf()
-	
+
+func _on_item_rect_changed():
+	var num_junctions = junctions.size()
+	for i in range(num_junctions):
+		if i < 3:
+			junctions[i].position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
+		elif i > (num_junctions - 4):
+			junctions[i].position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
+	pass # Replace with function body.

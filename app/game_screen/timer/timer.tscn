@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dby7xi10qcr1u"]
 
-[ext_resource type="Script" path="res://scripts/timer.gd" id="1_wlg0q"]
-[ext_resource type="Texture2D" uid="uid://cbj6ejdkxw26b" path="res://assets/score_board.png" id="2_vya2q"]
+[ext_resource type="Script" path="res://app/game_screen/timer/timer.gd" id="1_2au47"]
+[ext_resource type="Texture2D" uid="uid://cbj6ejdkxw26b" path="res://assets/score_board.png" id="2_ookb5"]
 
 [node name="Timer" type="Control"]
 layout_mode = 3
@@ -10,12 +10,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_wlg0q")
+script = ExtResource("1_2au47")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(247, 148)
 scale = Vector2(0.298148, 0.277778)
-texture = ExtResource("2_vya2q")
+texture = ExtResource("2_ookb5")
 
 [node name="Timer" type="Timer" parent="."]
 

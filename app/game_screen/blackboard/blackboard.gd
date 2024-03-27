@@ -1,4 +1,3 @@
-class_name Blackboard
 extends VBoxContainer
 
 signal word_submitted

@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://b0hw5ra8b0p6w"]
 
-[ext_resource type="Script" path="res://scripts/start_screen.gd" id="1_kvdat"]
-[ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="2_o5s7l"]
-[ext_resource type="Texture2D" uid="uid://qhwu1r1ywfgy" path="res://assets/wugImageStart.png" id="3_0lam6"]
-[ext_resource type="Texture2D" uid="uid://brl77y1xodabt" path="res://assets/outletImage.png" id="4_hci8w"]
+[ext_resource type="Script" path="res://app/start_screen/start_screen.gd" id="1_pdbn0"]
+[ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="2_8kk7f"]
+[ext_resource type="Texture2D" uid="uid://qhwu1r1ywfgy" path="res://assets/wugImageStart.png" id="3_r7h8b"]
+[ext_resource type="Texture2D" uid="uid://brl77y1xodabt" path="res://assets/outletImage.png" id="4_w8vkn"]
 
 [sub_resource type="Theme" id="Theme_iewqq"]
 
@@ -18,7 +18,7 @@ offset_right = 12.0
 offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_kvdat")
+script = ExtResource("1_pdbn0")
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 1
@@ -31,7 +31,7 @@ offset_right = -1878.4
 offset_bottom = -903.6
 theme = SubResource("Theme_iewqq")
 theme_override_colors/font_color = Color(0.0705882, 0.694118, 0.996078, 1)
-theme_override_fonts/font = ExtResource("2_o5s7l")
+theme_override_fonts/font = ExtResource("2_8kk7f")
 theme_override_font_sizes/font_size = 53
 text = "START"
 
@@ -41,17 +41,17 @@ offset_left = 260.0
 offset_top = 144.0
 offset_right = 1065.0
 offset_bottom = 351.0
-theme_override_fonts/font = ExtResource("2_o5s7l")
+theme_override_fonts/font = ExtResource("2_8kk7f")
 theme_override_font_sizes/font_size = 100
 text = "SAVE THE WUG"
 
 [node name="Wug" type="Sprite2D" parent="."]
 position = Vector2(292, 584)
 scale = Vector2(0.502778, 0.511111)
-texture = ExtResource("3_0lam6")
+texture = ExtResource("3_r7h8b")
 
 [node name="Outlet" type="Sprite2D" parent="."]
 position = Vector2(1284, 512)
-texture = ExtResource("4_hci8w")
+texture = ExtResource("4_w8vkn")
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
