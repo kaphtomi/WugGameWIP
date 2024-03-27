@@ -6,9 +6,8 @@ var Dseconds = 30
 var Dminutes = 1
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	z_index = 0
 	Reset_Timer()
-	
-	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):

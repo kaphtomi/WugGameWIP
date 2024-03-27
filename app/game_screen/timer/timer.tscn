@@ -12,11 +12,11 @@ offset_bottom = 150.0
 use_top_left = true
 script = ExtResource("1_2au47")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="TimeBoard" type="Sprite2D" parent="."]
 scale = Vector2(0.298148, 0.277778)
 texture = ExtResource("2_ookb5")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="TimeKeeper" type="Timer" parent="."]
 
 [node name="TimeRemaining" type="Label" parent="."]
 layout_mode = 2
