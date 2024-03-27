@@ -14,9 +14,10 @@ func _ready():
 	thickness = randi() % 5 + 1 #Sets thickness to a random number between 1 and 5
 	$Stroke.width = thickness * WIDTH_SCALE
 	
+	
 	# Attempting to vary color by thickness, but might not work bc of shader?
-	#var new_red := Color(1, 1 - (thickness*0.08), 1 - (thickness*0.08), 1)
-	#$Stroke.set_default_color(new_red)
+	var new_red := Color(1, 1 - (thickness*0.08), 1 - (thickness*0.08), 1)
+	$Stroke.set_default_color(new_red)
 
 func set_nodes(in_node, out_node):
 	_in_node = in_node
@@ -60,7 +61,7 @@ func set_thickness(width: float):
 	
 func decay(delta):
 	if (thickness>.05):
-		thickness -= delta*.3*randf()
+		thickness -= delta*.1*randf()
 		return false
 	else:
 		_out_node.remove_outgoing(self)
