@@ -1,25 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://dby7xi10qcr1u"]
+[gd_scene load_steps=4 format=3 uid="uid://dby7xi10qcr1u"]
 
 [ext_resource type="Script" path="res://app/game_screen/timer/timer.gd" id="1_2au47"]
 [ext_resource type="Texture2D" uid="uid://cbj6ejdkxw26b" path="res://assets/score_board.png" id="2_ookb5"]
+[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="3_6m10h"]
 
-[node name="Timer" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Timer" type="CenterContainer"]
+offset_left = 800.0
+offset_top = 150.0
+offset_right = 800.0
+offset_bottom = 150.0
+use_top_left = true
 script = ExtResource("1_2au47")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(247, 148)
 scale = Vector2(0.298148, 0.277778)
 texture = ExtResource("2_ookb5")
 
 [node name="Timer" type="Timer" parent="."]
 
 [node name="TimeRemaining" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+layout_mode = 2
+theme = ExtResource("3_6m10h")
+theme_override_font_sizes/font_size = 70
+horizontal_alignment = 1
+vertical_alignment = 1
