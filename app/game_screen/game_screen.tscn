@@ -35,3 +35,5 @@ layout_mode = 2
 [node name="Blackboard" parent="CircuitAndBlackboard" instance=ExtResource("3_pedhp")]
 z_as_relative = false
 layout_mode = 2
+
+[connection signal="word_submitted" from="CircuitAndBlackboard/Blackboard" to="." method="_on_blackboard_word_submitted"]

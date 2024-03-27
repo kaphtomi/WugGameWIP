@@ -31,3 +31,5 @@ caret_blink = true
 
 [node name="WordList" type="ItemList" parent="."]
 layout_mode = 2
+
+[connection signal="text_submitted" from="TextField" to="." method="_on_text_submitted"]
