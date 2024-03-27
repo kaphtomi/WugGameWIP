@@ -23,7 +23,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 offset_bottom = 900.0
 
-[node name="CircuitAndBlackboard" type="HSplitContainer" parent="."]
+[node name="CircuitAndBlackboard" type="HBoxContainer" parent="."]
 layout_mode = 2
 offset_left = 12.0
 offset_right = 1600.0
@@ -35,6 +35,8 @@ layout_mode = 2
 
 [node name="Blackboard" parent="CircuitAndBlackboard" instance=ExtResource("3_pedhp")]
 z_as_relative = false
+custom_minimum_size = Vector2(400, 2.08165e-12)
 layout_mode = 2
+size_flags_horizontal = 1
 
 [connection signal="word_submitted" from="CircuitAndBlackboard/Blackboard" to="." method="_on_blackboard_word_submitted"]
