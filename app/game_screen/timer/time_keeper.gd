@@ -35,4 +35,8 @@ func _on_time_keeper_timeout():
 			time_up.emit()
 			$Timer.stop()
 	current_seconds -= ONE_SECOND
-	$TimeRemaining.text = str(current_minutes)+ ":" + str(current_seconds)
+	
+	if current_seconds < 10: #formats the seconds
+		$TimeRemaining.text = str(current_minutes)+ ":0" + str(current_seconds)
+	else:
+		$TimeRemaining.text = str(current_minutes)+ ":" + str(current_seconds)
