@@ -7,7 +7,7 @@ signal text_field_changed
 var word_array : Array
 
 func _ready():
-	pass
+	$TextField.grab_focus()
 
 func _on_text_submitted(_new_text : String):
 	$TextField.clear()
