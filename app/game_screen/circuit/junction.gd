@@ -27,6 +27,12 @@ func is_a_start_node():
 func is_a_end_node():
 	return is_end_node
 
+func has_incoming():
+	return incoming_edges.size() > 0
+
+func has_outgoing():
+	return incoming_edges.size() > 0
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if has_physics:
