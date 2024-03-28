@@ -18,32 +18,10 @@ func _on_text_submitted(_new_text : String):
 	
 func add_word(word : String):
 	word_array.append(word)
-	render_words()
+	word_array.reverse()
+	$WordList/Label.text = "\n".join(word_array)
+	word_array.reverse()
 	
 func _on_text_changed(_new_text : String):
 	text_field_changed.emit(_new_text)
-	render_words()
-
-func render_words():
-	var list : ItemList = $WordList
-	list.clear()
-	var filtered_array = word_array.filter(starts_with)
-	for i in filtered_array.size():
-		list.add_item(filtered_array[i])
-		
-func starts_with(word : String):
-	var input = $TextField.get_text()
-	if (input == ""):
-		return true
-	var word_array = word.split("")
-	var input_array = input.split("")
-	for i in min(word_array.size(),input_array.size()):
-		if (word_array[i] != input_array[i]):
-			return false
-	return true
-
-
-func _on_text_field_text_changed(new_text):
-	text_field_changed.emit(new_text)
-	render_words()
-	
+	# render_words() if we want to filter
