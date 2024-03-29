@@ -42,16 +42,19 @@ func generate_junctions():
 		junctions.append(vertex)
 		vertex.get_node("Letter").set_material(shader_material)
 
+# Gets a random index of a junction that is NOT a start or end junction
 func get_central_junction_index():
 	var num_central_wires = junctions.size() - NUM_START_JUNCTIONS - NUM_END_JUNCTIONS
 	return NUM_START_JUNCTIONS + randi() % num_central_wires
 
+# Gets a random index of a junction that IS a start or end junction
 func get_start_or_end_index():
 	if randf() < 0.5:
 		return randi() % NUM_START_JUNCTIONS
 	else:
 		return junctions.size() - (randi() % NUM_END_JUNCTIONS) - 1
 
+# Creates a new wire between two indices
 func new_wire(from_index: int, to_index: int):
 	if to_index < from_index:
 		var temp = to_index
@@ -67,11 +70,14 @@ func new_wire(from_index: int, to_index: int):
 	wire.pop_in(0)
 	wires.append(wire)
 
+# Creates minimum number of wires between the terminal and non-terminal junctions
 func create_terminal_wires(wire_graph):
 	var max_junction_index = junctions.size() - 1
+	# Helper variables for indexing
 	var x
 	var y
 	var z
+	# TODO: consolidate these for loops maybe?
 	for i in NUM_START_JUNCTIONS:
 		x = i
 		y = i + NUM_START_JUNCTIONS
@@ -79,6 +85,7 @@ func create_terminal_wires(wire_graph):
 		new_wire(x, y)
 		wire_graph[x][y] = true
 		wire_graph[y][x] = true
+		# Creates second wire 50% of the time
 		if randf() < 0.5:
 			new_wire(x, z)
 			wire_graph[x][z] = true
@@ -90,26 +97,33 @@ func create_terminal_wires(wire_graph):
 		new_wire(x, y)
 		wire_graph[x][y] = true
 		wire_graph[y][x] = true
+		# Creates second wire 50% of the time
 		if randf() < 0.5:
 			new_wire(z, y)
 			wire_graph[z][y] = true
 			wire_graph[y][z] = true
+	# Updates and returns the wire graph as safeguard against duplicates
 	return wire_graph
 
+# Generates the initial wires in the circuit
 func generate_wires():
+	# Creates pseudo-2D Array to ensure no duplicate wires
 	var wire_graph = []
 	for i in junctions.size():
 		var new_column = []
 		for j in junctions.size():
 			new_column.append(false)
 		wire_graph.append(new_column)
+	# Generate the terminal wires
 	wire_graph = create_terminal_wires(wire_graph)
 	var num_central_junctions = junctions.size() - (NUM_START_JUNCTIONS + NUM_END_JUNCTIONS)
 	var num_wires = num_central_junctions
+	# Generates N-1 wires between the central junctions for N central junctions
 	while num_wires > 0:
 		var x = get_central_junction_index()
 		var y = get_central_junction_index()
 		if x == y: continue
+		# Exclude duplicates
 		if wire_graph[x][y] or wire_graph[y][x]: continue
 		new_wire(x, y)
 		wire_graph[x][y] = true
