@@ -10,8 +10,8 @@ var wires : Array
 const ELECTRIC_CONSTANT : float = 3000000
 const SPRING_CONSTANT : float = .1
 const SPRING_LENGTH : float = 600
-const NUM_START_NODES = 3
-const NUM_END_NODES = 3
+const NUM_START_JUNCTIONS = 3
+const NUM_END_JUNCTIONS = 3
 var score : int = 0
 
 # Called when the node enters the scene tree for the first time.
@@ -24,16 +24,16 @@ func generate():
 	generate_animations()
 
 func generate_junctions():
-	var num_junctions : int = randi() % 3 + 7 + max(NUM_END_NODES, NUM_START_NODES)
+	var num_junctions : int = randi() % 3 + 7 + max(NUM_END_JUNCTIONS, NUM_START_JUNCTIONS)
 	for i in num_junctions:
 		var letter = alphabetter[randi() % alphabetter.size()]
 		alphabetter.remove_at(alphabetter.find(letter))
 		var vertex = Junction.instantiate()
 		vertex.change_text(letter)
-		if i < NUM_START_NODES:
+		if i < NUM_START_JUNCTIONS:
 			vertex.make_start_node()
 			vertex.position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
-		elif i > (num_junctions - 1 - NUM_END_NODES):
+		elif i > (num_junctions - 1 - NUM_END_JUNCTIONS):
 			vertex.make_end_node()
 			vertex.position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
 		else:
@@ -43,8 +43,14 @@ func generate_junctions():
 		vertex.get_node("Letter").set_material(shader_material)
 
 func get_central_junction_index():
-	var num_central_wires = junctions.size() - NUM_START_NODES - NUM_END_NODES
-	return NUM_START_NODES + randi() % num_central_wires
+	var num_central_wires = junctions.size() - NUM_START_JUNCTIONS - NUM_END_JUNCTIONS
+	return NUM_START_JUNCTIONS + randi() % num_central_wires
+
+func get_start_or_end_index():
+	if randf() < 0.5:
+		return randi() % NUM_START_JUNCTIONS
+	else:
+		return junctions.size() - (randi() % NUM_END_JUNCTIONS) - 1
 
 func new_wire(from_index: int, to_index: int):
 	if to_index < from_index:
@@ -61,23 +67,45 @@ func new_wire(from_index: int, to_index: int):
 	wire.pop_in(0)
 	wires.append(wire)
 
-func create_terminal_wires():
+func create_terminal_wires(wire_graph):
 	var max_junction_index = junctions.size() - 1
-	for i in NUM_START_NODES:
-		new_wire(i, i + NUM_START_NODES)
-	for i in NUM_END_NODES:
-		new_wire(max_junction_index - NUM_END_NODES - i, max_junction_index - i)
+	var x
+	var y
+	var z
+	for i in NUM_START_JUNCTIONS:
+		x = i
+		y = i + NUM_START_JUNCTIONS
+		z = y + 1
+		new_wire(x, y)
+		wire_graph[x][y] = true
+		wire_graph[y][x] = true
+		if randf() < 0.5:
+			new_wire(x, z)
+			wire_graph[x][z] = true
+			wire_graph[z][x] = true
+	for i in NUM_END_JUNCTIONS:
+		x = max_junction_index - NUM_END_JUNCTIONS - i
+		y = max_junction_index - i
+		z = x - 1
+		new_wire(x, y)
+		wire_graph[x][y] = true
+		wire_graph[y][x] = true
+		if randf() < 0.5:
+			new_wire(z, y)
+			wire_graph[z][y] = true
+			wire_graph[y][z] = true
+	return wire_graph
 
 func generate_wires():
-	create_terminal_wires()
 	var wire_graph = []
-	for i in junctions.size() - 1:
+	for i in junctions.size():
 		var new_column = []
-		for j in junctions.size() - 1:
+		for j in junctions.size():
 			new_column.append(false)
 		wire_graph.append(new_column)
-	var num_central_junctions = junctions.size() - (NUM_START_NODES + NUM_END_NODES)
-	var num_wires = int(num_central_junctions * randf_range(1.0, 1.5)) + 1
+	wire_graph = create_terminal_wires(wire_graph)
+	var num_central_junctions = junctions.size() - (NUM_START_JUNCTIONS + NUM_END_JUNCTIONS)
+	var num_wires = num_central_junctions
 	while num_wires > 0:
 		var x = get_central_junction_index()
 		var y = get_central_junction_index()
@@ -87,46 +115,6 @@ func generate_wires():
 		wire_graph[x][y] = true
 		wire_graph[y][x] = true
 		num_wires -= 1
-	
-	#create_terminal_wires()
-	#for i in num_central_junctions - 1:
-		#var current_junction = i + NUM_START_NODES
-		#var next_junction = NUM_START_NODES
-		#for j in num_central_junctions:
-			#if i == j: continue
-			#var test_junction = junctions[j + NUM_START_NODES]
-			#if test_junction.has_incoming() and test_junction.has_outgoing(): continue
-			#next_junction += j
-			#break
-		#new_wire(current_junction, next_junction)
-	
-	#var num_wires : int = randi() % 7 + 12
-	#for i in num_wires:
-		#var fromIndex = randi() % junctions.size()
-		#var toIndex = randi() % junctions.size()
-		#while (fromIndex == toIndex):
-			#toIndex = randi() % junctions.size()
-		#if (fromIndex > toIndex):
-			#var blah = toIndex
-			#toIndex = fromIndex
-			#fromIndex = blah
-		#var from = junctions[fromIndex]
-		#var to = junctions[toIndex]
-		#if (!wires.is_empty()):
-			#var continue_bool = false
-			#for e in wires:
-				#if (e.get_start()==from&&e.get_end()==to):
-					#continue_bool=true
-			#if (continue_bool):
-				#continue
-		#var edge = Wire.instantiate()
-		#to.add_incoming(edge)
-		#from.add_outgoing(edge)
-		#add_child(edge)
-		#edge.set_nodes(from,to)
-		#edge.pop_in(0)
-		#wires.append(edge)
-		#edge.get_node("Stroke").set_material(shader_material)
 
 func generate_animations():
 	for i in junctions.size():

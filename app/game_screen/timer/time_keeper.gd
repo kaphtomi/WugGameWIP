@@ -13,7 +13,6 @@ func _ready():
 	z_index = 0  #Makes the timer get drawn in the background
 	reset_timer()
 	$TimeRemaining.text = str(current_minutes)+ ":" + str(current_seconds)
-	$Timer.start(ONE_SECOND)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -40,3 +39,8 @@ func _on_time_keeper_timeout():
 		$TimeRemaining.text = str(current_minutes)+ ":0" + str(current_seconds)
 	else:
 		$TimeRemaining.text = str(current_minutes)+ ":" + str(current_seconds)
+
+
+func _on_blackboard_start_timer():
+	$Timer.start(ONE_SECOND)
+	pass # Replace with function body.
