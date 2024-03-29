@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dj4v5021f26wl"]
 
 [ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
-[ext_resource type="PackedScene" uid="uid://rec4fik43muc" path="res://app/game_screen/blackboard/blackboard_class_327.tscn" id="3_pedhp"]
+[ext_resource type="PackedScene" uid="uid://rec4fik43muc" path="res://app/game_screen/blackboard/blackboard.tscn" id="3_pedhp"]
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
 [ext_resource type="PackedScene" uid="uid://dby7xi10qcr1u" path="res://app/game_screen/timer/time_keeper.tscn" id="4_84h7k"]
 

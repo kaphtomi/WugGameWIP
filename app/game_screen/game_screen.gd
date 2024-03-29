@@ -10,3 +10,5 @@ func ready_circuit():
 func _on_blackboard_word_submitted(word : String):
 	if $CircuitAndBlackboard/Circuit.is_word_in_circuit(word):
 		$CircuitAndBlackboard/Blackboard.add_word(word)
+
+

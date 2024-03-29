@@ -10,6 +10,8 @@ const ELECTRIC_CONSTANT : float = 100000000
 const SPRING_CONSTANT : float = 1
 const SPRING_LENGTH : float = 800
 var score : int = 0
+var time: float = 0
+var counter: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,6 +26,8 @@ func generate_junctions(num_junctions : int):
 		pop_in_junction(junc,i)
 	
 func generate_junction(num_wires : int):
+	if (alphabetter.is_empty()):
+		return null
 	var letter = alphabetter[randi() % alphabetter.size()]
 	alphabetter.remove_at(alphabetter.find(letter))
 	var junc = Junction.instantiate()
@@ -51,6 +55,11 @@ func generate_wire(from, to):
 	wires.append(wire)
 	return wire
 
+#copy the set of junctions, to juncs then pop one at random, try to find a connection
+#that doesn't already have an edge, if there are no connections that don't have
+#edges then its removed from juncs so we loop, popping a different junc at 
+# random and loop and then finally if juncs ends up empty at the beginning 
+# then we know every wire already exists
 func generate_random_wire():
 	var juncs = junctions.duplicate()
 	var from
@@ -70,6 +79,14 @@ func generate_random_wire():
 	from.pop_in_wire(w)
 
 func _process(delta):
+	time += delta
+	if time > 3:
+		time = 0
+		counter += 1
+		add_to_graph(counter)
+		if counter >= 9:
+			counter = 0
+	
 	for i in junctions.size():
 		for j in range(i,junctions.size()):
 			coolombs(junctions[i],junctions[j], delta)
@@ -141,28 +158,9 @@ func is_word_in_circuit(word : String):
 			return false
 		update_wires[wire]=null
 	for w in update_wires.keys():
-		w.increment_thickness()
+		snap(w)
 	score += letters.size()
-	match letters.size():
-		4:
-			generate_random_wire()
-		5:
-			generate_random_wire()
-			generate_random_wire()
-		6:
-			var junc = generate_junction(1)
-			pop_in_junction(junc,0)
-		7:
-			var junc = generate_junction(2)
-			pop_in_junction(junc,0)
-		8:
-			var junc = generate_junction(2)
-			pop_in_junction(junc,0)
-			generate_random_wire()
-		9: 
-			var junc = generate_junction(3)
-			pop_in_junction(junc,0)
-			generate_random_wire()
+	add_to_graph(letters.size())
 	return true
 		
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
@@ -196,6 +194,7 @@ func pop_out_junction(junc):
 	tweenopac.play()
 	
 func snap(wire):
+	wire.snap()
 	var from = wire.get_start()
 	var to = wire.get_end()
 	var s = to.position-from.position
@@ -203,3 +202,26 @@ func snap(wire):
 	to.force(s.normalized()*100)
 	wires.remove_at(wires.find(wire))
 	wire.queue_free()
+
+func add_to_graph(amt):
+	match amt:
+		4:
+			generate_random_wire()
+		5:
+			generate_random_wire()
+			generate_random_wire()
+		6:
+			var junc = generate_junction(1)
+			pop_in_junction(junc,0)
+		7:
+			var junc = generate_junction(2)
+			pop_in_junction(junc,0)
+		8:
+			var junc = generate_junction(2)
+			pop_in_junction(junc,0)
+			generate_random_wire()
+		9: 
+			var junc = generate_junction(3)
+			pop_in_junction(junc,0)
+			generate_random_wire()
+	

@@ -60,8 +60,6 @@ func set_thickness(width: float):
 func decay(delta, score):
 	thickness -= delta*.05*randf()*sqrt(score)
 	if thickness< 0:
-		_from.remove_outgoing(self)
-		_to.remove_incoming(self)
 		return true
 	return false
 	
@@ -79,3 +77,7 @@ func check_connecting_letters(letter1: String, letter2: String):
 	if connecting_letters.has(letter1) && connecting_letters.has(letter2) && letter1!=letter2:
 		return true
 	return false
+
+func snap():
+	_from.remove_outgoing(self)
+	_to.remove_incoming(self)
