@@ -66,7 +66,7 @@ func generate_random_wire():
 	var to
 	while true:
 		if juncs.is_empty():
-			break
+			return
 		from = juncs.pop_at(randi() % juncs.size())
 		var juncs2 = juncs.duplicate()
 		var connections = from.get_connections()
@@ -80,9 +80,9 @@ func generate_random_wire():
 
 func _process(delta):
 	time += delta
-	if time > 3:
+	if time > (wires.size()+10)/10:
 		time = 0
-		counter += 1
+		counter += randi() % 3
 		add_to_graph(counter)
 		if counter >= 9:
 			counter = 0
@@ -92,9 +92,6 @@ func _process(delta):
 			coolombs(junctions[i],junctions[j], delta)
 			
 	for wire in wires:
-		if wire.decay(delta,score):
-			snap(wire)
-			break
 		hookes(wire,delta)
 	
 	var pop_outs = {}
@@ -159,8 +156,6 @@ func is_word_in_circuit(word : String):
 		update_wires[wire]=null
 	for w in update_wires.keys():
 		snap(w)
-	score += letters.size()
-	add_to_graph(letters.size())
 	return true
 		
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
@@ -220,7 +215,7 @@ func add_to_graph(amt):
 			var junc = generate_junction(2)
 			pop_in_junction(junc,0)
 			generate_random_wire()
-		9: 
+		9, 10, 11, 12, 13: 
 			var junc = generate_junction(3)
 			pop_in_junction(junc,0)
 			generate_random_wire()
