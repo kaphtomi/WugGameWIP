@@ -6,9 +6,9 @@ const Junction = preload("res://app/game_screen/circuit/junction.tscn")
 var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
 var junctions : Array
 var wires : Array
-const ELECTRIC_CONSTANT : float = 30000000
+const ELECTRIC_CONSTANT : float = 100000000
 const SPRING_CONSTANT : float = 1
-const SPRING_LENGTH : float = 600
+const SPRING_LENGTH : float = 800
 var score : int = 0
 
 # Called when the node enters the scene tree for the first time.
@@ -55,8 +55,9 @@ func generate_random_wire():
 	var juncs = junctions.duplicate()
 	var from
 	var to
-	var sent = true
-	while sent:
+	while true:
+		if juncs.is_empty():
+			break
 		from = juncs.pop_at(randi() % juncs.size())
 		var juncs2 = juncs.duplicate()
 		var connections = from.get_connections()
@@ -65,7 +66,6 @@ func generate_random_wire():
 		if !juncs2.is_empty():
 			to = juncs2.pop_at(randi() % juncs2.size())
 			break
-		
 	var w = generate_wire(from,to)
 	from.pop_in_wire(w)
 
@@ -74,17 +74,11 @@ func _process(delta):
 		for j in range(i,junctions.size()):
 			coolombs(junctions[i],junctions[j], delta)
 			
-	for e in wires:
-		if (score>5&&e.decay(delta,score)):
-			var v1 = e.get_start()
-			var v2 = e.get_end()
-			var s = v2.position-v1.position
-			v1.force(-s.normalized()*100)
-			v2.force(s.normalized()*100)
-			wires.remove_at(wires.find(e))
-			e.queue_free()
+	for wire in wires:
+		if wire.decay(delta,score):
+			snap(wire)
 			break
-		hookes(e,delta)
+		hookes(wire,delta)
 	
 	var pop_outs = {}
 	for junc in junctions:
@@ -107,16 +101,16 @@ func coolombs(v1, v2, delta : float):
 	v2.force(f*delta)
 
 #spring force
-func hookes(e, delta : float):
-	var v1 = e.get_start()
-	var v2 = e.get_end()
-	var p1 : Vector2 = v1.position
-	var p2 : Vector2 = v2.position
-	var d : Vector2 = p2 - p1
-	var s = d.length()-SPRING_LENGTH / sqrt(e.thickness) 
-	var f : Vector2 = -(SPRING_CONSTANT * e.thickness * e.thickness)* s * d.normalized() * sqrt(e.done)
-	v1.force(-f*delta)
-	v2.force(f*delta)
+func hookes(wire, delta : float):
+	var from = wire.get_start()
+	var to = wire.get_end()
+	var start : Vector2 = from.position
+	var end : Vector2 = to.position
+	var d : Vector2 = end - start
+	var s = max(d.length()-SPRING_LENGTH / sqrt(wire.thickness),0) 
+	var f : Vector2 = -(SPRING_CONSTANT * wire.thickness * wire.thickness)* s * d.normalized() * sqrt(wire.done)
+	from.force(-f*delta)
+	to.force(f*delta)
 
 #border_force
 func border_force(v, delta):
@@ -201,3 +195,11 @@ func pop_out_junction(junc):
 	tweensize.play()
 	tweenopac.play()
 	
+func snap(wire):
+	var from = wire.get_start()
+	var to = wire.get_end()
+	var s = to.position-from.position
+	from.force(-s.normalized()*100)
+	to.force(s.normalized()*100)
+	wires.remove_at(wires.find(wire))
+	wire.queue_free()

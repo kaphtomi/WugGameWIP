@@ -12,7 +12,7 @@ const MAX_THICKNESS: int = 7
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	thickness = randi() % 5 + 1
+	thickness = randi() % 4 + 4
 	color()
 
 func set_nodes(from, to):
