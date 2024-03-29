@@ -200,6 +200,8 @@ func is_word_in_circuit(word : String):
 	var update_wires : Dictionary = {}
 	for i in (letters.size()-1):
 		var wire = get_wire(letters[i], letters[i+1])
+		if (letters[i].contains(letters[i-1])):
+			return false
 		if wire == null:
 			return false
 		update_wires[wire]=null
