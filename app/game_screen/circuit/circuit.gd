@@ -12,6 +12,7 @@ const SPRING_LENGTH : float = 800
 var score : int = 0
 var time: float = 0
 var counter: int = 0
+var mouse_pos = Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -79,8 +80,10 @@ func generate_random_wire():
 	from.pop_in_wire(w)
 
 func _process(delta):
+	mouse_pos = lerp(mouse_pos,get_viewport().get_mouse_position()/Vector2(get_viewport().size),.1)
+	RenderingServer.global_shader_parameter_set("mouse_pos", mouse_pos)
 	time += delta
-	if time > (wires.size()+10)/10:
+	if time > (wires.size()+1)/2.0:
 		time = 0
 		counter += randi() % 3
 		add_to_graph(counter)
