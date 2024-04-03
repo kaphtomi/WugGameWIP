@@ -49,6 +49,7 @@ func generate_wires(from, num_wires : int):
 	
 
 func generate_wire(from, to):
+
 	var wire = Wire.instantiate()
 	wire.set_nodes(from, to)
 	wire.pop_in(0)

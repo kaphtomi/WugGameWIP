@@ -3,6 +3,7 @@ extends VBoxContainer
 signal word_submitted
 signal word_array_changed
 signal text_field_changed
+signal start_timer
 
 var word_array : Array
 
@@ -17,6 +18,7 @@ func _on_text_submitted(_new_text : String):
 	word_submitted.emit(_new_text)
 	
 func add_word(word : String):
+	if word_array.size() == 0: start_timer.emit()
 	word_array.append(word)
 	render_words()
 	
