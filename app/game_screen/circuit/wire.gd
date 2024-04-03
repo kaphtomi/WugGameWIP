@@ -1,7 +1,9 @@
 extends AnimatableBody2D
 
-var _in_node
-var _out_node
+var _from
+var _to
+var hue = randf()
+var sat = 1
 var done = 0.0
 var connecting_letters: Array[String] = []
 var thickness: float = 1
@@ -10,49 +12,44 @@ const MAX_THICKNESS: int = 7
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# Gives the Wire a random starting thickness
-	thickness = randi() % 5 + 1 #Sets thickness to a random number between 1 and 5
-	$Stroke.width = thickness * WIDTH_SCALE
-	
-	
-	# Attempting to vary color by thickness, but might not work bc of shader?
-	#var new_red := Color(1, 1 - (thickness*0.08), 1 - (thickness*0.08), 1)
-	#$Stroke.set_default_color(new_red)
-	$Stroke.set_default_color(Color(randf(), randf(), randf()))
+	thickness = randi() % 4 + 4
+	color()
 
-func set_nodes(in_node, out_node):
-	_in_node = in_node
-	_out_node = out_node
-	var start = _in_node.position
-	var end = _out_node.position
-	connecting_letters.append(in_node.letter)
-	connecting_letters.append(out_node.letter)
+func set_nodes(from, to):
+	_from = from
+	_to = to
+	var start = from.position
+	var end = to.position
+	from.add_outgoing(self)
+	to.add_incoming(self)
+	connecting_letters.append(_from.get_letter())
+	connecting_letters.append(_to.get_letter())
 	update(start,end)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	color()
 	if (done>.99):
-		update(_in_node.position, _out_node.position)
+		update(_from.position, _to.position)
 	pass
 	
 func update(start: Vector2, end: Vector2):
-	$Stroke.width = clamp(thickness * WIDTH_SCALE, 1, 20)  # Update stroke width based on thickness
-	
-	var offset = 10*Vector2.from_angle(90+start.direction_to(end).angle())
+	$Stroke.width = clamp(thickness * WIDTH_SCALE, 1, 20)
 	$Stroke.set_point_position(0,start)
 	$Stroke.set_point_position(1,end)
-	$Hitbox.polygon = PackedVector2Array([start+offset, end + offset, end -offset, start - offset])
 	
-	
+func color():
+	$Stroke.set_default_color(Color.from_ok_hsl(hue, sat, 1 - thickness*.07))
+
 func pop_in(t:float):
-	update(_in_node.position, _in_node.position+ t*(_out_node.position-_in_node.position))
+	update(_from.position, _from.position+ t*(_to.position-_from.position))
 	done = t
 
 func get_start():
-	return _in_node
+	return _from
 
 func get_end():
-	return _out_node
+	return _to
 	
 func get_thickness():
 	return thickness
@@ -60,14 +57,11 @@ func get_thickness():
 func set_thickness(width: float):
 	thickness = width
 	
-func decay(delta):
-	if (thickness>.05):
-		thickness -= delta*.1*randf()
-		return false
-	else:
-		_out_node.remove_outgoing(self)
-		_in_node.remove_incoming(self)
+func decay(delta, score):
+	thickness -= delta*.05*randf()*sqrt(score)
+	if thickness< 0:
 		return true
+	return false
 	
 func increment_thickness():
 	if thickness < MAX_THICKNESS:
@@ -79,8 +73,11 @@ func decrement_thickness():
 		thickness -= 1
 	pass
 
-# Doesn't take care of the duplicate letters edge case, but could add that
 func check_connecting_letters(letter1: String, letter2: String):
-	if connecting_letters.has(letter1) && connecting_letters.has(letter2):
+	if connecting_letters.has(letter1) && connecting_letters.has(letter2) && letter1!=letter2:
 		return true
 	return false
+
+func snap():
+	_from.remove_outgoing(self)
+	_to.remove_incoming(self)

@@ -4,28 +4,10 @@ var outgoing_edges : Array
 var incoming_edges : Array
 var velocity : Vector2
 var size : Vector2
-var letter: String = ""
-
-var is_start_node = false
-var is_end_node = false
-var has_physics = true
+var _letter: String = ""
 
 func _ready():
 	velocity = Vector2.ZERO
-
-func make_start_node():
-	is_start_node = true
-	has_physics = false
-	
-func make_end_node():
-	is_end_node = true
-	has_physics = false
-
-func is_a_start_node():
-	return is_start_node
-	
-func is_a_end_node():
-	return is_end_node
 
 func has_incoming():
 	return incoming_edges.size() > 0
@@ -35,14 +17,21 @@ func has_outgoing():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if has_physics:
-		velocity *= exp(-_delta*2)
+	velocity *= exp(-_delta*velocity.length_squared()*.001)
 	
 func get_outgoing_edges():
 	return outgoing_edges
 	
 func get_incoming_edges():
 	return incoming_edges
+	
+func get_connections():
+	var connections = {}
+	for w in outgoing_edges:
+		connections[w.get_end()]=true
+	for w in incoming_edges:
+		connections[w.get_start()]=true
+	return connections
 	
 func add_outgoing(to):
 	outgoing_edges.append(to)
@@ -56,23 +45,25 @@ func remove_outgoing(to):
 func remove_incoming(from):
 	incoming_edges.remove_at(incoming_edges.find(from))
 	
-func change_text(text):
-	$Letter.text = text
-	letter = text
-
-func pop_in_edges():
-	for e in outgoing_edges:
-		pop_in_edge(e)
+func set_letter(letter):
+	$Letter.text = letter
+	_letter = letter
 	
-func pop_in_edge(e):
-	e.pop_in(0)	
+func get_letter():
+	return _letter
+
+func pop_in_wires():
+	for e in outgoing_edges:
+		pop_in_wire(e)
+	
+func pop_in_wire(e):
+	e.pop_in(0)
 	var tween = create_tween()
 	tween.tween_method(e.pop_in,0.0,1.0,.3+.1*randf())
 	tween.play()
 	
 func force(amt : Vector2):
-	if has_physics:
-		velocity += amt
+	velocity += amt
 	
 func get_velocity():
 	return velocity

@@ -37,10 +37,10 @@ func starts_with(word : String):
 	var input = $TextField.get_text()
 	if (input == ""):
 		return true
-	var word_array = word.split("")
-	var input_array = input.split("")
-	for i in min(word_array.size(),input_array.size()):
-		if (word_array[i] != input_array[i]):
+	var word_chars = word.split("")
+	var input_chars = input.split("")
+	for i in min(word_chars.size(),input_chars.size()):
+		if (word_chars[i] != input_chars[i]):
 			return false
 	return true
 
