@@ -83,19 +83,17 @@ func generate_random_wire():
 func _process(delta):
 	mouse_pos = lerp(mouse_pos,get_viewport().get_mouse_position()/Vector2(get_viewport().size),.1)
 	RenderingServer.global_shader_parameter_set("mouse_pos", mouse_pos)
-	time += delta
-	if time > (wires.size()+1)/2.0:
-		time = 0
-		counter += randi() % 3
-		add_to_graph(counter)
-		if counter >= 9:
-			counter = 0
+	RenderingServer.global_shader_parameter_set("in_radius", 100.0)
+	RenderingServer.global_shader_parameter_set("out_radius", 200.0)
 	
 	for i in junctions.size():
 		for j in range(i,junctions.size()):
 			coolombs(junctions[i],junctions[j], delta)
 			
 	for wire in wires:
+		if (wire.decay(delta,score)):
+			snap(wire)
+			break
 		hookes(wire,delta)
 	
 	var pop_outs = {}
@@ -159,7 +157,9 @@ func is_word_in_circuit(word : String):
 			return false
 		update_wires[wire]=null
 	for w in update_wires.keys():
-		snap(w)
+		w.increment_thickness()
+	score += letters.size()
+	add_to_graph(letters.size())
 	return true
 		
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
