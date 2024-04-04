@@ -36,5 +36,6 @@ custom_minimum_size = Vector2(400, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 1
 
+[connection signal="circuit_broken" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_circuit_broken"]
 [connection signal="start_timer" from="CircuitAndBlackboard/Blackboard" to="TimeKeeper" method="_on_blackboard_start_timer"]
 [connection signal="word_submitted" from="CircuitAndBlackboard/Blackboard" to="." method="_on_blackboard_word_submitted"]

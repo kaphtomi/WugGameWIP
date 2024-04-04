@@ -95,7 +95,6 @@ func _process(delta):
 			
 	for wire in wires:
 		if (wire.decay(delta,score)):
-			print("about to snap wire")
 			snap(wire)
 			break
 		hookes(wire,delta)
@@ -201,7 +200,6 @@ func pop_out_junction(junc):
 	tweenopac.play()
 	
 func snap(wire):
-	print("snapping wire...")
 	wire.snap()
 	var from = wire.get_start()
 	var to = wire.get_end()
@@ -209,7 +207,6 @@ func snap(wire):
 	from.force(-s.normalized()*100)
 	to.force(s.normalized()*100)
 	wires.remove_at(wires.find(wire))
-	print("wires left: " + str(wires.size()))
 	wire.queue_free()
 
 func add_to_graph(amt):
