@@ -3,6 +3,9 @@ extends Control
 const Wire = preload("res://app/game_screen/circuit/wire.tscn")
 const Junction = preload("res://app/game_screen/circuit/junction.tscn")
 
+# Sent when there are not enough wires left to play the game
+signal circuit_broken
+
 var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
 var junctions : Array
 var wires : Array
@@ -17,7 +20,7 @@ var mouse_pos = Vector2.ZERO
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
-	
+
 func generate():
 	generate_junctions(randi() % 3 + 9)
 
@@ -92,6 +95,7 @@ func _process(delta):
 			
 	for wire in wires:
 		if (wire.decay(delta,score)):
+			print("about to snap wire")
 			snap(wire)
 			break
 		hookes(wire,delta)
@@ -106,6 +110,10 @@ func _process(delta):
 	
 	for junc in pop_outs.keys():
 		pop_out_junction(junc)
+		
+	#checks for end condition
+	if wires.size() < 2:
+		circuit_broken.emit()
 	
 #electric force
 func coolombs(v1, v2, delta : float):
@@ -193,6 +201,7 @@ func pop_out_junction(junc):
 	tweenopac.play()
 	
 func snap(wire):
+	print("snapping wire...")
 	wire.snap()
 	var from = wire.get_start()
 	var to = wire.get_end()
@@ -200,6 +209,7 @@ func snap(wire):
 	from.force(-s.normalized()*100)
 	to.force(s.normalized()*100)
 	wires.remove_at(wires.find(wire))
+	print("wires left: " + str(wires.size()))
 	wire.queue_free()
 
 func add_to_graph(amt):
