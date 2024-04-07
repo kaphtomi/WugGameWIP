@@ -33,6 +33,8 @@ func _on_circuit_circuit_broken():
 	fade = 1
 	var game_over_label = $Flow/Score
 	game_over_label.text = game_over_label.text + ", game over"
+	GlobalVariables.final_score = score
+	
 	
 
 

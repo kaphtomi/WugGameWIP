@@ -21,6 +21,10 @@ boot_splash/use_filter=false
 config/icon="res://icon.svg"
 boot_splash/defaults/default_clear_color=Color(0.0666667, 0.0666667, 0.0666667, 1)
 
+[autoload]
+
+GlobalVariables="*res://app/global_variables.gd"
+
 [display]
 
 window/size/viewport_width=1600
