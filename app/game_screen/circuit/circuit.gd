@@ -5,6 +5,7 @@ const Junction = preload("res://app/game_screen/circuit/junction.tscn")
 
 # Sent when there are not enough wires left to play the game
 signal circuit_broken
+var circuit_is_broken = false
 
 var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
 var junctions : Array
@@ -112,7 +113,8 @@ func _process(delta):
 			pop_outs[junc]=true
 	
 	for junc in pop_outs.keys():
-		pop_out_junction(junc)
+		if !circuit_is_broken:
+			pop_out_junction(junc)
 	if grabbed != null:
 		grabbed.position = lerp(grabbed.position,get_viewport().get_mouse_position(),.1)
 
@@ -227,6 +229,7 @@ func snap(wire):
 	wires.remove_at(wires.find(wire))
 	wire.queue_free()
 	if wires.is_empty():
+		circuit_is_broken = true
 		circuit_broken.emit()
 
 # ANIMATIONS

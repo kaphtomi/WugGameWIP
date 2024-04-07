@@ -31,9 +31,10 @@ func _on_blackboard_word_submitted(word : String):
 func _on_circuit_circuit_broken():
 	# replace with switching to a game over screen eventually
 	fade = 1
-	#var game_over_label = $Flow/Score
-	#game_over_label.text = game_over_label.text + ", game over"
+	var game_over_label = $Flow/Score
+	game_over_label.text = game_over_label.text + ", game over"
 	GlobalVariables.final_score = score
+	print("changing scene")
 	get_tree().change_scene_to_file("res://app/game_over_screen/game_over_screen.tscn")
 	
 	
