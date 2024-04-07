@@ -1,46 +1,50 @@
-[gd_scene load_steps=7 format=3 uid="uid://xkohs2it4yb7"]
+[gd_scene load_steps=6 format=3 uid="uid://xkohs2it4yb7"]
 
 [ext_resource type="Script" path="res://app/game_over_screen/game_over_screen.gd" id="1_ckdyu"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="2_stirv"]
 [ext_resource type="Texture2D" uid="uid://vlmdbotxd4ym" path="res://icon.svg" id="3_vsd8r"]
-[ext_resource type="Shader" path="res://assets/shader.gdshader" id="4_j2nqd"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="5_bjqul"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eu4vd"]
-shader = ExtResource("4_j2nqd")
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_745db"]
+blend_mode = 3
 
 [node name="GameOverScreen" type="Node2D"]
 script = ExtResource("1_ckdyu")
 
 [node name="Organizer" type="VBoxContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 359.0
+offset_bottom = 320.0
+size_flags_horizontal = 4
 
 [node name="GameOverLabel" type="Label" parent="Organizer"]
 layout_mode = 2
 theme = ExtResource("2_stirv")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
 text = "Game Over!"
 horizontal_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="Organizer"]
 layout_mode = 2
+theme = ExtResource("2_stirv")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
+text = "Score: "
+horizontal_alignment = 1
 
 [node name="RestartButton" type="TextureButton" parent="Organizer"]
 layout_mode = 2
+size_flags_horizontal = 4
 texture_normal = ExtResource("3_vsd8r")
 texture_pressed = ExtResource("3_vsd8r")
 texture_hover = ExtResource("3_vsd8r")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect2" type="TextureRect" parent="."]
 z_index = 2
-material = SubResource("ShaderMaterial_eu4vd")
+material = SubResource("CanvasItemMaterial_745db")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -2120.0
-offset_top = -1416.0
-offset_right = 2120.0
-offset_bottom = 1416.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

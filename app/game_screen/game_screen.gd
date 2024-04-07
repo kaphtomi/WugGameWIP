@@ -34,6 +34,7 @@ func _on_circuit_circuit_broken():
 	#var game_over_label = $Flow/Score
 	#game_over_label.text = game_over_label.text + ", game over"
 	GlobalVariables.final_score = score
+	get_tree().change_scene_to_file("res://app/game_over_screen/game_over_screen.tscn")
 	
 	
 
