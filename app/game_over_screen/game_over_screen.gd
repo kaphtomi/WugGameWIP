@@ -15,4 +15,4 @@ func _process(delta):
 
 
 func _on_restart_button_pressed():
-	pass # Replace with function body.
+	get_tree().change_scene_to_file("res://app/start_screen/start_screen.tscn")
