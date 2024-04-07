@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b0hw5ra8b0p6w"]
+[gd_scene load_steps=11 format=3 uid="uid://b0hw5ra8b0p6w"]
 
 [ext_resource type="Script" path="res://app/start_screen/start_screen.gd" id="1_pdbn0"]
 [ext_resource type="Texture2D" uid="uid://bh0lb86se2x5g" path="res://assets/wug title.png" id="2_6so2s"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bwbeqjno223jr" path="res://wug_scores_360.png" id="6_pk8i2"]
 [ext_resource type="Texture2D" uid="uid://bo7d4yssdtr5u" path="res://wug_settings_360.png" id="7_g6jsy"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="8_8e3qr"]
+[ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="8_dwjc1"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_87kwe"]
 
@@ -81,5 +82,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("8_8e3qr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(168, 652)
+scale = Vector2(0.753369, 0.717054)
+texture = ExtResource("8_dwjc1")
 
 [connection signal="pressed" from="StartButton" to="." method="_on_texture_button_pressed"]
