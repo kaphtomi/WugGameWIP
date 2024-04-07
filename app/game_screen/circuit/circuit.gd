@@ -32,7 +32,8 @@ func generate():
 func generate_junctions(num_junctions : int):
 	for i in num_junctions:
 		var junc = generate_junction(randi() % 2+1)
-		pop_in_junction(junc,i)
+		if junc!= null:
+			pop_in_junction(junc,i)
 	
 func generate_junction(num_wires : int):
 	if (alphabetter.is_empty()):
@@ -154,21 +155,26 @@ func add_to_graph(amt):
 			generate_random_wire()
 		6:
 			var junc = generate_junction(1)
-			pop_in_junction(junc,0)
+			if junc != null:
+				pop_in_junction(junc,0)
 		7:
 			var junc = generate_junction(2)
-			pop_in_junction(junc,0)
+			if junc != null:
+				pop_in_junction(junc,0)
 		8:
 			var junc = generate_junction(2)
-			pop_in_junction(junc,0)
+			if junc != null:
+				pop_in_junction(junc,0)
 			generate_random_wire()
 		9:
 			var junc = generate_junction(3)
-			pop_in_junction(junc,0)
+			if junc != null:
+				pop_in_junction(junc,0)
 			generate_random_wire()
 		10:
 			var junc = generate_junction(3)
-			pop_in_junction(junc,0)
+			if junc != null:
+				pop_in_junction(junc,0)
 			generate_random_wire()
 			generate_random_wire()
 
