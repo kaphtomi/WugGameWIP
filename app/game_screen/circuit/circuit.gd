@@ -115,7 +115,7 @@ func _process(delta):
 	for junc in pop_outs.keys():
 		if !circuit_is_broken:
 			pop_out_junction(junc)
-	if grabbed != null:
+	if grabbed != null && !circuit_is_broken:
 		grabbed.position = lerp(grabbed.position,get_viewport().get_mouse_position(),.1)
 
 #SCORING
@@ -228,7 +228,7 @@ func snap(wire):
 	to.force(s.normalized()*SPRING_SNAP)
 	wires.remove_at(wires.find(wire))
 	wire.queue_free()
-	if wires.is_empty():
+	if wires.size() < 2:
 		circuit_is_broken = true
 		circuit_broken.emit()
 
