@@ -5,6 +5,7 @@ var incoming_edges : Array
 var velocity : Vector2
 var size : Vector2
 var _letter: String = ""
+var popped_in = false
 
 func _ready():
 	velocity = Vector2.ZERO
@@ -53,6 +54,7 @@ func get_letter():
 	return _letter
 
 func pop_in_wires():
+	popped_in = true
 	for e in outgoing_edges:
 		pop_in_wire(e)
 	

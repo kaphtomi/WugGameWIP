@@ -1,13 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://b0hw5ra8b0p6w"]
+[gd_scene load_steps=10 format=3 uid="uid://b0hw5ra8b0p6w"]
 
 [ext_resource type="Script" path="res://app/start_screen/start_screen.gd" id="1_pdbn0"]
+[ext_resource type="Texture2D" uid="uid://bh0lb86se2x5g" path="res://assets/wug title.png" id="2_6so2s"]
 [ext_resource type="Texture2D" uid="uid://bsapxnqyp4hmv" path="res://wug_start_360.png" id="3_sm3k7"]
-[ext_resource type="Texture2D" uid="uid://0nod4nseva4o" path="res://wug_title.png" id="4_byjud"]
 [ext_resource type="Texture2D" uid="uid://b5igtrnnu1pbp" path="res://wug_snooze_360.png" id="5_vjobh"]
 [ext_resource type="Texture2D" uid="uid://bwbeqjno223jr" path="res://wug_scores_360.png" id="6_pk8i2"]
 [ext_resource type="Texture2D" uid="uid://bo7d4yssdtr5u" path="res://wug_settings_360.png" id="7_g6jsy"]
+[ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="8_8e3qr"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_87kwe"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_w5o8w"]
+blend_mode = 3
 
 [node name="StartScreen" type="Control"]
 layout_mode = 3
@@ -20,9 +24,18 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pdbn0")
 
-[node name="WugTitle" type="Sprite2D" parent="."]
-position = Vector2(1208, 116)
-texture = ExtResource("4_byjud")
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1100.0
+offset_top = 30.0
+offset_right = -27.0
+offset_bottom = 369.0
+grow_horizontal = 0
+texture = ExtResource("2_6so2s")
 
 [node name="StartButton" type="TextureButton" parent="."]
 layout_mode = 0
@@ -56,5 +69,17 @@ offset_top = 710.0
 offset_right = 1554.0
 offset_bottom = 765.0
 texture_normal = ExtResource("7_g6jsy")
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+z_index = 2
+material = SubResource("CanvasItemMaterial_w5o8w")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("8_8e3qr")
 
 [connection signal="pressed" from="StartButton" to="." method="_on_texture_button_pressed"]

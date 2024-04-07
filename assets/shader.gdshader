@@ -1,4 +1,5 @@
 shader_type canvas_item;
+render_mode blend_mul;
 global uniform vec2 mouse_pos;
 global uniform float out_radius;
 global uniform float in_radius;

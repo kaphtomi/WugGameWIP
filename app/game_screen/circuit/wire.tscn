@@ -1,16 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1ubg4xnqp7f7"]
+[gd_scene load_steps=2 format=3 uid="uid://c1ubg4xnqp7f7"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/wire.gd" id="1_q1emx"]
-[ext_resource type="Shader" path="res://assets/shader.gdshader" id="2_otiks"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_g3ge1"]
-shader = ExtResource("2_otiks")
 
 [node name="Wire" type="AnimatableBody2D"]
 script = ExtResource("1_q1emx")
 metadata/_edit_group_ = true
 
 [node name="Stroke" type="Line2D" parent="."]
-material = SubResource("ShaderMaterial_g3ge1")
 points = PackedVector2Array(0, 0, 0, 0)
 antialiased = true

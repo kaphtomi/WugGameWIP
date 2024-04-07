@@ -4,11 +4,23 @@ signal word_submitted
 signal word_array_changed
 signal text_field_changed
 signal start_timer
+var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
 
 var word_array : Array
 
 func _ready():
 	$TextField.grab_focus()
+	
+func _process(_delta):
+	#fuzz test
+	#var fuzz = ""
+	#for i in (randi() % 8)+2:
+		#fuzz = fuzz + alphabetter[randi() % alphabetter.size()]
+	#for word in word_array:
+		#if fuzz == word:
+			#return
+	#word_submitted.emit(fuzz)
+	pass
 
 func _on_text_submitted(_new_text : String):
 	$TextField.clear()

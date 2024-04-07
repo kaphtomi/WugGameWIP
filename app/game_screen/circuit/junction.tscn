@@ -1,21 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bjks1kiocgde7"]
+[gd_scene load_steps=7 format=3 uid="uid://bjks1kiocgde7"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/junction.gd" id="1_f0j0a"]
-[ext_resource type="Shader" path="res://assets/shader.gdshader" id="1_soy8p"]
 [ext_resource type="Texture2D" uid="uid://doo6d5ytb3bpa" path="res://assets/SVG/Asset 1.svg" id="2_6f8t3"]
 [ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="3_e5nsi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2jd3n"]
 radius = 192.26
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_glxlc"]
-shader = ExtResource("1_soy8p")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s4f7s"]
-shader = ExtResource("1_soy8p")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gccpy"]
-shader = ExtResource("1_soy8p")
 
 [sub_resource type="FontVariation" id="FontVariation_yaqmt"]
 base_font = ExtResource("3_e5nsi")
@@ -40,18 +30,15 @@ script = ExtResource("1_f0j0a")
 shape = SubResource("CircleShape2D_2jd3n")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_glxlc")
 scale = Vector2(0.32, 0.32)
 texture = ExtResource("2_6f8t3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.0666667, 0.0666667, 0.0666667, 1)
-material = SubResource("ShaderMaterial_s4f7s")
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_6f8t3")
 
 [node name="Letter" type="Label" parent="."]
-material = SubResource("ShaderMaterial_gccpy")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

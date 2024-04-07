@@ -12,15 +12,20 @@ var wires : Array
 const ELECTRIC_CONSTANT : float = 100000000
 const SPRING_CONSTANT : float = 1
 const SPRING_LENGTH : float = 800
+const SPRING_SNAP : float = 250
 var score : int = 0
 var time: float = 0
 var counter: int = 0
 var mouse_pos = Vector2.ZERO
+enum STATE {RELAX, ASLEEP, FOCUS, DREAM, STRESS, NIGHTMARE}
+var grabbed = null
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
 
+# GENERATION
 func generate():
 	generate_junctions(randi() % 3 + 9)
 
@@ -49,10 +54,8 @@ func generate_wires(from, num_wires : int):
 			return
 		var to = juncs.pop_at(randi() % juncs.size())
 		generate_wire(from, to)
-	
 
 func generate_wire(from, to):
-
 	var wire = Wire.instantiate()
 	wire.set_nodes(from, to)
 	wire.pop_in(0)
@@ -81,133 +84,66 @@ func generate_random_wire():
 			to = juncs2.pop_at(randi() % juncs2.size())
 			break
 	var w = generate_wire(from,to)
-	from.pop_in_wire(w)
+	if from.popped_in:
+		from.pop_in_wire(w)
+
 
 func _process(delta):
+	if Input.is_action_just_pressed("click"):
+		for junc in junctions:
+			if junc.position.distance_to(get_viewport().get_mouse_position())<80:
+				grabbed = junc
+				break
+	if Input.is_action_just_released("click"):
+		grabbed = null
 	mouse_pos = lerp(mouse_pos,get_viewport().get_mouse_position()/Vector2(get_viewport().size),.1)
 	RenderingServer.global_shader_parameter_set("mouse_pos", mouse_pos)
-	RenderingServer.global_shader_parameter_set("in_radius", 100.0)
-	RenderingServer.global_shader_parameter_set("out_radius", 200.0)
-	
-	for i in junctions.size():
-		for j in range(i,junctions.size()):
-			coolombs(junctions[i],junctions[j], delta)
-			
+	RenderingServer.global_shader_parameter_set("in_radius", 2000.0)
+	RenderingServer.global_shader_parameter_set("out_radius", 3000.0)
+	physics(delta)
 	for wire in wires:
 		if (wire.decay(delta,score)):
 			snap(wire)
 			break
-		hookes(wire,delta)
-	
 	var pop_outs = {}
 	for junc in junctions:
-		border_force(junc,delta)
-		junc.position = junc.position + junc.get_velocity()*delta
-		junc.position = Vector2(clamp(junc.position.x,0,size.x),clamp(junc.position.y,0,size.y))
 		if junc.get_connections().is_empty():
 			pop_outs[junc]=true
 	
 	for junc in pop_outs.keys():
 		pop_out_junction(junc)
-		
-	#checks for end condition
-	if wires.size() < 2:
-		circuit_broken.emit()
-	
-#electric force
-func coolombs(v1, v2, delta : float):
-	var p1 : Vector2 = v1.position
-	var p2 : Vector2 = v2.position
-	var r : Vector2 = p2 - p1
-	var f : Vector2 = ELECTRIC_CONSTANT / (r.length_squared()+1) * r.normalized()
-	v1.force(-f*delta)
-	v2.force(f*delta)
+	if grabbed != null:
+		grabbed.position = lerp(grabbed.position,get_viewport().get_mouse_position(),.1)
 
-#spring force
-func hookes(wire, delta : float):
-	var from = wire.get_start()
-	var to = wire.get_end()
-	var start : Vector2 = from.position
-	var end : Vector2 = to.position
-	var d : Vector2 = end - start
-	var s = max(d.length()-SPRING_LENGTH / sqrt(wire.thickness),0) 
-	var f : Vector2 = -(SPRING_CONSTANT * wire.thickness * wire.thickness)* s * d.normalized() * sqrt(wire.done)
-	from.force(-f*delta)
-	to.force(f*delta)
-
-#border_force
-func border_force(v, delta):
-	var p : Vector2 = v.position
-	var k = ELECTRIC_CONSTANT
-	v.force(Vector2(k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1)),k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))))
-
-func pop_in_junction(v, i:int):
-	v.scale = Vector2.ZERO
-	var tween = create_tween()
-	var wait = .15*i
-	var dur = .25
-	tween.tween_interval(wait)
-	tween.tween_property(v, "scale", (1+randf()*.3)*Vector2.ONE, dur)
-	tween.tween_property(v, "scale", Vector2.ONE, randf()*.1)
-	tween.tween_callback(v.pop_in_wires)
-	tween.play()
-
-# Called when text is submitted in TextField
+#SCORING
 func is_word_in_circuit(word : String):
 	var letters = word.split("", false, 0)
 	var update_wires : Dictionary = {}
 	for i in (letters.size()-1):
 		var wire = get_wire(letters[i], letters[i+1])
-		if (letters[i].contains(letters[i-1])):
-			return false
 		if wire == null:
 			return false
-		update_wires[wire]=null
+		update_wires[wire]=true
 	for w in update_wires.keys():
 		w.increment_thickness()
-	score += letters.size()
-	add_to_graph(letters.size())
 	return true
-		
-# Gets a wire based on its start and end letter (does not depend on direction, at the moment)
-func get_wire(startNodeLetter: String, endNodeLetter: String):
-	for wire in wires:
-		if wire.check_connecting_letters(startNodeLetter, endNodeLetter):
-			return wire
-	return null
 
-
-func _on_item_rect_changed():
-	var num_junctions = junctions.size()
-	for i in range(num_junctions):
-		if i < 3:
-			junctions[i].position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
-		elif i > (num_junctions - 4):
-			junctions[i].position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
-	pass # Replace with function body.
-	
-func pop_out_junction(junc):
-	junctions.erase(junc)
-	alphabetter.append(junc.get_letter())
-	junc.scale = Vector2.ONE
-	var tweensize = create_tween()
-	var tweenopac = create_tween()
-	var dur = .25
-	tweensize.tween_property(junc, "scale", Vector2.ONE*1.5, dur)
-	tweenopac.tween_property(junc, "modulate", Color(1,1,1,0), dur)
-	tweensize.tween_callback(junc.queue_free)
-	tweensize.play()
-	tweenopac.play()
-	
-func snap(wire):
-	wire.snap()
-	var from = wire.get_start()
-	var to = wire.get_end()
-	var s = to.position-from.position
-	from.force(-s.normalized()*100)
-	to.force(s.normalized()*100)
-	wires.remove_at(wires.find(wire))
-	wire.queue_free()
+func score_word(word : String):
+	var letters = word.split("", false, 0)
+	var update_wires : Dictionary = {}
+	for i in (letters.size()-1):
+		var wire = get_wire(letters[i], letters[i+1])
+		update_wires[wire]=true
+	var s = 0
+	for w in update_wires:
+		if w.score_wire():
+			s+=1
+		s+=2
+	score+=s
+	print(s)
+	if s>10:
+		s=10
+	add_to_graph(s)
 
 func add_to_graph(amt):
 	match amt:
@@ -226,8 +162,103 @@ func add_to_graph(amt):
 			var junc = generate_junction(2)
 			pop_in_junction(junc,0)
 			generate_random_wire()
-		9, 10, 11, 12, 13: 
+		9:
 			var junc = generate_junction(3)
 			pop_in_junction(junc,0)
 			generate_random_wire()
+		10:
+			var junc = generate_junction(3)
+			pop_in_junction(junc,0)
+			generate_random_wire()
+			generate_random_wire()
+
+# PHYSICS
+func physics(delta):
+	for i in junctions.size():
+		for j in range(i,junctions.size()):
+			coolombs(junctions[i],junctions[j], delta)
+	for wire in wires:
+		hookes(wire,delta)
+	for junc in junctions:
+		border_force(junc,delta)
+		junc.position = junc.position + junc.get_velocity()*delta
+		junc.position = Vector2(clamp(junc.position.x,.1*size.x,.9*size.x),clamp(junc.position.y,.1*size.y,.9*size.y))
 	
+#electric force
+func coolombs(v1, v2, delta : float):
+	var p1 : Vector2 = v1.position
+	var p2 : Vector2 = v2.position
+	var r : Vector2 = p2 - p1
+	var f : Vector2 = ELECTRIC_CONSTANT / (r.length_squared()+1) * r.normalized()
+	v1.force(-f*delta)
+	v2.force(f*delta)
+
+#border_force
+func border_force(v, delta):
+	var p : Vector2 = v.position
+	var k = ELECTRIC_CONSTANT
+	v.force(Vector2(k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1)),k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))))
+
+#spring force
+func hookes(wire, delta : float):
+	var from = wire.get_start()
+	var to = wire.get_end()
+	var start : Vector2 = from.position
+	var end : Vector2 = to.position
+	var d : Vector2 = end - start
+	var s = max(d.length()-SPRING_LENGTH / sqrt(wire.thickness),0) 
+	var f : Vector2 = -(SPRING_CONSTANT * wire.thickness * wire.thickness)* s * d.normalized() * sqrt(wire.done)
+	from.force(-f*delta)
+	to.force(f*delta)
+
+func snap(wire):
+	wire.snap()
+	var from = wire.get_start()
+	var to = wire.get_end()
+	var s = to.position-from.position
+	from.force(-s.normalized()*SPRING_SNAP)
+	to.force(s.normalized()*SPRING_SNAP)
+	wires.remove_at(wires.find(wire))
+	wire.queue_free()
+	if wires.is_empty():
+		circuit_broken.emit()
+
+# ANIMATIONS
+func pop_in_junction(v, i:int):
+	v.scale = Vector2.ZERO
+	var tween = create_tween()
+	var wait = .15*i
+	var dur = .25
+	tween.tween_interval(wait)
+	tween.tween_property(v, "scale", (1+randf()*.3)*Vector2.ONE, dur)
+	tween.tween_property(v, "scale", Vector2.ONE, randf()*.1)
+	tween.tween_callback(v.pop_in_wires)
+	tween.play()
+
+func pop_out_junction(junc):
+	junctions.erase(junc)
+	alphabetter.append(junc.get_letter())
+	junc.scale = Vector2.ONE
+	var tweensize = create_tween()
+	var tweenopac = create_tween()
+	var dur = .25
+	tweensize.tween_property(junc, "scale", Vector2.ONE*1.5, dur)
+	tweenopac.tween_property(junc, "modulate", Color(1,1,1,0), dur)
+	tweensize.tween_callback(junc.queue_free)
+	tweensize.play()
+	tweenopac.play()
+
+# Gets a wire based on its start and end letter (does not depend on direction, at the moment)
+func get_wire(startNodeLetter: String, endNodeLetter: String):
+	for wire in wires:
+		if wire.check_connecting_letters(startNodeLetter, endNodeLetter):
+			return wire
+	return null
+
+func _on_item_rect_changed():
+	var num_junctions = junctions.size()
+	for i in range(num_junctions):
+		if i < 3:
+			junctions[i].position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
+		elif i > (num_junctions - 4):
+			junctions[i].position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))

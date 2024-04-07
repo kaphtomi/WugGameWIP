@@ -9,6 +9,7 @@ var connecting_letters: Array[String] = []
 var thickness: float = 1
 const WIDTH_SCALE: int = 3
 const MAX_THICKNESS: int = 7
+var not_scored = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -34,12 +35,12 @@ func _process(_delta):
 	pass
 	
 func update(start: Vector2, end: Vector2):
-	$Stroke.width = clamp(thickness * WIDTH_SCALE, 1, 20)
+	$Stroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
 	$Stroke.set_point_position(0,start)
 	$Stroke.set_point_position(1,end)
 	
 func color():
-	$Stroke.set_default_color(Color.from_ok_hsl(hue, sat, 1 - thickness*.07))
+	$Stroke.set_default_color(Color.from_ok_hsl(hue, sat, .5 + thickness*.03))
 
 func pop_in(t:float):
 	update(_from.position, _from.position+ t*(_to.position-_from.position))
@@ -58,15 +59,19 @@ func set_thickness(width: float):
 	thickness = width
 	
 func decay(delta, score):
-	thickness -= delta*.05*randf()*sqrt(score)
+	var decrement = delta*.04*randf()*sqrt(score)
+	if not_scored:
+		decrement*=1.5
+	thickness -= decrement
 	if thickness< 0:
 		return true
 	return false
 	
 func increment_thickness():
-	if thickness < MAX_THICKNESS:
-		thickness += 1
-	pass
+	thickness +=1
+	if !not_scored:
+		thickness+=1
+	thickness = min(thickness,MAX_THICKNESS)
 	
 func decrement_thickness():
 	if thickness > 1:
@@ -81,3 +86,8 @@ func check_connecting_letters(letter1: String, letter2: String):
 func snap():
 	_from.remove_outgoing(self)
 	_to.remove_incoming(self)
+
+func score_wire():
+	var s = not_scored
+	not_scored = false
+	return s
