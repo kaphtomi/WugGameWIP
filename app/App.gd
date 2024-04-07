@@ -8,6 +8,7 @@ func _ready():
 
 func _on_start():
 	for child in get_children():
-		child.queue_free()
+		if child != GlobalVariables:
+			child.queue_free()
 	#var game_screen = GameScreen.instantiate()
 	#add_child(game_screen)
