@@ -13,8 +13,8 @@ func _ready():
 	
 func _process(_delta):
 	#fuzz test
-	for i in 8:
-		fuzz()
+	#for i in 8:
+		#fuzz()
 	pass
 
 func fuzz():
