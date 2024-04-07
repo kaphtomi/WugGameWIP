@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://app/start_screen/start_screen.gd" id="1_pdbn0"]
 [ext_resource type="Texture2D" uid="uid://bh0lb86se2x5g" path="res://assets/wug title.png" id="2_6so2s"]
-[ext_resource type="Texture2D" uid="uid://bsapxnqyp4hmv" path="res://wug_start_360.png" id="3_sm3k7"]
-[ext_resource type="Texture2D" uid="uid://b5igtrnnu1pbp" path="res://wug_snooze_360.png" id="5_vjobh"]
-[ext_resource type="Texture2D" uid="uid://bwbeqjno223jr" path="res://wug_scores_360.png" id="6_pk8i2"]
-[ext_resource type="Texture2D" uid="uid://bo7d4yssdtr5u" path="res://wug_settings_360.png" id="7_g6jsy"]
+[ext_resource type="Texture2D" uid="uid://bjivtnyhm0fe3" path="res://wug_start_360.png" id="3_sm3k7"]
+[ext_resource type="Texture2D" uid="uid://dtp7jkrjexpl" path="res://wug_snooze_360.png" id="5_vjobh"]
+[ext_resource type="Texture2D" uid="uid://ckk5q0g02r40k" path="res://wug_scores_360.png" id="6_pk8i2"]
+[ext_resource type="Texture2D" uid="uid://ckpapo8q7rwkp" path="res://wug_settings_360.png" id="7_g6jsy"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="8_8e3qr"]
 [ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="8_dwjc1"]
 
