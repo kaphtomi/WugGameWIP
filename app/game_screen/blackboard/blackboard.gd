@@ -13,14 +13,18 @@ func _ready():
 	
 func _process(_delta):
 	#fuzz test
-	#var fuzz = ""
-	#for i in (randi() % 8)+2:
-		#fuzz = fuzz + alphabetter[randi() % alphabetter.size()]
-	#for word in word_array:
-		#if fuzz == word:
-			#return
-	#word_submitted.emit(fuzz)
+	#for i in 8:
+	#	fuzz()
 	pass
+
+func fuzz():
+	var fuzzy = ""
+	for i in (randi() % 8)+2:
+		fuzzy = fuzzy + alphabetter[randi() % alphabetter.size()]
+	for word in word_array:
+		if fuzzy == word:
+			return
+	word_submitted.emit(fuzzy)
 
 func _on_text_submitted(_new_text : String):
 	$TextField.clear()
