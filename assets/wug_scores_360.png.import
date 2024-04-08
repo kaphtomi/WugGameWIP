@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtp7jkrjexpl"
-path="res://.godot/imported/wug_snooze_360.png-1d5f0e8e33017be83487985f0f754c9d.ctex"
+uid="uid://ckk5q0g02r40k"
+path="res://.godot/imported/wug_scores_360.png-5a93ac5a92d4f21ae20b06d04b910789.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://wug_snooze_360.png"
-dest_files=["res://.godot/imported/wug_snooze_360.png-1d5f0e8e33017be83487985f0f754c9d.ctex"]
+source_file="res://assets/wug_scores_360.png"
+dest_files=["res://.godot/imported/wug_scores_360.png-5a93ac5a92d4f21ae20b06d04b910789.ctex"]
 
 [params]
 

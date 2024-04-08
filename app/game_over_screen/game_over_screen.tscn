@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://app/game_over_screen/game_over_screen.gd" id="1_ckdyu"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="2_stirv"]
-[ext_resource type="Texture2D" uid="uid://vlmdbotxd4ym" path="res://icon.svg" id="3_vsd8r"]
+[ext_resource type="Texture2D" uid="uid://vlmdbotxd4ym" path="res://assets/icon.svg" id="3_vsd8r"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="5_bjqul"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_745db"]

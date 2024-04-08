@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckpapo8q7rwkp"
-path="res://.godot/imported/wug_settings_360.png-8e24b71c8061c3899f519c2a12f032d0.ctex"
+uid="uid://bjivtnyhm0fe3"
+path="res://.godot/imported/wug_start_360.png-d2eae456ce2c399bd48e5bdaa912f98b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://wug_settings_360.png"
-dest_files=["res://.godot/imported/wug_settings_360.png-8e24b71c8061c3899f519c2a12f032d0.ctex"]
+source_file="res://assets/wug_start_360.png"
+dest_files=["res://.godot/imported/wug_start_360.png-d2eae456ce2c399bd48e5bdaa912f98b.ctex"]
 
 [params]
 
