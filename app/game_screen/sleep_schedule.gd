@@ -34,7 +34,6 @@ func change_states():
 	else:
 		current_state = "Awake"
 	$TestLabel.text = "Current Mode: " + current_state
-	print("state change: ", current_state, ", ", schedule[current_state])
 
 func update_state_periods(old_state):
 	if old_state == "Sleeping":

@@ -1,8 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://dj4v5021f26wl"]
+[gd_scene load_steps=12 format=3 uid="uid://dj4v5021f26wl"]
 
 [ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
-[ext_resource type="PackedScene" uid="uid://dby7xi10qcr1u" path="res://app/game_screen/timer/time_keeper.tscn" id="4_84h7k"]
 [ext_resource type="PackedScene" uid="uid://rec4fik43muc" path="res://app/game_screen/blackboard/blackboard.tscn" id="5_54kgm"]
 [ext_resource type="Shader" path="res://assets/shader.gdshader" id="5_fgtqu"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="6_sk6v4"]
@@ -44,12 +43,6 @@ text = "Start"
 
 [node name="SleepTimer" type="Timer" parent="SleepSchedule"]
 one_shot = true
-
-[node name="TimeKeeper" parent="." instance=ExtResource("4_84h7k")]
-visible = false
-z_index = 2
-layout_mode = 2
-offset_bottom = 900.0
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
