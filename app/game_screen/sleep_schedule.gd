@@ -3,7 +3,7 @@ extends Node
 const STARTING_AWAKE_PERIOD = 90  #The initial "normal mode" time in seconds
 const STARTING_SLEEPING_PERIOD = 10  #The initial "hard mode" time in seconds
 const STARTING_CALM_PERIOD = 30  #The initial "easy mode" time in seconds
-const STATE_CHANGE_DELTA = 5 #
+const STATE_CHANGE_DELTA = 5 #Increments the states period by 5 seconds
 
 var current_state
 var schedule = {
@@ -21,7 +21,7 @@ func _ready():
 
 func _on_sleep_timer_timeout():
 	change_states()
-	$Timer.start(schedule[current_state])
+	$SleepTimer.start(schedule[current_state])
 
 
 func change_states():
@@ -34,10 +34,10 @@ func change_states():
 	else:
 		current_state = "Awake"
 	$TestLabel.text = "Current Mode: " + current_state
+	print("state change: ", current_state, ", ", schedule[current_state])
 
 func update_state_periods(old_state):
 	if old_state == "Sleeping":
-		schedule[old_state] = schedule[old_state] + STATE_CHANGE_DELTA
-	
-	if schedule[old_state] > STATE_CHANGE_DELTA:
-		schedule[old_state] = schedule[old_state] - STATE_CHANGE_DELTA
+		schedule[old_state] += STATE_CHANGE_DELTA
+	elif schedule[old_state] > STATE_CHANGE_DELTA:
+		schedule[old_state] -= STATE_CHANGE_DELTA
