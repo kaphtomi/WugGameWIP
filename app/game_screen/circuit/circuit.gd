@@ -228,7 +228,6 @@ func snap(wire):
 	wires.remove_at(wires.find(wire))
 	wire.queue_free()
 	if wires.is_empty():
-		circuit_is_broken = true
 		circuit_broken.emit()
 
 # ANIMATIONS
