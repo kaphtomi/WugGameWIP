@@ -227,7 +227,7 @@ func snap(wire):
 	to.force(s.normalized()*SPRING_SNAP)
 	wires.remove_at(wires.find(wire))
 	wire.queue_free()
-	if wires.is_empty():
+	if wires.size() < 2: # Ends the game when there is one wire left
 		circuit_broken.emit()
 
 # ANIMATIONS
