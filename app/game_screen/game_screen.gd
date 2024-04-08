@@ -11,7 +11,7 @@ func _process(delta):
 	var cur_score_init = cur_score
 	cur_score = lerp(float(cur_score),float(score),delta*2)
 	fade = fade-delta
-	if fade<0:
+	if fade < 0:
 		$Flow/Extras.text = ""
 		if game_is_over:
 			var game_over_label = $Flow/Score
@@ -36,8 +36,7 @@ func _on_blackboard_word_submitted(word : String):
 		fade=2
 
 func _on_circuit_circuit_broken():
-	# replace with switching to a game over screen eventually
-	fade = 5
+	fade = 1
 	game_is_over=true
 	
 	
