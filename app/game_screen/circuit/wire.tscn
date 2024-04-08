@@ -8,4 +8,3 @@ metadata/_edit_group_ = true
 
 [node name="Stroke" type="Line2D" parent="."]
 points = PackedVector2Array(0, 0, 0, 0)
-antialiased = true

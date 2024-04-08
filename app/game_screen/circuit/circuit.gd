@@ -143,7 +143,6 @@ func score_word(word : String):
 			s+=1
 		s+=2
 	score+=s
-	print(s)
 	if s>10:
 		s=10
 	add_to_graph(s)
@@ -228,7 +227,7 @@ func snap(wire):
 	to.force(s.normalized()*SPRING_SNAP)
 	wires.remove_at(wires.find(wire))
 	wire.queue_free()
-	if wires.size() < 2:
+	if wires.is_empty():
 		circuit_is_broken = true
 		circuit_broken.emit()
 

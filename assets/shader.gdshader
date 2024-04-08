@@ -11,7 +11,7 @@ void vertex() {
 
 void fragment() {
 	float dist_from_mouse = length((SCREEN_UV - mouse_pos/vec2(1600.0,900.0)/SCREEN_PIXEL_SIZE)/SCREEN_PIXEL_SIZE);
-	float amt = (out_radius-dist_from_mouse)/(out_radius-in_radius);
+	float amt = (out_radius-dist_from_mouse+10.0*fract(sin(dot(SCREEN_UV,vec2(12.9898,78.233)*TIME))*43758.5453123))/(out_radius-in_radius);
 	amt = clamp(amt,0.0,1.0);
 	COLOR = vec4(COLOR.rgb*amt,COLOR.a);
 }

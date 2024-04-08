@@ -1,18 +1,73 @@
-[gd_scene load_steps=11 format=3 uid="uid://b0hw5ra8b0p6w"]
+[gd_scene load_steps=22 format=3 uid="uid://b0hw5ra8b0p6w"]
 
 [ext_resource type="Script" path="res://app/start_screen/start_screen.gd" id="1_pdbn0"]
-[ext_resource type="Texture2D" uid="uid://bh0lb86se2x5g" path="res://assets/wug title.png" id="2_6so2s"]
-[ext_resource type="Texture2D" uid="uid://bjivtnyhm0fe3" path="res://wug_start_360.png" id="3_sm3k7"]
-[ext_resource type="Texture2D" uid="uid://dtp7jkrjexpl" path="res://wug_snooze_360.png" id="5_vjobh"]
-[ext_resource type="Texture2D" uid="uid://ckk5q0g02r40k" path="res://wug_scores_360.png" id="6_pk8i2"]
-[ext_resource type="Texture2D" uid="uid://ckpapo8q7rwkp" path="res://wug_settings_360.png" id="7_g6jsy"]
+[ext_resource type="Texture2D" uid="uid://cegvrxsnl8nb1" path="res://assets/wug title1.png" id="2_xs5of"]
+[ext_resource type="Texture2D" uid="uid://dkb17ui4ny38i" path="res://assets/wug title2.png" id="3_ioxtp"]
+[ext_resource type="Texture2D" uid="uid://bsapxnqyp4hmv" path="res://wug_start_360.png" id="3_sm3k7"]
+[ext_resource type="Texture2D" uid="uid://c2ch8joxt63pa" path="res://assets/wug title3.png" id="4_xmho3"]
+[ext_resource type="Texture2D" uid="uid://dmhgaiqtvibyd" path="res://assets/wug title4.png" id="5_6ma3e"]
+[ext_resource type="Texture2D" uid="uid://b5igtrnnu1pbp" path="res://wug_snooze_360.png" id="5_vjobh"]
+[ext_resource type="Texture2D" uid="uid://bwbeqjno223jr" path="res://wug_scores_360.png" id="6_pk8i2"]
+[ext_resource type="Texture2D" uid="uid://c3ko3ueexu8ps" path="res://assets/wug title5.png" id="6_s8bys"]
+[ext_resource type="Texture2D" uid="uid://bo7d4yssdtr5u" path="res://wug_settings_360.png" id="7_g6jsy"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="8_8e3qr"]
-[ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="8_dwjc1"]
+[ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="8_tdxo1"]
+[ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="9_5cbnx"]
+[ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="10_kvlei"]
+[ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="11_dg88i"]
+[ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="12_swrw1"]
+[ext_resource type="Texture2D" uid="uid://cc2xkh0eth680" path="res://assets/wug horizon.png" id="13_lloq7"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_87kwe"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_w5o8w"]
 blend_mode = 3
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_023ln"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_tdxo1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_kvlei")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_swrw1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_5cbnx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_dg88i")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2u1g2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xs5of")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ioxtp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_xmho3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_6ma3e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_s8bys")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
 
 [node name="StartScreen" type="Control"]
 layout_mode = 3
@@ -24,19 +79,6 @@ offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pdbn0")
-
-[node name="TextureRect" type="TextureRect" parent="."]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -1100.0
-offset_top = 30.0
-offset_right = -27.0
-offset_bottom = 369.0
-grow_horizontal = 0
-texture = ExtResource("2_6so2s")
 
 [node name="StartButton" type="TextureButton" parent="."]
 layout_mode = 0
@@ -83,9 +125,24 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("8_8e3qr")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(168, 652)
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(220, 716)
 scale = Vector2(0.753369, 0.717054)
-texture = ExtResource("8_dwjc1")
+sprite_frames = SubResource("SpriteFrames_023ln")
+animation = &"idle"
+autoplay = "idle"
+frame = 1
+frame_progress = 0.0785378
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(854, 785)
+texture = ExtResource("13_lloq7")
+
+[node name="TextureRect" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(1042, 191)
+sprite_frames = SubResource("SpriteFrames_2u1g2")
+autoplay = "default"
 
 [connection signal="pressed" from="StartButton" to="." method="_on_texture_button_pressed"]
