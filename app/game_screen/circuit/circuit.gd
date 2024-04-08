@@ -100,8 +100,8 @@ func _process(delta):
 		grabbed = null
 	mouse_pos = lerp(mouse_pos,get_viewport().get_mouse_position()/Vector2(get_viewport().size),.1)
 	RenderingServer.global_shader_parameter_set("mouse_pos", mouse_pos)
-	RenderingServer.global_shader_parameter_set("in_radius", 2000.0)
-	RenderingServer.global_shader_parameter_set("out_radius", 3000.0)
+	RenderingServer.global_shader_parameter_set("in_radius", 2000.0 * get_viewport().size.x/1600.0)
+	RenderingServer.global_shader_parameter_set("out_radius", 3000.0 * get_viewport().size.x/1600.0)
 	physics(delta)
 	for wire in wires:
 		if (wire.decay(delta,score)):
