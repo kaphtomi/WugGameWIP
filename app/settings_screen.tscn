@@ -72,10 +72,10 @@ autoplay = "idle"
 
 [node name="TextureButton" type="TextureButton" parent="."]
 layout_mode = 0
-offset_left = 778.0
-offset_top = 604.0
-offset_right = 906.0
-offset_bottom = 732.0
+offset_left = 738.0
+offset_top = 572.0
+offset_right = 866.0
+offset_bottom = 700.0
 texture_normal = ExtResource("9_v7kx3")
 stretch_mode = 0
 
@@ -85,19 +85,19 @@ texture = ExtResource("10_mujcx")
 
 [node name="CheckButton" type="CheckButton" parent="."]
 layout_mode = 0
-offset_left = 578.0
-offset_top = 316.0
-offset_right = 622.0
-offset_bottom = 340.0
+offset_left = 854.0
+offset_top = 290.0
+offset_right = 898.0
+offset_bottom = 314.0
 scale = Vector2(3, 3)
 
 [node name="Music" type="Label" parent="."]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
-offset_left = 330.0
-offset_top = 278.0
-offset_right = 451.0
-offset_bottom = 336.0
+offset_left = 610.0
+offset_top = 258.0
+offset_right = 731.0
+offset_bottom = 316.0
 scale = Vector2(2, 2)
 theme = ExtResource("11_jvlly")
 text = "Music:"
