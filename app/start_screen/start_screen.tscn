@@ -146,3 +146,4 @@ sprite_frames = SubResource("SpriteFrames_2u1g2")
 autoplay = "default"
 
 [connection signal="pressed" from="StartButton" to="." method="_on_texture_button_pressed"]
+[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]

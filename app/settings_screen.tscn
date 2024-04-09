@@ -1,0 +1,106 @@
+[gd_scene load_steps=13 format=3 uid="uid://cshqe8yfov5j2"]
+
+[ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="1_50auc"]
+[ext_resource type="Script" path="res://app/settings_screen.gd" id="1_p6sej"]
+[ext_resource type="Texture2D" uid="uid://ckpapo8q7rwkp" path="res://assets/wug_settings_360.png" id="2_jhe8y"]
+[ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="3_kycmt"]
+[ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="4_s0roo"]
+[ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="5_40bl2"]
+[ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="6_p8hk1"]
+[ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="7_gi2bu"]
+[ext_resource type="Texture2D" uid="uid://vlmdbotxd4ym" path="res://assets/icon.svg" id="9_v7kx3"]
+[ext_resource type="Texture2D" uid="uid://cc2xkh0eth680" path="res://assets/wug horizon.png" id="10_mujcx"]
+[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="11_jvlly"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wjnbe"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_kycmt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_40bl2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_gi2bu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_s0roo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_p8hk1")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="settings_screen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p6sej")
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_50auc")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(500, 2.08165e-12)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 66.0
+offset_right = 250.0
+offset_bottom = 231.0
+grow_horizontal = 2
+texture = ExtResource("2_jhe8y")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(291, 758)
+scale = Vector2(0.725, 0.64)
+sprite_frames = SubResource("SpriteFrames_wjnbe")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 778.0
+offset_top = 604.0
+offset_right = 906.0
+offset_bottom = 732.0
+texture_normal = ExtResource("9_v7kx3")
+stretch_mode = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(932, 800)
+texture = ExtResource("10_mujcx")
+
+[node name="CheckButton" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 578.0
+offset_top = 316.0
+offset_right = 622.0
+offset_bottom = 340.0
+scale = Vector2(3, 3)
+
+[node name="Music" type="Label" parent="."]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 330.0
+offset_top = 278.0
+offset_right = 451.0
+offset_bottom = 336.0
+scale = Vector2(2, 2)
+theme = ExtResource("11_jvlly")
+text = "Music:"
+
+[connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]
+[connection signal="toggled" from="CheckButton" to="." method="_on_check_button_toggled"]
