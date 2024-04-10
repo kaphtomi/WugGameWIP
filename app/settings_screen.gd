@@ -7,7 +7,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 func _on_texture_button_pressed():
@@ -20,9 +20,9 @@ func _on_music_button_pressed():
 	
 
 
-func _on_check_box_toggled(toggled_on):
+func _on_check_box_toggled(_toggled_on):
 	GlobalAudio.stream_paused = !GlobalAudio.stream_paused
 
 
-func _on_check_button_toggled(toggled_on):
+func _on_check_button_toggled(_toggled_on):
 	GlobalAudio.stream_paused = !GlobalAudio.stream_paused

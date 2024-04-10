@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b0hw5ra8b0p6w"]
+[gd_scene load_steps=23 format=3 uid="uid://b0hw5ra8b0p6w"]
 
 [ext_resource type="Script" path="res://app/start_screen/start_screen.gd" id="1_pdbn0"]
 [ext_resource type="Texture2D" uid="uid://cegvrxsnl8nb1" path="res://assets/wug title1.png" id="2_xs5of"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://ckk5q0g02r40k" path="res://assets/wug_scores_360.png" id="6_pk8i2"]
 [ext_resource type="Texture2D" uid="uid://c3ko3ueexu8ps" path="res://assets/wug title5.png" id="6_s8bys"]
 [ext_resource type="Texture2D" uid="uid://ckpapo8q7rwkp" path="res://assets/wug_settings_360.png" id="7_g6jsy"]
+[ext_resource type="Texture2D" uid="uid://vlmdbotxd4ym" path="res://assets/icon.svg" id="7_xqshp"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="8_8e3qr"]
 [ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="8_tdxo1"]
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="9_5cbnx"]
@@ -112,6 +113,8 @@ offset_top = 710.0
 offset_right = 1554.0
 offset_bottom = 765.0
 texture_normal = ExtResource("7_g6jsy")
+texture_pressed = ExtResource("7_xqshp")
+texture_hover = ExtResource("7_xqshp")
 
 [node name="TextureRect2" type="TextureRect" parent="."]
 z_index = 2
