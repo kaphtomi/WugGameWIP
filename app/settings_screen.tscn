@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cshqe8yfov5j2"]
+[gd_scene load_steps=14 format=3 uid="uid://cshqe8yfov5j2"]
 
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="1_50auc"]
 [ext_resource type="Script" path="res://app/settings_screen.gd" id="1_p6sej"]
@@ -8,8 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="5_40bl2"]
 [ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="6_p8hk1"]
 [ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="7_gi2bu"]
-[ext_resource type="Texture2D" uid="uid://vlmdbotxd4ym" path="res://assets/icon.svg" id="9_v7kx3"]
+[ext_resource type="Texture2D" uid="uid://cd6pxsail74ia" path="res://assets/wug_home.png" id="9_b0o4p"]
 [ext_resource type="Texture2D" uid="uid://cc2xkh0eth680" path="res://assets/wug horizon.png" id="10_mujcx"]
+[ext_resource type="Texture2D" uid="uid://dy1yny3uq0jt1" path="res://assets/wug_home_hover.png" id="10_qu47f"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="11_jvlly"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wjnbe"]
@@ -72,11 +73,14 @@ autoplay = "idle"
 
 [node name="TextureButton" type="TextureButton" parent="."]
 layout_mode = 0
-offset_left = 738.0
-offset_top = 572.0
-offset_right = 866.0
-offset_bottom = 700.0
-texture_normal = ExtResource("9_v7kx3")
+offset_left = 690.0
+offset_top = 454.0
+offset_right = 2738.0
+offset_bottom = 2502.0
+scale = Vector2(0.07, 0.07)
+texture_normal = ExtResource("9_b0o4p")
+texture_pressed = ExtResource("10_qu47f")
+texture_hover = ExtResource("10_qu47f")
 stretch_mode = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

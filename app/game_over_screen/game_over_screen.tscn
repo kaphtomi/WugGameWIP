@@ -1,17 +1,65 @@
-[gd_scene load_steps=6 format=3 uid="uid://xkohs2it4yb7"]
+[gd_scene load_steps=13 format=3 uid="uid://xkohs2it4yb7"]
 
 [ext_resource type="Script" path="res://app/game_over_screen/game_over_screen.gd" id="1_ckdyu"]
+[ext_resource type="Texture2D" uid="uid://cd6pxsail74ia" path="res://assets/wug_home.png" id="2_ho4j4"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="2_stirv"]
-[ext_resource type="Texture2D" uid="uid://vlmdbotxd4ym" path="res://assets/icon.svg" id="3_vsd8r"]
+[ext_resource type="Texture2D" uid="uid://dy1yny3uq0jt1" path="res://assets/wug_home_hover.png" id="3_000kw"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="5_bjqul"]
+[ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="6_qao40"]
+[ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="7_ux0k7"]
+[ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_3kiqm"]
+[ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="9_1r3rp"]
+[ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="10_yaap0"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_745db"]
 blend_mode = 3
 
-[node name="GameOverScreen" type="Node2D"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_55dna"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_qao40")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ux0k7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_3kiqm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_1r3rp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_yaap0")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[node name="GameOverScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_ckdyu")
 
+[node name="TextureRect2" type="TextureRect" parent="."]
+z_index = 2
+material = SubResource("CanvasItemMaterial_745db")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2120.0
+offset_top = -1416.0
+offset_right = 2120.0
+offset_bottom = 1416.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_bjqul")
+
 [node name="Organizer" type="VBoxContainer" parent="."]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -41,22 +89,23 @@ theme_override_font_sizes/font_size = 60
 text = "Score: "
 horizontal_alignment = 1
 
-[node name="RestartButton" type="TextureButton" parent="Organizer"]
-layout_mode = 2
-size_flags_horizontal = 4
-texture_normal = ExtResource("3_vsd8r")
-texture_pressed = ExtResource("3_vsd8r")
-texture_hover = ExtResource("3_vsd8r")
+[node name="RestartButton" type="TextureButton" parent="."]
+offset_left = 694.0
+offset_top = 504.0
+offset_right = 2742.0
+offset_bottom = 2552.0
+scale = Vector2(0.07, 0.07)
+texture_normal = ExtResource("2_ho4j4")
+texture_pressed = ExtResource("3_000kw")
+texture_hover = ExtResource("3_000kw")
+stretch_mode = 0
 
-[node name="TextureRect2" type="TextureRect" parent="."]
-z_index = 2
-material = SubResource("CanvasItemMaterial_745db")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("5_bjqul")
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(276, 672)
+scale = Vector2(0.753369, 0.717054)
+sprite_frames = SubResource("SpriteFrames_55dna")
+animation = &"idle"
+autoplay = "idle"
 
-[connection signal="pressed" from="Organizer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
