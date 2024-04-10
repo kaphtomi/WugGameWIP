@@ -91,6 +91,7 @@ func generate_random_wire():
 
 
 func _process(delta):
+	time += delta
 	if Input.is_action_just_pressed("click"):
 		for junc in junctions:
 			if junc.position.distance_to(get_viewport().get_mouse_position())<80:
@@ -204,7 +205,9 @@ func coolombs(v1, v2, delta : float):
 func border_force(v, delta):
 	var p : Vector2 = v.position
 	var k = ELECTRIC_CONSTANT
-	v.force(Vector2(k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1)),k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))))
+	var fx = k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1))
+	var fy = k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))
+	v.force(Vector2(fx*(1+.15*sin(p.y/500+time*.5)),fy*(1+.15*cos(p.x/400+time*.7))))
 
 #spring force
 func hookes(wire, delta : float):

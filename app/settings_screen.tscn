@@ -80,6 +80,7 @@ texture_normal = ExtResource("9_v7kx3")
 stretch_mode = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
 position = Vector2(932, 800)
 texture = ExtResource("10_mujcx")
 
