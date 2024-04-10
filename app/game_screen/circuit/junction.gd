@@ -18,7 +18,10 @@ func has_outgoing():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	velocity *= exp(-_delta*velocity.length_squared()*.001)
+	velocity *= exp(-_delta*velocity.length_squared()*.0001)
+	
+func move(vee):
+	position += vee
 	
 func get_outgoing_edges():
 	return outgoing_edges

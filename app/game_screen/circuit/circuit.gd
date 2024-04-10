@@ -10,24 +10,29 @@ var circuit_is_broken = false
 var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
 var junctions : Array
 var wires : Array
-const ELECTRIC_CONSTANT : float = 100000000
-const SPRING_CONSTANT : float = 1
+const ELECTRIC_CONSTANT : float = 30000000
+const SPRING_CONSTANT : float = .1
 const SPRING_LENGTH : float = 800
-const SPRING_SNAP : float = 250
+const SPRING_SNAP : float = 1000
 var score : int = 0
 var time: float = 0
 var counter: int = 0
 var mouse_pos = Vector2.ZERO
 enum STATE {RELAX, ASLEEP, FOCUS, DREAM, STRESS, NIGHTMARE}
 var grabbed = null
+var in_radius
+var out_radius
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	pass
 
 # GENERATION
 func generate():
+	in_radius = 2000.0 * get_viewport().size.x/1600.0
+	out_radius = 3000.0 * get_viewport().size.x/1600.0
 	generate_junctions(randi() % 3 + 9)
 
 func generate_junctions(num_junctions : int):
@@ -100,14 +105,17 @@ func _process(delta):
 	if Input.is_action_just_released("click"):
 		grabbed = null
 	mouse_pos = lerp(mouse_pos,get_viewport().get_mouse_position()/Vector2(get_viewport().size),.1)
+	#in_radius = lerp(in_radius,190.0,delta)
+	#out_radius = lerp(out_radius,200.0,delta)
 	RenderingServer.global_shader_parameter_set("mouse_pos", mouse_pos)
-	RenderingServer.global_shader_parameter_set("in_radius", 2000.0 * get_viewport().size.x/1600.0)
-	RenderingServer.global_shader_parameter_set("out_radius", 3000.0 * get_viewport().size.x/1600.0)
-	physics(delta)
+	RenderingServer.global_shader_parameter_set("in_radius", in_radius)
+	RenderingServer.global_shader_parameter_set("out_radius", out_radius)
 	for wire in wires:
 		if (wire.decay(delta,score)):
 			snap(wire)
 			break
+	physics(delta)
+	
 	var pop_outs = {}
 	for junc in junctions:
 		if junc.get_connections().is_empty():
@@ -115,7 +123,7 @@ func _process(delta):
 	
 	for junc in pop_outs.keys():
 		if !circuit_is_broken:
-			pop_out_junction(junc)
+			pop_out_junction(junc, delta)
 	if grabbed != null && !circuit_is_broken:
 		grabbed.position = lerp(grabbed.position,get_viewport().get_mouse_position(),.1)
 
@@ -207,7 +215,7 @@ func border_force(v, delta):
 	var k = ELECTRIC_CONSTANT
 	var fx = k*delta*(1/(p.x ** 2 + 1) - 1/((p.x-size.x) ** 2 + 1))
 	var fy = k*delta*(1/(p.y ** 2 + 1) - 1/((p.y-size.y) ** 2 + 1))
-	v.force(Vector2(fx*(1+.15*sin(p.y/500+time*.5)),fy*(1+.15*cos(p.x/400+time*.7))))
+	v.force(Vector2(fx*(1+.25*sin(p.y/200+time*.5)),fy*(1+.15*cos(p.x/370+time*.7))))
 
 #spring force
 func hookes(wire, delta : float):
@@ -217,7 +225,7 @@ func hookes(wire, delta : float):
 	var end : Vector2 = to.position
 	var d : Vector2 = end - start
 	var s = max(d.length()-SPRING_LENGTH / sqrt(wire.thickness),0) 
-	var f : Vector2 = -(SPRING_CONSTANT * wire.thickness * wire.thickness)* s * d.normalized() * sqrt(wire.done)
+	var f : Vector2 = -(SPRING_CONSTANT * wire.thickness * wire.thickness)* s * d.normalized() * wire.done* wire.done
 	from.force(-f*delta)
 	to.force(f*delta)
 
@@ -245,18 +253,21 @@ func pop_in_junction(v, i:int):
 	tween.tween_callback(v.pop_in_wires)
 	tween.play()
 
-func pop_out_junction(junc):
+func pop_out_junction(junc, delta):
 	junctions.erase(junc)
 	alphabetter.append(junc.get_letter())
 	junc.scale = Vector2.ONE
 	var tweensize = create_tween()
 	var tweenopac = create_tween()
-	var dur = .25
+	var tweenmove = create_tween()
+	var dur = .4
+	tweenmove.tween_method(junc.move,junc.velocity*delta*.7,junc.velocity.rotated(2*randf()-1)*.5*delta,dur)
 	tweensize.tween_property(junc, "scale", Vector2.ONE*1.5, dur)
 	tweenopac.tween_property(junc, "modulate", Color(1,1,1,0), dur)
 	tweensize.tween_callback(junc.queue_free)
 	tweensize.play()
 	tweenopac.play()
+	tweenmove.play()
 
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
 func get_wire(startNodeLetter: String, endNodeLetter: String):
