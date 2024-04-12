@@ -18,10 +18,11 @@ var score : int = 0
 var time: float = 0
 var counter: int = 0
 var mouse_pos = Vector2.ZERO
-enum STATE {RELAX, ASLEEP, FOCUS, DREAM, STRESS, NIGHTMARE}
 var grabbed = null
 var in_radius
 var out_radius
+var in_radius_to
+var out_radius_to
 
 
 # Called when the node enters the scene tree for the first time.
@@ -31,8 +32,10 @@ func _ready():
 
 # GENERATION
 func generate():
-	in_radius = 2000.0 * get_viewport().size.x/1600.0
-	out_radius = 3000.0 * get_viewport().size.x/1600.0
+	in_radius = 4000.0 * get_viewport().size.x/1600.0
+	out_radius = 4000.0 * get_viewport().size.x/1600.0
+	in_radius_to = in_radius
+	out_radius_to = out_radius
 	generate_junctions(randi() % 3 + 9)
 
 func generate_junctions(num_junctions : int):
@@ -96,6 +99,13 @@ func generate_random_wire():
 
 
 func _process(delta):
+	match GlobalVariables.cur_zzz:
+		GlobalVariables.WUG_ZZZ.AWAKE:
+			in_radius_to = 4000.0 * get_viewport().size.x/1600.0
+			out_radius_to = 4000.0 * get_viewport().size.x/1600.0
+		GlobalVariables.WUG_ZZZ.SLEEP:
+			in_radius_to = (190.0-score/50.0) * get_viewport().size.x/1600.0
+			out_radius_to = (200.0-score/50.0) * get_viewport().size.x/1600.0
 	time += delta
 	if Input.is_action_just_pressed("click"):
 		for junc in junctions:
@@ -105,12 +115,14 @@ func _process(delta):
 	if Input.is_action_just_released("click"):
 		grabbed = null
 	mouse_pos = lerp(mouse_pos,get_viewport().get_mouse_position()/Vector2(get_viewport().size),.1)
-	#in_radius = lerp(in_radius,190.0,delta)
-	#out_radius = lerp(out_radius,200.0,delta)
+	in_radius = lerp(in_radius,in_radius_to,delta)
+	out_radius = lerp(out_radius,out_radius_to,delta)
 	RenderingServer.global_shader_parameter_set("mouse_pos", mouse_pos)
 	RenderingServer.global_shader_parameter_set("in_radius", in_radius)
 	RenderingServer.global_shader_parameter_set("out_radius", out_radius)
 	for wire in wires:
+		if wires.size() == 1:
+			wire.decay(delta*2,score)
 		if (wire.decay(delta,score)):
 			snap(wire)
 			break
@@ -152,6 +164,8 @@ func score_word(word : String):
 			s+=1
 		s+=2
 	score+=s
+	if junctions.size() > 7:
+		s -= junctions.size()-7
 	if s>10:
 		s=10
 	add_to_graph(s)
@@ -234,11 +248,37 @@ func snap(wire):
 	var from = wire.get_start()
 	var to = wire.get_end()
 	var s = to.position-from.position
+	var snap_text = Label.new()
+	snap_text.text = ["snap","snap","snap","snap","snap!","ssnap","snap!","snip"].pick_random()
+	var angle = s.angle()
+	if angle < -PI/2:
+		angle+=PI
+	if angle > PI/2:
+		angle-=PI
+	if angle < -PI/4:
+		angle += PI/2
+	if angle > PI/4:
+		angle -=PI/2
+	snap_text.horizontal_alignment= HORIZONTAL_ALIGNMENT_CENTER
+	snap_text.vertical_alignment= VERTICAL_ALIGNMENT_CENTER
+	snap_text.pivot_offset=snap_text.size/2
+	snap_text.rotation = angle
+	snap_text.position = from.position+(s*.5)
+	
+	snap_text.set_theme(load("res://assets/text_theme.tres"))
+	add_child(snap_text)
+	var tween = create_tween()
+	snap_text.modulate = wire.get_color()
+	tween.tween_interval(.2)
+	tween.tween_property(snap_text, "modulate",Color(wire.get_color(),0),.1)
+	tween.tween_callback(snap_text.queue_free)
+	tween.play()
 	from.force(-s.normalized()*SPRING_SNAP)
 	to.force(s.normalized()*SPRING_SNAP)
 	wires.remove_at(wires.find(wire))
 	wire.queue_free()
-	if wires.size() < 2: # Ends the game when there is one wire left
+	
+	if wires.is_empty(): # Ends the game when there is one wire left
 		circuit_broken.emit()
 
 # ANIMATIONS

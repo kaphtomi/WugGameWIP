@@ -42,6 +42,9 @@ func update(start: Vector2, end: Vector2):
 func color():
 	$Stroke.set_default_color(Color.from_ok_hsl(hue, sat, .5 + thickness*.03))
 
+func get_color():
+	return Color.from_ok_hsl(hue, sat, .5 + thickness*.03)
+	
 func pop_in(t:float):
 	update(_from.position, _from.position+ t*(_to.position-_from.position))
 	done = t
@@ -62,6 +65,10 @@ func decay(delta, score):
 	var decrement = delta*.01*randf()*sqrt(score)
 	if not_scored:
 		decrement*=1.5
+	if GlobalVariables.cur_dif==GlobalVariables.WUG_DIFF.HARD:
+		decrement*=log(score+1)/2
+	if GlobalVariables.cur_dif==GlobalVariables.WUG_DIFF.MED:
+		decrement*=2
 	thickness -= decrement
 	if thickness< 0:
 		return true

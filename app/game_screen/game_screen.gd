@@ -16,7 +16,7 @@ func _process(delta):
 		if game_is_over:
 			var game_over_label = $Flow/Score
 			game_over_label.text = game_over_label.text + ", game over"
-			GlobalVariables.final_score = score
+			GlobalVariables.score = score
 			print("changing scene")
 			get_tree().change_scene_to_file("res://app/game_over_screen/game_over_screen.tscn")
 	if ceil(cur_score)!= ceil(cur_score_init):
@@ -34,6 +34,7 @@ func _on_blackboard_word_submitted(word : String):
 		score += score_plus
 		$Flow/Extras.text = "+" + str(score_plus) + " " + word
 		fade=2
+		change_state()
 
 func _on_circuit_circuit_broken():
 	fade = 1.5
@@ -41,3 +42,20 @@ func _on_circuit_circuit_broken():
 
 func _on_blackboard_text_field_changed(new_text):
 	$Label.text = new_text
+	
+	
+func change_state():
+	if score/100 % 3 ==2:
+		GlobalVariables.cur_zzz=GlobalVariables.WUG_ZZZ.SLEEP
+	else:
+		GlobalVariables.cur_zzz=GlobalVariables.WUG_ZZZ.AWAKE
+	match score/100:
+		0, 2:
+			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.EASY
+		1, 3, 5, 6, 8, 10:
+			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.MED
+		4, 7, 9:
+			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD
+	if score/1000!=0:
+		GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD
+
