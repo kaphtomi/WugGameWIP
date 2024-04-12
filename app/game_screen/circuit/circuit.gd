@@ -27,7 +27,7 @@ var out_radius_to
 var kill = false
 var cur_word = {}
 var handling_letter = false
-
+var words: Array = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -103,18 +103,59 @@ func generate_random_wire():
 
 
 # INPUT
+
+var selected_junction
+var word = ""
+var affected_junctions = []
+var connecting_wires = []
+var potential_wires = []
+
+signal word_submitted
+
 func _input(event):
 	var input = event.as_text()
+	if input == "Enter":
+		if word in words:
+			# TODO: Indicate invalid
+			return
+		else:
+			words.append(word)
+			score_word(word)
+		selected_junction = null
+		for j in affected_junctions: j.clear_highlight()
+		for w in connecting_wires: w.clear_highlight()
+		for w in potential_wires: w.clear_highlight()
+		word = ""
+		connecting_wires = []
+		potential_wires = []
 	if not input in "QWERTYUIOPASDFGHJKLZXCVBNM/": return
 	for junction in junctions:
 		if junction.get_letter() != input: continue
-		if not junction.is_highlighted: junction.pulse()
-		junction.become_valid()
+		if selected_junction:
+			var connection
+			for w in potential_wires:
+				if w.check_connecting_letters(junction.get_letter(), selected_junction.get_letter()):
+					connection = w
+					w.highlight_green()
+					break
+				else: continue
+			if not connection: return # TODO: Handle lack of connection
+			for w in potential_wires: w.clear_highlight(2)
+			potential_wires = []
+			connecting_wires.append(connection)
+			selected_junction.set_selected()
+		junction.set_potential()
+		selected_junction = junction
+		affected_junctions.append(junction)
 		for w in junction.outgoing_edges:
+			if w in connecting_wires: continue
 			w.highlight_blue()
+			potential_wires.append(w)
 		for w in junction.incoming_edges:
+			if w in connecting_wires: continue
 			w.highlight_blue(true)
-		return
+			potential_wires.append(w)
+		word += selected_junction.get_letter()
 
 # PROCESS
 func _process(delta):
@@ -190,6 +231,7 @@ func score_word(word : String):
 	if s>10:
 		s=10
 	add_to_graph(s)
+	word_submitted.emit(word)
 
 func add_to_graph(amt):
 	match amt:

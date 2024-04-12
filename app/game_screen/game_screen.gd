@@ -28,11 +28,11 @@ func ready_circuit():
 
 
 
-func _on_blackboard_word_submitted(word : String):
+func _on_circuit_word_submitted(word : String):
 	if word == "/kill":
 		$CircuitAndBlackboard/Circuit.kill_circuit()
-	if $CircuitAndBlackboard/Circuit.is_word_in_circuit(word):
-		$CircuitAndBlackboard/Circuit.score_word(word)
+	if true: #$CircuitAndBlackboard/Circuit.is_word_in_circuit(word):
+		#$CircuitAndBlackboard/Circuit.score_word(word)
 		#$CircuitAndBlackboard/Blackboard.add_word(word)
 		var score_plus = $CircuitAndBlackboard/Circuit.score - score
 		score += score_plus

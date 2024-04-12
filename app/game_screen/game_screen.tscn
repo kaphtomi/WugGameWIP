@@ -88,3 +88,4 @@ visible = false
 autoplay = false
 
 [connection signal="circuit_broken" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_circuit_broken"]
+[connection signal="word_submitted" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_word_submitted"]
