@@ -26,6 +26,8 @@ func ready_circuit():
 	$CircuitAndBlackboard/Circuit.generate()
 	$CircuitAndBlackboard/Circuit.position = Vector2()
 
+
+
 func _on_blackboard_word_submitted(word : String):
 	if word == "/kill":
 		$CircuitAndBlackboard/Circuit.kill_circuit()
@@ -43,7 +45,7 @@ func _on_circuit_circuit_broken():
 	game_is_over=true
 
 func _on_blackboard_text_field_changed(new_text):
-	$Label.text = new_text
+	$CircuitAndBlackboard/Circuit.update_word(new_text)
 	
 	
 func change_state():

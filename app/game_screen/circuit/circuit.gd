@@ -8,6 +8,7 @@ signal circuit_broken
 var circuit_is_broken = false
 
 var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
+var junction_map = {}
 var junctions : Array
 var wires : Array
 const ELECTRIC_CONSTANT : float = 30000000
@@ -24,6 +25,7 @@ var out_radius
 var in_radius_to
 var out_radius_to
 var kill = false
+var cur_word = {}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -56,6 +58,7 @@ func generate_junction(num_wires : int):
 	add_child(junc)
 	generate_wires(junc, num_wires)
 	junctions.append(junc)
+	junction_map[letter]=junc
 	return junc
 	
 func generate_wires(from, num_wires : int):
@@ -150,9 +153,6 @@ func is_word_in_circuit(word : String):
 		var wire = get_wire(letters[i], letters[i+1])
 		if wire == null:
 			return false
-		update_wires[wire]=true
-	for w in update_wires.keys():
-		w.increment_thickness()
 	return true
 
 func score_word(word : String):
@@ -163,6 +163,7 @@ func score_word(word : String):
 		update_wires[wire]=true
 	var s = 0
 	for w in update_wires:
+		w.increment_thickness()
 		if w.score_wire():
 			s+=1
 		s+=2
@@ -287,6 +288,29 @@ func snap(wire):
 		circuit_broken.emit()
 
 # ANIMATIONS
+func update_word(word):
+	var word_array = word.split("", false, 0)
+	var checks = cur_word.duplicate()
+	for letter in word_array:
+		checks.erase(letter)
+		var junc = junction_map.get(letter)
+		if cur_word.get(letter)==null&&junc!=null:
+			cur_word[letter]=true
+			var tween = create_tween()
+			tween.tween_property(junc, "scale", Vector2.ONE*1.3, .05)
+			tween.tween_property(junc, "scale", Vector2.ONE*1.25, .01)
+			tween.play()
+	for letter in checks.keys():
+		cur_word.erase(letter)
+		var junc = junction_map[letter]
+		if junc!=null:
+			var tween = create_tween()
+			tween.tween_property(junc, "scale", Vector2.ONE*.95, .02)
+			tween.tween_property(junc, "scale", Vector2.ONE, .01)
+			tween.play()
+		
+	
+
 func pop_in_junction(v, i:int):
 	v.scale = Vector2.ZERO
 	var tween = create_tween()
@@ -300,6 +324,7 @@ func pop_in_junction(v, i:int):
 
 func pop_out_junction(junc, delta):
 	junctions.erase(junc)
+	junction_map.erase(junc)
 	alphabetter.append(junc.get_letter())
 	junc.scale = Vector2.ONE
 	var tweensize = create_tween()
