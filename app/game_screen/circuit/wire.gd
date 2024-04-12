@@ -11,6 +11,9 @@ const WIDTH_SCALE: int = 3
 const MAX_THICKNESS: int = 7
 var not_scored = true
 
+var highlight_tween
+var is_highlighted = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	thickness = randi() % 4 + 4
@@ -38,6 +41,10 @@ func update(start: Vector2, end: Vector2):
 	$Stroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
 	$Stroke.set_point_position(0,start)
 	$Stroke.set_point_position(1,end)
+	$HighlightStroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
+	if highlight_tween and not highlight_tween.is_running():
+		$HighlightStroke.set_point_position(0,start)
+		$HighlightStroke.set_point_position(1,end)
 	
 func color():
 	$Stroke.set_default_color(Color.from_ok_hsl(hue, sat, .5 + thickness*.03))
@@ -48,6 +55,30 @@ func get_color():
 func pop_in(t:float):
 	update(_from.position, _from.position+ t*(_to.position-_from.position))
 	done = t
+
+func set_highlight_stroke_length(t: float):
+	var current_origin: Vector2 = _from.position
+	var current_dest: Vector2 = _to.position
+	var new_end_pos = (current_dest - current_origin) * t + current_origin
+	$HighlightStroke.set_point_position(0, current_origin)
+	$HighlightStroke.set_point_position(1, new_end_pos)
+
+func set_highlight_stroke_length_inverted(t: float):
+	var current_origin: Vector2 = _to.position
+	var current_dest: Vector2 = _from.position
+	var new_end_pos = (current_dest - current_origin) * t + current_origin
+	$HighlightStroke.set_point_position(0, current_origin)
+	$HighlightStroke.set_point_position(1, new_end_pos)
+
+func highlight_blue(inverted: bool = false):
+	if is_highlighted: return
+	is_highlighted = true
+	highlight_tween = create_tween()
+	$HighlightStroke.set_default_color(Color.BLUE)
+	if inverted: highlight_tween.tween_method(set_highlight_stroke_length_inverted, 0.0, 1.0, 0.5)
+	else: highlight_tween.tween_method(set_highlight_stroke_length, 0.0, 1.0, 0.5)
+	$HighlightStroke.set_visible(true)
+	highlight_tween.play()
 
 func get_start():
 	return _from

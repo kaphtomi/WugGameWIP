@@ -7,7 +7,7 @@ const Junction = preload("res://app/game_screen/circuit/junction.tscn")
 signal circuit_broken
 var circuit_is_broken = false
 
-var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
+var alphabetter = "ETAONSHRDLCUMWFGYPBVKJXQZI".split("", true, 0)
 var junction_map = {}
 var junctions : Array
 var wires : Array
@@ -26,7 +26,7 @@ var in_radius_to
 var out_radius_to
 var kill = false
 var cur_word = {}
-
+var handling_letter = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -102,6 +102,21 @@ func generate_random_wire():
 		from.pop_in_wire(w)
 
 
+# INPUT
+func _input(event):
+	var input = event.as_text()
+	if not input in "QWERTYUIOPASDFGHJKLZXCVBNM/": return
+	for junction in junctions:
+		if junction.get_letter() != input: continue
+		if not junction.is_highlighted: junction.pulse()
+		junction.become_valid()
+		for w in junction.outgoing_edges:
+			w.highlight_blue()
+		for w in junction.incoming_edges:
+			w.highlight_blue(true)
+		return
+
+# PROCESS
 func _process(delta):
 	match GlobalVariables.cur_zzz:
 		GlobalVariables.WUG_ZZZ.AWAKE:

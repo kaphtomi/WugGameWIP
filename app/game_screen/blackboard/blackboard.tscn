@@ -29,10 +29,5 @@ deselect_on_focus_loss_enabled = false
 drag_and_drop_selection_enabled = false
 caret_blink = true
 
-[node name="WordList" type="ItemList" parent="."]
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_tx2cj")
-
 [connection signal="text_changed" from="TextField" to="." method="_on_text_field_text_changed"]
 [connection signal="text_submitted" from="TextField" to="." method="_on_text_submitted"]

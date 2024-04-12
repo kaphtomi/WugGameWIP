@@ -4,7 +4,7 @@ signal word_submitted
 signal word_array_changed
 signal text_field_changed
 signal start_timer
-var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
+var alphabetter = "ETAONSHRDLCUMWFGYPBVKJXQZI".split("", true, 0)
 
 var word_array : Array
 
@@ -17,15 +17,6 @@ func _process(_delta):
 		#fuzz()
 	pass
 
-func fuzz():
-	var fuzzy = ""
-	for i in (randi() % 8)+2:
-		fuzzy = fuzzy + alphabetter[randi() % alphabetter.size()]
-	for word in word_array:
-		if fuzzy == word:
-			return
-	word_submitted.emit(fuzzy)
-
 func _on_text_submitted(_new_text : String):
 	$TextField.clear()
 	for word in word_array:
@@ -36,18 +27,10 @@ func _on_text_submitted(_new_text : String):
 func add_word(word : String):
 	if word_array.size() == 0: start_timer.emit()
 	word_array.append(word)
-	render_words()
 	
 func _on_text_changed(_new_text : String):
 	text_field_changed.emit(_new_text)
-	render_words()
 
-func render_words():
-	var list : ItemList = $WordList
-	list.clear()
-	var filtered_array = word_array.filter(starts_with)
-	for i in filtered_array.size():
-		list.add_item(filtered_array[i])
 		
 func starts_with(word : String):
 	var input = $TextField.get_text()
@@ -63,5 +46,4 @@ func starts_with(word : String):
 
 func _on_text_field_text_changed(new_text):
 	text_field_changed.emit(new_text)
-	render_words()
 	
