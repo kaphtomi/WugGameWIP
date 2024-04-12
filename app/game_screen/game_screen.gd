@@ -27,6 +27,8 @@ func ready_circuit():
 	$CircuitAndBlackboard/Circuit.position = Vector2()
 
 func _on_blackboard_word_submitted(word : String):
+	if word == "/kill":
+		$CircuitAndBlackboard/Circuit.kill_circuit()
 	if $CircuitAndBlackboard/Circuit.is_word_in_circuit(word):
 		$CircuitAndBlackboard/Circuit.score_word(word)
 		$CircuitAndBlackboard/Blackboard.add_word(word)
@@ -52,7 +54,7 @@ func change_state():
 	match score/100:
 		0, 2:
 			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.EASY
-		1, 3, 5, 6, 8, 10:
+		1, 3, 5, 6, 8:
 			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.MED
 		4, 7, 9:
 			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD

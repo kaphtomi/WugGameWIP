@@ -23,6 +23,7 @@ var in_radius
 var out_radius
 var in_radius_to
 var out_radius_to
+var kill = false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -121,6 +122,8 @@ func _process(delta):
 	RenderingServer.global_shader_parameter_set("in_radius", in_radius)
 	RenderingServer.global_shader_parameter_set("out_radius", out_radius)
 	for wire in wires:
+		if kill:
+			wire.decay(delta*500,score+10)
 		if wires.size() == 1:
 			wire.decay(delta*2,score)
 		if (wire.decay(delta,score)):
@@ -166,6 +169,8 @@ func score_word(word : String):
 	score+=s
 	if junctions.size() > 7:
 		s -= junctions.size()-7
+	if junctions.size() > 11:
+		s -= junctions.size()-11
 	if s>10:
 		s=10
 	add_to_graph(s)
@@ -259,9 +264,9 @@ func snap(wire):
 		angle += PI/2
 	if angle > PI/4:
 		angle -=PI/2
-	snap_text.horizontal_alignment= HORIZONTAL_ALIGNMENT_CENTER
-	snap_text.vertical_alignment= VERTICAL_ALIGNMENT_CENTER
-	snap_text.pivot_offset=snap_text.size/2
+	snap_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	snap_text.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	snap_text.pivot_offset = snap_text.size/2
 	snap_text.rotation = angle
 	snap_text.position = from.position+(s*.5)
 	
@@ -315,6 +320,9 @@ func get_wire(startNodeLetter: String, endNodeLetter: String):
 		if wire.check_connecting_letters(startNodeLetter, endNodeLetter):
 			return wire
 	return null
+	
+func kill_circuit():
+	kill=true
 
 func _on_item_rect_changed():
 	var num_junctions = junctions.size()
