@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://dj4v5021f26wl"]
+[gd_scene load_steps=10 format=3 uid="uid://dj4v5021f26wl"]
 
 [ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
-[ext_resource type="PackedScene" uid="uid://rec4fik43muc" path="res://app/game_screen/blackboard/blackboard.tscn" id="5_54kgm"]
 [ext_resource type="Shader" path="res://assets/shader.gdshader" id="5_fgtqu"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="6_sk6v4"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="7_wel0y"]
@@ -48,9 +47,6 @@ offset_bottom = 900.0
 z_as_relative = false
 layout_mode = 2
 
-[node name="Blackboard" parent="CircuitAndBlackboard" instance=ExtResource("5_54kgm")]
-layout_mode = 2
-
 [node name="TextureRect" type="TextureRect" parent="."]
 z_index = 2
 material = SubResource("ShaderMaterial_2rufv")
@@ -92,5 +88,3 @@ visible = false
 autoplay = false
 
 [connection signal="circuit_broken" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_circuit_broken"]
-[connection signal="text_field_changed" from="CircuitAndBlackboard/Blackboard" to="." method="_on_blackboard_text_field_changed"]
-[connection signal="word_submitted" from="CircuitAndBlackboard/Blackboard" to="." method="_on_blackboard_word_submitted"]
