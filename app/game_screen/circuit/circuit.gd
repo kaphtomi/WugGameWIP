@@ -154,11 +154,11 @@ func _input(event):
 		affected_junctions.append(junction)
 		for w in junction.outgoing_edges:
 			if w in connecting_wires: continue
-			w.highlight_blue()
+			if score < 300: w.highlight_blue()
 			potential_wires.append(w)
 		for w in junction.incoming_edges:
 			if w in connecting_wires: continue
-			w.highlight_blue(true)
+			if score < 300: w.highlight_blue(true)
 			potential_wires.append(w)
 		word += selected_junction.get_letter()
 	

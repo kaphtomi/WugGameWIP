@@ -92,10 +92,10 @@ func highlight(color: Color, state: HighlightState, inverted: bool = false):
 	highlight_tween.play()
 
 func highlight_blue(inverted: bool = false):
-	highlight(Color.BLUE, HighlightState.BLUE, inverted)
+	highlight(Color(0.4784, 0.8078, 1.0), HighlightState.BLUE, inverted)
 
 func highlight_green(inverted: bool = false):
-	highlight(Color.GREEN, HighlightState.GREEN, inverted)
+	highlight(Color(0.3137, 1.0, 0.0), HighlightState.GREEN, inverted)
 
 func flash_num_helper(t: float):
 	if t < 0.33: return t * 3
@@ -123,8 +123,8 @@ func flash_red():
 		
 func clear_highlight(unless: HighlightState = HighlightState.NONE):
 	if highlight_state == unless: return
-	$HighlightStroke.set_visible(false)
 	highlight_state = HighlightState.NONE
+	$HighlightStroke.set_visible(false)
 
 func get_start():
 	return _from

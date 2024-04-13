@@ -79,10 +79,10 @@ func get_velocity():
 	return velocity
 
 func highlight_valid(amt: float):
-	$Letter.set("theme_override_colors/font_color", Color(amt, 1.0, amt))
+	$Letter.set("theme_override_colors/font_color", Color(1 - 0.6863 * amt, 1.0, 0.0))
 
 func highlight_potential(amt: float):
-	$Letter.set("theme_override_colors/font_color", Color(amt, amt, 1.0))
+	$Letter.set("theme_override_colors/font_color", Color(1 - 0.5216 * amt, 1 - 0.1926 * amt, 1.0))
 
 func cos_0_to_15(val: float):
 	var ret = cos(val*2*PI) + 1
@@ -138,7 +138,7 @@ func set_selected():
 	if highlight_state == HighlightState.SELECTED: return
 	highlight_state = HighlightState.SELECTED
 	var tween = create_tween()
-	tween.tween_method(highlight_valid, 1.0, 0.0, 0.1)
+	tween.tween_method(highlight_valid, 0.0, 1.0, 0.1)
 	tween.play()
 	pulse()
 
@@ -146,10 +146,10 @@ func set_potential():
 	if highlight_state == HighlightState.POTENTIAL: return
 	highlight_state = HighlightState.POTENTIAL
 	var tween = create_tween()
-	tween.tween_method(highlight_potential, 1.0, 0.0, 0.1)
+	tween.tween_method(highlight_potential, 0.0, 1.0, 0.1)
 	tween.play()
 	pulse()
 
 func clear_highlight():
-	$Letter.set("theme_override_colors/font_color", Color.WHITE)
 	highlight_state = HighlightState.NONE
+	$Letter.set("theme_override_colors/font_color", Color.WHITE)
