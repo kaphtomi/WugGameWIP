@@ -22,6 +22,8 @@ func has_outgoing():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	velocity *= exp(-_delta*velocity.length_squared()*.0001)
+	if highlight_state == HighlightState.NONE:
+		clear_highlight()
 	
 func move(vee):
 	position += vee
@@ -109,12 +111,16 @@ func tween_highlight_color(t: float, og_color: Color, target_color: Color):
 	var b = og_color.b * (1 - t)
 	$Letter.set("theme_override_colors/font_color", Color(r, g, b))
 
-func flash_red():
+func flash_red(revert: bool = true):
 	if highlight_state == HighlightState.INVALID: return
 	var og_state = highlight_state
 	highlight_state = HighlightState.INVALID
 	var tween = create_tween()
-	var reset = func reset(): highlight_state = og_state; tween.kill()
+	var reset
+	if revert:
+		reset = func reset(): highlight_state = og_state
+	else:
+		reset = clear_highlight
 	var og_color = $Letter.get("theme_override_colors/font_color")
 	
 	tween.tween_method(func flash_red_tween_helper(t: float):
@@ -122,7 +128,11 @@ func flash_red():
 		tween_highlight_color(t, og_color, Color.RED), 0.0, 1.0, 0.5)
 	tween.tween_callback(reset)
 	tween.play()
-	#pulse()
+	pulse()
+
+func pulse_and_reset():
+	clear_highlight()
+	pulse()
 
 func set_selected():
 	if highlight_state == HighlightState.SELECTED: return

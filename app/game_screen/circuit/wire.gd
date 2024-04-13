@@ -38,6 +38,8 @@ func _process(_delta):
 	color()
 	if (done>.99):
 		update(_from.position, _to.position)
+	if highlight_state == HighlightState.NONE:
+		clear_highlight()
 	pass
 	
 func update(start: Vector2, end: Vector2):
@@ -84,8 +86,8 @@ func highlight(color: Color, state: HighlightState, inverted: bool = false):
 	
 	highlight_state = state
 	highlight_tween = create_tween()
-	if inverted: highlight_tween.tween_method(set_highlight_stroke_length_inverted, 0.0, 1.0, 0.5)
-	else: highlight_tween.tween_method(set_highlight_stroke_length, 0.0, 1.0, 0.5)
+	if inverted: highlight_tween.tween_method(set_highlight_stroke_length_inverted, 0.0, 1.0, 0.2)
+	else: highlight_tween.tween_method(set_highlight_stroke_length, 0.0, 1.0, 0.2)
 	$HighlightStroke.set_visible(true)
 	highlight_tween.play()
 
@@ -93,7 +95,6 @@ func highlight_blue(inverted: bool = false):
 	highlight(Color.BLUE, HighlightState.BLUE, inverted)
 
 func highlight_green(inverted: bool = false):
-	print("GREEEEEN")
 	highlight(Color.GREEN, HighlightState.GREEN, inverted)
 
 func flash_num_helper(t: float):
@@ -167,8 +168,10 @@ func check_connecting_letters(letter1: String, letter2: String):
 	return false
 
 func snap():
+	if highlight_state != HighlightState.NONE: return false
 	_from.remove_outgoing(self)
 	_to.remove_incoming(self)
+	return true
 
 func score_wire():
 	var s = not_scored

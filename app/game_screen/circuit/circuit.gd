@@ -117,17 +117,18 @@ func _input(event):
 	if input == "Enter":
 		if word in words:
 			for w in connecting_wires: w.flash_red()
-			for j in affected_junctions: j.flash_red()
+			for j in affected_junctions: j.flash_red(false)
 		else:
-			words.append(word)
+			if word.length() > 0: words.append(word)
 			score_word(word)
-			selected_junction = null
-			for j in affected_junctions: j.clear_highlight()
-			for w in connecting_wires: w.clear_highlight()
-			for w in potential_wires: w.clear_highlight()
-			word = ""
-			connecting_wires = []
-			potential_wires = []
+			for j in affected_junctions: j.pulse_and_reset()
+		selected_junction = null
+		for w in connecting_wires: w.clear_highlight()
+		for w in potential_wires: w.clear_highlight()
+		word = ""
+		connecting_wires = []
+		potential_wires = []
+		affected_junctions = []
 	if not input in "QWERTYUIOPASDFGHJKLZXCVBNM/": return
 	for junction in junctions:
 		if junction.get_letter() != input: continue
@@ -139,7 +140,11 @@ func _input(event):
 					w.highlight_green()
 					break
 				else: continue
-			if not connection: return # TODO: Handle lack of connection
+			if connection == null: 
+				if not word.ends_with(input):
+					for w in connecting_wires: w.flash_red()
+					for j in affected_junctions: j.flash_red()
+				return
 			for w in potential_wires: w.clear_highlight(2)
 			potential_wires = []
 			connecting_wires.append(connection)
@@ -156,6 +161,7 @@ func _input(event):
 			w.highlight_blue(true)
 			potential_wires.append(w)
 		word += selected_junction.get_letter()
+	
 
 # PROCESS
 func _process(delta):
@@ -307,7 +313,7 @@ func hookes(wire, delta : float):
 	to.force(f*delta)
 
 func snap(wire):
-	wire.snap()
+	if not wire.snap(): return
 	var from = wire.get_start()
 	var to = wire.get_end()
 	var s = to.position-from.position
