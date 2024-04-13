@@ -313,7 +313,7 @@ func hookes(wire, delta : float):
 	to.force(f*delta)
 
 func snap(wire):
-	if not wire.snap(): return
+	wire.snap()
 	var from = wire.get_start()
 	var to = wire.get_end()
 	var s = to.position-from.position
@@ -349,30 +349,6 @@ func snap(wire):
 	
 	if wires.is_empty(): # Ends the game when there is one wire left
 		circuit_broken.emit()
-
-# ANIMATIONS
-func update_word(word):
-	var word_array = word.split("", false, 0)
-	var checks = cur_word.duplicate()
-	for letter in word_array:
-		checks.erase(letter)
-		var junc = junction_map.get(letter)
-		if cur_word.get(letter)==null&&junc!=null:
-			cur_word[letter]=true
-			var tween = create_tween()
-			tween.tween_property(junc, "scale", Vector2.ONE*1.3, .05)
-			tween.tween_property(junc, "scale", Vector2.ONE*1.25, .01)
-			tween.play()
-	for letter in checks.keys():
-		cur_word.erase(letter)
-		var junc = junction_map[letter]
-		if junc!=null:
-			var tween = create_tween()
-			tween.tween_property(junc, "scale", Vector2.ONE*.95, .02)
-			tween.tween_property(junc, "scale", Vector2.ONE, .01)
-			tween.play()
-		
-	
 
 func pop_in_junction(v, i:int):
 	v.scale = Vector2.ZERO

@@ -2,9 +2,16 @@
 
 [ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="1_jqgrn"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gfr1o"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u7rwm"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_boqj6"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aht6l"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(0.705882, 0.32549, 0.376471, 0.8)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
 
 [sub_resource type="FontVariation" id="FontVariation_nim1x"]
 base_font = ExtResource("1_jqgrn")
@@ -14,13 +21,13 @@ variation_opentype = {
 
 [resource]
 default_font = SubResource("FontVariation_nim1x")
-default_font_size = 89
+default_font_size = 38
 LineEdit/colors/caret_color = Color(0, 0, 0, 1)
-LineEdit/colors/font_color = Color(0, 0, 0, 0.658824)
+LineEdit/colors/font_color = Color(0, 0, 0, 1)
 LineEdit/colors/font_outline_color = Color(0, 0, 0, 1)
 LineEdit/colors/font_placeholder_color = Color(0, 0, 0, 1)
 LineEdit/colors/font_selected_color = Color(0, 0, 0, 1)
 LineEdit/colors/selection_color = Color(0, 0, 0, 1)
 LineEdit/constants/caret_width = 3
-LineEdit/styles/focus = SubResource("StyleBoxEmpty_gfr1o")
-LineEdit/styles/normal = SubResource("StyleBoxEmpty_boqj6")
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_u7rwm")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_aht6l")

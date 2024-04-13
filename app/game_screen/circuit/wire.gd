@@ -139,6 +139,8 @@ func set_thickness(width: float):
 	thickness = width
 	
 func decay(delta, score):
+	if highlight_state != HighlightState.NONE:
+		return false
 	var decrement = delta*.01*randf()*sqrt(score)
 	if not_scored:
 		decrement*=1.5
@@ -168,10 +170,8 @@ func check_connecting_letters(letter1: String, letter2: String):
 	return false
 
 func snap():
-	if highlight_state != HighlightState.NONE: return false
 	_from.remove_outgoing(self)
 	_to.remove_incoming(self)
-	return true
 
 func score_wire():
 	var s = not_scored
