@@ -14,6 +14,8 @@ var not_scored = true
 var highlight_tween
 var highlight_state = HighlightState.NONE
 
+var block_decay = false
+
 enum HighlightState { NONE, BLUE, GREEN, YELLOW, RED }
 	
 
@@ -78,12 +80,9 @@ func highlight(color: Color, state: HighlightState, inverted: bool = false):
 	if highlight_state == state: return
 	$HighlightStroke.set_default_color(color) # place so early in code to enable immediate return if already highlighted
 	if highlight_state != HighlightState.NONE: 
-		#$HighlightStroke.set_visible(false)
-		#$HighlightStroke.set_visible(true)
 		highlight_state = state
-		
 		return
-	
+	block_decay = true
 	highlight_state = state
 	highlight_tween = create_tween()
 	if inverted: highlight_tween.tween_method(set_highlight_stroke_length_inverted, 0.0, 1.0, 0.2)
@@ -123,6 +122,7 @@ func flash_red():
 		
 func clear_highlight(unless: HighlightState = HighlightState.NONE):
 	if highlight_state == unless: return
+	block_decay = false
 	highlight_state = HighlightState.NONE
 	$HighlightStroke.set_visible(false)
 
@@ -139,8 +139,7 @@ func set_thickness(width: float):
 	thickness = width
 	
 func decay(delta, score):
-	if highlight_state != HighlightState.NONE:
-		return false
+	if block_decay: return
 	var decrement = delta*.01*randf()*sqrt(score)
 	if not_scored:
 		decrement*=1.5

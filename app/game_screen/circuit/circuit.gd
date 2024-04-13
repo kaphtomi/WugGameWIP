@@ -135,9 +135,11 @@ func _input(event):
 		if selected_junction:
 			var connection
 			for w in potential_wires:
+				if w == null: continue
 				if w.check_connecting_letters(junction.get_letter(), selected_junction.get_letter()):
 					connection = w
-					w.highlight_green()
+					var invert_highlight_direction = w.get_end().get_letter() == selected_junction.get_letter()
+					w.highlight_green(invert_highlight_direction)
 					break
 				else: continue
 			if connection == null: 
@@ -154,14 +156,18 @@ func _input(event):
 		affected_junctions.append(junction)
 		for w in junction.outgoing_edges:
 			if w in connecting_wires: continue
-			if score < 300: w.highlight_blue()
+			if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+				w.highlight_blue()
+			else: w.block_decay = true
 			potential_wires.append(w)
 		for w in junction.incoming_edges:
 			if w in connecting_wires: continue
-			if score < 300: w.highlight_blue(true)
+			if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+				w.highlight_blue(true)
+			else: w.block_decay = true
 			potential_wires.append(w)
 		word += selected_junction.get_letter()
-	
+
 
 # PROCESS
 func _process(delta):
