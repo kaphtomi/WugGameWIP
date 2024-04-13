@@ -26,8 +26,6 @@ func ready_circuit():
 	$CircuitAndBlackboard/Circuit.generate()
 	$CircuitAndBlackboard/Circuit.position = Vector2()
 
-
-
 func _on_circuit_word_submitted(word : String):
 	if word == "/kill":
 		$CircuitAndBlackboard/Circuit.kill_circuit()

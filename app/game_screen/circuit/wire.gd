@@ -102,18 +102,23 @@ func flash_num_helper(t: float):
 	elif t > 0.67: return 1 - (t - 0.67) * 3
 
 func tween_highlight_color(t: float, og_color: Color, target_color: Color):
-	var r = og_color.r * (1 - t) + target_color.r * (t)
-	var g = og_color.g * (1 - t) + target_color.r * (t)
-	var b = og_color.b * (1 - t) + target_color.r * (t)
-	$HighlightStroke.set_default_color(r, g, b)
+	var r = og_color.r * (1 - t) + t
+	var g = og_color.g * (1 - t)
+	var b = og_color.b * (1 - t)
+	$HighlightStroke.set_default_color(Color(r, g, b))
 
 func flash_red():
 	if highlight_state == HighlightState.RED: return
-	var og_color = $HighlightStroke.color
-	highlight_tween = create_tween()
-	highlight_tween.tween_method(func flash_red_tween_helper(t: float):
+	var og_state = highlight_state
+	highlight_state = HighlightState.RED
+	var reset = func reset(): highlight_state = og_state
+	var og_color = $HighlightStroke.get_default_color()
+	var tween = create_tween()
+	tween.tween_method(func flash_red_tween_helper(t: float):
 		t = flash_num_helper(t)
 		tween_highlight_color(t, og_color, Color.RED), 0.0, 1.0, 0.5)
+	tween.tween_callback(reset)
+	tween.play()
 		
 func clear_highlight(unless: HighlightState = HighlightState.NONE):
 	if highlight_state == unless: return

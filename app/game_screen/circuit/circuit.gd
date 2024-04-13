@@ -116,18 +116,18 @@ func _input(event):
 	var input = event.as_text()
 	if input == "Enter":
 		if word in words:
-			# TODO: Indicate invalid
-			return
+			for w in connecting_wires: w.flash_red()
+			for j in affected_junctions: j.flash_red()
 		else:
 			words.append(word)
 			score_word(word)
-		selected_junction = null
-		for j in affected_junctions: j.clear_highlight()
-		for w in connecting_wires: w.clear_highlight()
-		for w in potential_wires: w.clear_highlight()
-		word = ""
-		connecting_wires = []
-		potential_wires = []
+			selected_junction = null
+			for j in affected_junctions: j.clear_highlight()
+			for w in connecting_wires: w.clear_highlight()
+			for w in potential_wires: w.clear_highlight()
+			word = ""
+			connecting_wires = []
+			potential_wires = []
 	if not input in "QWERTYUIOPASDFGHJKLZXCVBNM/": return
 	for junction in junctions:
 		if junction.get_letter() != input: continue

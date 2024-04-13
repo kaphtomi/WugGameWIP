@@ -97,6 +97,32 @@ func pulse():
 	tween.tween_method(apply_equal_scale, 1.0, 1.5, 0.25)
 	tween.tween_callback(tween2.play)
 	tween.play()
+	
+func flash_num_helper(t: float):
+	if t < 0.33: return t * 3
+	elif t < 0.67: return 1
+	elif t > 0.67: return 1 - (t - 0.67) * 3
+
+func tween_highlight_color(t: float, og_color: Color, target_color: Color):
+	var r = og_color.r * (1 - t) + t
+	var g = og_color.g * (1 - t)
+	var b = og_color.b * (1 - t)
+	$Letter.set("theme_override_colors/font_color", Color(r, g, b))
+
+func flash_red():
+	if highlight_state == HighlightState.INVALID: return
+	var og_state = highlight_state
+	highlight_state = HighlightState.INVALID
+	var tween = create_tween()
+	var reset = func reset(): highlight_state = og_state; tween.kill()
+	var og_color = $Letter.get("theme_override_colors/font_color")
+	
+	tween.tween_method(func flash_red_tween_helper(t: float):
+		t = flash_num_helper(t)
+		tween_highlight_color(t, og_color, Color.RED), 0.0, 1.0, 0.5)
+	tween.tween_callback(reset)
+	tween.play()
+	#pulse()
 
 func set_selected():
 	if highlight_state == HighlightState.SELECTED: return
