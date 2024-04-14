@@ -79,10 +79,10 @@ func get_velocity():
 	return velocity
 
 func highlight_valid(amt: float):
-	$Letter.set("theme_override_colors/font_color", Color(1 - 0.6863 * amt, 1.0, 0.0))
+	$Letter.modulate = Color(1 - 0.6863 * amt, 1.0, 0.0)
 
 func highlight_potential(amt: float):
-	$Letter.set("theme_override_colors/font_color", Color(1 - 0.5216 * amt, 1 - 0.1926 * amt, 1.0))
+	$Letter.modulate = Color(1 - 0.5216 * amt, 1 - 0.1926 * amt, 1.0)
 
 func cos_0_to_15(val: float):
 	var ret = cos(val*2*PI) + 1
@@ -109,7 +109,7 @@ func tween_highlight_color(t: float, og_color: Color, target_color: Color):
 	var r = og_color.r * (1 - t) + t
 	var g = og_color.g * (1 - t)
 	var b = og_color.b * (1 - t)
-	$Letter.set("theme_override_colors/font_color", Color(r, g, b))
+	$Letter.modulate = Color(r, g, b)
 
 func flash_red(revert: bool = true):
 	if highlight_state == HighlightState.INVALID: return
@@ -118,10 +118,14 @@ func flash_red(revert: bool = true):
 	var tween = create_tween()
 	var reset
 	if revert:
-		reset = func reset(): highlight_state = og_state
+		reset = func reset(): 
+			highlight_state = og_state
+			match highlight_state:
+				HighlightState.POTENTIAL: highlight_potential(1.0)
+				HighlightState.SELECTED: highlight_valid(1.0)
 	else:
 		reset = clear_highlight
-	var og_color = $Letter.get("theme_override_colors/font_color")
+	var og_color = $Letter.modulate
 	
 	tween.tween_method(func flash_red_tween_helper(t: float):
 		t = flash_num_helper(t)
@@ -152,4 +156,4 @@ func set_potential():
 
 func clear_highlight():
 	highlight_state = HighlightState.NONE
-	$Letter.set("theme_override_colors/font_color", Color.WHITE)
+	$Letter.modulate = Color.WHITE

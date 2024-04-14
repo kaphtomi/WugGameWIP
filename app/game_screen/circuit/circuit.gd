@@ -112,61 +112,75 @@ var potential_wires = []
 
 signal word_submitted
 
+# Checks if currently selected word is not in word list
+func validate_word():
+	if word in words:
+		for w in connecting_wires: w.flash_red()
+		for j in affected_junctions: j.flash_red(false)
+	else:
+		if word.length() > 0: words.append(word)
+		score_word(word)
+		for j in affected_junctions: j.pulse_and_reset()
+	selected_junction = null
+	for w in connecting_wires: w.clear_highlight()
+	for w in potential_wires: w.clear_highlight()
+	word = ""
+	connecting_wires = []
+	potential_wires = []
+	affected_junctions = []
+
+# Checks to see if junction is connected to previously selected junction
+func validate_junction(junction, input):
+	var connection
+	for w in potential_wires:
+		if w == null: continue
+		if w.check_connecting_letters(junction.get_letter(), selected_junction.get_letter()):
+			connection = w
+			var invert_highlight_direction = w.get_end().get_letter() == selected_junction.get_letter()
+			w.highlight_green(invert_highlight_direction)
+			break
+		else: continue
+	if connection == null: 
+		if not word.ends_with(input):
+			for w in connecting_wires: w.flash_red()
+			for j in affected_junctions: j.flash_red()
+		return false
+	for w in potential_wires: w.clear_highlight(2)
+	potential_wires = []
+	connecting_wires.append(connection)
+	selected_junction.set_selected()
+	return true
+
+# Checks difficulty and, if applicable, highlights potential wires blue
+func highlight_wires():
+	for w in selected_junction.outgoing_edges:
+		if w in connecting_wires: continue
+		if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+			w.highlight_blue()
+		else: w.block_decay = true
+		potential_wires.append(w)
+	for w in selected_junction.incoming_edges:
+		if w in connecting_wires: continue
+		if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+			w.highlight_blue(true)
+		else: w.block_decay = true
+		potential_wires.append(w)
+
 func _input(event):
 	var input = event.as_text()
-	if input == "Enter":
-		if word in words:
-			for w in connecting_wires: w.flash_red()
-			for j in affected_junctions: j.flash_red(false)
-		else:
-			if word.length() > 0: words.append(word)
-			score_word(word)
-			for j in affected_junctions: j.pulse_and_reset()
-		selected_junction = null
-		for w in connecting_wires: w.clear_highlight()
-		for w in potential_wires: w.clear_highlight()
-		word = ""
-		connecting_wires = []
-		potential_wires = []
-		affected_junctions = []
+	if input == "Enter": validate_word()
 	if not input in "QWERTYUIOPASDFGHJKLZXCVBNM/": return
-	for junction in junctions:
-		if junction.get_letter() != input: continue
-		if selected_junction:
-			var connection
-			for w in potential_wires:
-				if w == null: continue
-				if w.check_connecting_letters(junction.get_letter(), selected_junction.get_letter()):
-					connection = w
-					var invert_highlight_direction = w.get_end().get_letter() == selected_junction.get_letter()
-					w.highlight_green(invert_highlight_direction)
-					break
-				else: continue
-			if connection == null: 
-				if not word.ends_with(input):
-					for w in connecting_wires: w.flash_red()
-					for j in affected_junctions: j.flash_red()
-				return
-			for w in potential_wires: w.clear_highlight(2)
-			potential_wires = []
-			connecting_wires.append(connection)
-			selected_junction.set_selected()
-		junction.set_potential()
-		selected_junction = junction
-		affected_junctions.append(junction)
-		for w in junction.outgoing_edges:
-			if w in connecting_wires: continue
-			if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
-				w.highlight_blue()
-			else: w.block_decay = true
-			potential_wires.append(w)
-		for w in junction.incoming_edges:
-			if w in connecting_wires: continue
-			if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
-				w.highlight_blue(true)
-			else: w.block_decay = true
-			potential_wires.append(w)
-		word += selected_junction.get_letter()
+	var junction = junction_map.get(input)
+	if junction == null: return
+	if selected_junction and not validate_junction(junction, input): return
+	
+	junction.set_potential()
+	selected_junction = junction
+	affected_junctions.append(junction)
+	
+	highlight_wires()
+
+	word += selected_junction.get_letter()
 
 
 # PROCESS
