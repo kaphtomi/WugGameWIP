@@ -7,6 +7,9 @@ var size : Vector2
 var _letter: String = ""
 var popped_in = false
 
+enum HighlightState { NONE, POTENTIAL, SELECTED, INVALID }
+var highlight_state = HighlightState.NONE
+
 func _ready():
 	velocity = Vector2.ZERO
 
@@ -19,6 +22,8 @@ func has_outgoing():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	velocity *= exp(-_delta*velocity.length_squared()*.0001)
+	if highlight_state == HighlightState.NONE:
+		clear_highlight()
 	
 func move(vee):
 	position += vee
@@ -72,3 +77,79 @@ func force(amt : Vector2):
 	
 func get_velocity():
 	return velocity
+
+func highlight_valid(amt: float):
+	$Letter.set("theme_override_colors/font_color", Color(1 - 0.6863 * amt, 1.0, 0.0))
+
+func highlight_potential(amt: float):
+	$Letter.set("theme_override_colors/font_color", Color(1 - 0.5216 * amt, 1 - 0.1926 * amt, 1.0))
+
+func cos_0_to_15(val: float):
+	var ret = cos(val*2*PI) + 1
+	return ret * (2/3)
+	
+func apply_equal_scale(t: float):
+	set_scale(Vector2(t, t))
+	
+func pulse():
+	var tween = create_tween()
+	var tween2 = create_tween()
+	tween2.tween_method(apply_equal_scale, 1.5, 1.0, 0.25)
+	
+	tween.tween_method(apply_equal_scale, 1.0, 1.5, 0.25)
+	tween.tween_callback(tween2.play)
+	tween.play()
+	
+func flash_num_helper(t: float):
+	if t < 0.33: return t * 3
+	elif t < 0.67: return 1
+	elif t > 0.67: return 1 - (t - 0.67) * 3
+
+func tween_highlight_color(t: float, og_color: Color, target_color: Color):
+	var r = og_color.r * (1 - t) + t
+	var g = og_color.g * (1 - t)
+	var b = og_color.b * (1 - t)
+	$Letter.set("theme_override_colors/font_color", Color(r, g, b))
+
+func flash_red(revert: bool = true):
+	if highlight_state == HighlightState.INVALID: return
+	var og_state = highlight_state
+	highlight_state = HighlightState.INVALID
+	var tween = create_tween()
+	var reset
+	if revert:
+		reset = func reset(): highlight_state = og_state
+	else:
+		reset = clear_highlight
+	var og_color = $Letter.get("theme_override_colors/font_color")
+	
+	tween.tween_method(func flash_red_tween_helper(t: float):
+		t = flash_num_helper(t)
+		tween_highlight_color(t, og_color, Color.RED), 0.0, 1.0, 0.5)
+	tween.tween_callback(reset)
+	tween.play()
+	pulse()
+
+func pulse_and_reset():
+	clear_highlight()
+	pulse()
+
+func set_selected():
+	if highlight_state == HighlightState.SELECTED: return
+	highlight_state = HighlightState.SELECTED
+	var tween = create_tween()
+	tween.tween_method(highlight_valid, 0.0, 1.0, 0.1)
+	tween.play()
+	pulse()
+
+func set_potential():
+	if highlight_state == HighlightState.POTENTIAL: return
+	highlight_state = HighlightState.POTENTIAL
+	var tween = create_tween()
+	tween.tween_method(highlight_potential, 0.0, 1.0, 0.1)
+	tween.play()
+	pulse()
+
+func clear_highlight():
+	highlight_state = HighlightState.NONE
+	$Letter.set("theme_override_colors/font_color", Color.WHITE)

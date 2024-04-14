@@ -6,7 +6,7 @@ var game_is_over=false
 	
 func _ready():
 	call_deferred("ready_circuit")
-	
+
 func _process(delta):
 	var cur_score_init = cur_score
 	cur_score = lerp(float(cur_score),float(score),delta*2)
@@ -26,14 +26,12 @@ func ready_circuit():
 	$CircuitAndBlackboard/Circuit.generate()
 	$CircuitAndBlackboard/Circuit.position = Vector2()
 
-
-
-func _on_blackboard_word_submitted(word : String):
+func _on_circuit_word_submitted(word : String):
 	if word == "/kill":
 		$CircuitAndBlackboard/Circuit.kill_circuit()
-	if $CircuitAndBlackboard/Circuit.is_word_in_circuit(word):
-		$CircuitAndBlackboard/Circuit.score_word(word)
-		$CircuitAndBlackboard/Blackboard.add_word(word)
+	if true: #$CircuitAndBlackboard/Circuit.is_word_in_circuit(word):
+		#$CircuitAndBlackboard/Circuit.score_word(word)
+		#$CircuitAndBlackboard/Blackboard.add_word(word)
 		var score_plus = $CircuitAndBlackboard/Circuit.score - score
 		score += score_plus
 		$Flow/Extras.text = "+" + str(score_plus) + " " + word

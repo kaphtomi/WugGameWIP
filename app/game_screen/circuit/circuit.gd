@@ -7,7 +7,7 @@ const Junction = preload("res://app/game_screen/circuit/junction.tscn")
 signal circuit_broken
 var circuit_is_broken = false
 
-var alphabetter = "etaonshrdlcumwfgypbvkjxqzi".split("", true, 0)
+var alphabetter = "ETAONSHRDLCUMWFGYPBVKJXQZI".split("", true, 0)
 var junction_map = {}
 var junctions : Array
 var wires : Array
@@ -26,8 +26,8 @@ var in_radius_to
 var out_radius_to
 var kill = false
 var cur_word = {}
-
-
+var handling_letter = false
+var words: Array = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -102,6 +102,74 @@ func generate_random_wire():
 		from.pop_in_wire(w)
 
 
+# INPUT
+
+var selected_junction
+var word = ""
+var affected_junctions = []
+var connecting_wires = []
+var potential_wires = []
+
+signal word_submitted
+
+func _input(event):
+	var input = event.as_text()
+	if input == "Enter":
+		if word in words:
+			for w in connecting_wires: w.flash_red()
+			for j in affected_junctions: j.flash_red(false)
+		else:
+			if word.length() > 0: words.append(word)
+			score_word(word)
+			for j in affected_junctions: j.pulse_and_reset()
+		selected_junction = null
+		for w in connecting_wires: w.clear_highlight()
+		for w in potential_wires: w.clear_highlight()
+		word = ""
+		connecting_wires = []
+		potential_wires = []
+		affected_junctions = []
+	if not input in "QWERTYUIOPASDFGHJKLZXCVBNM/": return
+	for junction in junctions:
+		if junction.get_letter() != input: continue
+		if selected_junction:
+			var connection
+			for w in potential_wires:
+				if w == null: continue
+				if w.check_connecting_letters(junction.get_letter(), selected_junction.get_letter()):
+					connection = w
+					var invert_highlight_direction = w.get_end().get_letter() == selected_junction.get_letter()
+					w.highlight_green(invert_highlight_direction)
+					break
+				else: continue
+			if connection == null: 
+				if not word.ends_with(input):
+					for w in connecting_wires: w.flash_red()
+					for j in affected_junctions: j.flash_red()
+				return
+			for w in potential_wires: w.clear_highlight(2)
+			potential_wires = []
+			connecting_wires.append(connection)
+			selected_junction.set_selected()
+		junction.set_potential()
+		selected_junction = junction
+		affected_junctions.append(junction)
+		for w in junction.outgoing_edges:
+			if w in connecting_wires: continue
+			if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+				w.highlight_blue()
+			else: w.block_decay = true
+			potential_wires.append(w)
+		for w in junction.incoming_edges:
+			if w in connecting_wires: continue
+			if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+				w.highlight_blue(true)
+			else: w.block_decay = true
+			potential_wires.append(w)
+		word += selected_junction.get_letter()
+
+
+# PROCESS
 func _process(delta):
 	match GlobalVariables.cur_zzz:
 		GlobalVariables.WUG_ZZZ.AWAKE:
@@ -175,6 +243,7 @@ func score_word(word : String):
 	if s>10:
 		s=10
 	add_to_graph(s)
+	word_submitted.emit(word)
 
 func add_to_graph(amt):
 	match amt:
@@ -286,30 +355,6 @@ func snap(wire):
 	
 	if wires.is_empty(): # Ends the game when there is one wire left
 		circuit_broken.emit()
-
-# ANIMATIONS
-func update_word(word):
-	var word_array = word.split("", false, 0)
-	var checks = cur_word.duplicate()
-	for letter in word_array:
-		checks.erase(letter)
-		var junc = junction_map.get(letter)
-		if cur_word.get(letter)==null&&junc!=null:
-			cur_word[letter]=true
-			var tween = create_tween()
-			tween.tween_property(junc, "scale", Vector2.ONE*1.3, .05)
-			tween.tween_property(junc, "scale", Vector2.ONE*1.25, .01)
-			tween.play()
-	for letter in checks.keys():
-		cur_word.erase(letter)
-		var junc = junction_map[letter]
-		if junc!=null:
-			var tween = create_tween()
-			tween.tween_property(junc, "scale", Vector2.ONE*.95, .02)
-			tween.tween_property(junc, "scale", Vector2.ONE, .01)
-			tween.play()
-		
-	
 
 func pop_in_junction(v, i:int):
 	v.scale = Vector2.ZERO

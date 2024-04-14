@@ -11,6 +11,14 @@ const WIDTH_SCALE: int = 3
 const MAX_THICKNESS: int = 7
 var not_scored = true
 
+var highlight_tween
+var highlight_state = HighlightState.NONE
+
+var block_decay = false
+
+enum HighlightState { NONE, BLUE, GREEN, YELLOW, RED }
+	
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	thickness = randi() % 4 + 4
@@ -32,12 +40,18 @@ func _process(_delta):
 	color()
 	if (done>.99):
 		update(_from.position, _to.position)
+	if highlight_state == HighlightState.NONE:
+		clear_highlight()
 	pass
 	
 func update(start: Vector2, end: Vector2):
 	$Stroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
 	$Stroke.set_point_position(0,start)
 	$Stroke.set_point_position(1,end)
+	$HighlightStroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
+	if highlight_tween and not highlight_tween.is_running():
+		$HighlightStroke.set_point_position(0,start)
+		$HighlightStroke.set_point_position(1,end)
 	
 func color():
 	$Stroke.set_default_color(Color.from_ok_hsl(hue, sat, .5 + thickness*.03))
@@ -48,6 +62,69 @@ func get_color():
 func pop_in(t:float):
 	update(_from.position, _from.position+ t*(_to.position-_from.position))
 	done = t
+
+func fade_highlight_stroke(t: float, from, to):
+	var current_origin: Vector2 = from.position
+	var current_dest: Vector2 = to.position
+	var new_end_pos = (current_dest - current_origin) * t + current_origin
+	$HighlightStroke.set_point_position(0, current_origin)
+	$HighlightStroke.set_point_position(1, new_end_pos)
+
+func set_highlight_stroke_length(t: float):
+	fade_highlight_stroke(t, _from, _to)
+	
+func set_highlight_stroke_length_inverted(t: float):
+	fade_highlight_stroke(t, _to, _from)
+
+func highlight(color: Color, state: HighlightState, inverted: bool = false):
+	if highlight_state == state: return
+	$HighlightStroke.set_default_color(color) # place so early in code to enable immediate return if already highlighted
+	if highlight_state != HighlightState.NONE: 
+		highlight_state = state
+		return
+	block_decay = true
+	highlight_state = state
+	highlight_tween = create_tween()
+	if inverted: highlight_tween.tween_method(set_highlight_stroke_length_inverted, 0.0, 1.0, 0.2)
+	else: highlight_tween.tween_method(set_highlight_stroke_length, 0.0, 1.0, 0.2)
+	$HighlightStroke.set_visible(true)
+	highlight_tween.play()
+
+func highlight_blue(inverted: bool = false):
+	highlight(Color(0.4784, 0.8078, 1.0), HighlightState.BLUE, inverted)
+
+func highlight_green(inverted: bool = false):
+	highlight(Color(0.3137, 1.0, 0.0), HighlightState.GREEN, inverted)
+
+func flash_num_helper(t: float):
+	if t < 0.33: return t * 3
+	elif t < 0.67: return 1
+	elif t > 0.67: return 1 - (t - 0.67) * 3
+
+func tween_highlight_color(t: float, og_color: Color, target_color: Color):
+	var r = og_color.r * (1 - t) + t
+	var g = og_color.g * (1 - t)
+	var b = og_color.b * (1 - t)
+	$HighlightStroke.set_default_color(Color(r, g, b))
+
+func flash_red():
+	if highlight_state == HighlightState.RED: return
+	var og_state = highlight_state
+	highlight_state = HighlightState.RED
+	var reset = func reset(): highlight_state = og_state
+	var og_color = $HighlightStroke.get_default_color()
+	var tween = create_tween()
+	tween.tween_method(func flash_red_tween_helper(t: float):
+		t = flash_num_helper(t)
+		tween_highlight_color(t, og_color, Color.RED), 0.0, 1.0, 0.5)
+	tween.tween_callback(reset)
+	tween.play()
+		
+func clear_highlight(unless: HighlightState = HighlightState.NONE):
+	if highlight_state == unless: return
+	block_decay = false
+	highlight_state = HighlightState.NONE
+	$HighlightStroke.set_visible(false)
 
 func get_start():
 	return _from
@@ -62,6 +139,7 @@ func set_thickness(width: float):
 	thickness = width
 	
 func decay(delta, score):
+	if block_decay: return
 	var decrement = delta*.01*randf()*sqrt(score)
 	if not_scored:
 		decrement*=1.5
