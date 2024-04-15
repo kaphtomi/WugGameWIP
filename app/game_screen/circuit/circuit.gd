@@ -114,20 +114,37 @@ signal word_submitted
 
 # Checks if currently selected word is not in word list
 func validate_word():
-	if word in words:
+	if null in connecting_wires:
+		clear_word_selection()
+		flash_all_red()
+	elif word in words:
 		for w in connecting_wires: w.flash_red()
 		for j in affected_junctions: j.flash_red(false)
 	else:
 		if word.length() > 0: words.append(word)
 		score_word(word)
 		for j in affected_junctions: j.pulse_and_reset()
+	clear_word_selection()
+
+func clear_word_selection():
 	selected_junction = null
-	for w in connecting_wires: w.clear_highlight()
-	for w in potential_wires: w.clear_highlight()
+	for w in connecting_wires:
+		if w == null: continue
+		w.clear_highlight()
+	for w in potential_wires: 
+		if w == null: continue
+		w.clear_highlight()
+	for j in affected_junctions:
+		if j == null: continue
+		j.clear_highlight()
 	word = ""
 	connecting_wires = []
 	potential_wires = []
 	affected_junctions = []
+
+func void_current_word():
+	clear_word_selection()
+	flash_all_red()
 
 # Checks to see if junction is connected to previously selected junction
 func validate_junction(junction, input):
@@ -142,10 +159,19 @@ func validate_junction(junction, input):
 		else: continue
 	if connection == null: 
 		if not word.ends_with(input):
-			for w in connecting_wires: w.flash_red()
-			for j in affected_junctions: j.flash_red()
+			for w in connecting_wires:
+				if w == null:
+					void_current_word()
+					return
+				w.flash_red()
+			if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.AWAKE:
+				for j in affected_junctions: j.flash_red()
+			else:
+				for j in junctions: j.flash_red()
 		return false
-	for w in potential_wires: w.clear_highlight(2)
+	for w in potential_wires: 
+		if w == null: continue
+		w.clear_highlight(2)
 	potential_wires = []
 	connecting_wires.append(connection)
 	selected_junction.set_selected()
@@ -154,26 +180,38 @@ func validate_junction(junction, input):
 # Checks difficulty and, if applicable, highlights potential wires blue
 func highlight_wires():
 	for w in selected_junction.outgoing_edges:
+		if w == null: continue
 		if w in connecting_wires: continue
 		if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
 			w.highlight_blue()
 		else: w.block_decay = true
 		potential_wires.append(w)
 	for w in selected_junction.incoming_edges:
+		if w == null: continue
 		if w in connecting_wires: continue
 		if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
 			w.highlight_blue(true)
 		else: w.block_decay = true
 		potential_wires.append(w)
 
+func flash_all_red():
+	for w in wires: w.flash_red()
+	for j in junctions: j.flash_red()
+
 func _input(event):
 	if event.is_echo()||event.is_released():
 		return
 	var input = event.as_text()
-	if input == "Enter": validate_word()
-	if not input in "QWERTYUIOPASDFGHJKLZXCVBNM/": return
+	if input == "Enter": 
+		validate_word()
+		return
+	elif not input in "QWERTYUIOPASDFGHJKLZXCVBNM/":
+		flash_all_red()
+		return
 	var junction = junction_map.get(input)
-	if junction == null: return
+	if junction == null: 
+		flash_all_red()
+		return
 	if selected_junction and not validate_junction(junction, input): return
 	
 	junction.set_potential()
@@ -336,6 +374,7 @@ func hookes(wire, delta : float):
 
 func snap(wire):
 	wire.snap()
+	if wire in connecting_wires: void_current_word()
 	var from = wire.get_start()
 	var to = wire.get_end()
 	var s = to.position-from.position

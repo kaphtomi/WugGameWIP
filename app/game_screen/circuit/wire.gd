@@ -153,7 +153,7 @@ func set_thickness(width: float):
 	thickness = width
 	
 func decay(delta, score):
-	if block_decay: return
+	#if block_decay: return
 	var decrement = delta*.01*randf()*sqrt(score)
 	if not_scored:
 		decrement*=1.5
