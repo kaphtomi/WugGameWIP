@@ -167,6 +167,8 @@ func highlight_wires():
 		potential_wires.append(w)
 
 func _input(event):
+	if event.is_echo()||event.is_released():
+		return
 	var input = event.as_text()
 	if input == "Enter": validate_word()
 	if not input in "QWERTYUIOPASDFGHJKLZXCVBNM/": return
