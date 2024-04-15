@@ -49,9 +49,11 @@ func _process(_delta):
 	if highlight_state == HighlightState.NONE:
 		clear_highlight()
 	pass
-	
+
+const SKETCHY_WIRES: bool = true
+
 func update(start: Vector2, end: Vector2):
-	if time>.1:
+	if time>.1 and SKETCHY_WIRES:
 		time=0
 		start_offset = 5*Vector2.ONE.rotated(randf()*TAU)
 		end_offset = 5*Vector2.ONE.rotated(randf()*TAU)

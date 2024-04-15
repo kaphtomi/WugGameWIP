@@ -7,6 +7,8 @@ var size : Vector2
 var _letter: String = ""
 var popped_in = false
 
+var highlight_tween: Tween
+
 enum HighlightState { NONE, POTENTIAL, SELECTED, INVALID }
 var highlight_state = HighlightState.NONE
 
@@ -115,7 +117,7 @@ func flash_red(revert: bool = true):
 	if highlight_state == HighlightState.INVALID: return
 	var og_state = highlight_state
 	highlight_state = HighlightState.INVALID
-	var tween = create_tween()
+	highlight_tween = create_tween()
 	var reset
 	if revert:
 		reset = func reset(): 
@@ -127,11 +129,11 @@ func flash_red(revert: bool = true):
 		reset = clear_highlight
 	var og_color = $Letter.modulate
 	
-	tween.tween_method(func flash_red_tween_helper(t: float):
+	highlight_tween.tween_method(func flash_red_tween_helper(t: float):
 		t = flash_num_helper(t)
 		tween_highlight_color(t, og_color, Color.RED), 0.0, 1.0, 0.5)
-	tween.tween_callback(reset)
-	tween.play()
+	highlight_tween.tween_callback(reset)
+	highlight_tween.play()
 	pulse()
 
 func pulse_and_reset():
@@ -141,19 +143,21 @@ func pulse_and_reset():
 func set_selected():
 	if highlight_state == HighlightState.SELECTED: return
 	highlight_state = HighlightState.SELECTED
-	var tween = create_tween()
-	tween.tween_method(highlight_valid, 0.0, 1.0, 0.1)
-	tween.play()
+	highlight_tween = create_tween()
+	highlight_tween.tween_method(highlight_valid, 0.0, 1.0, 0.1)
+	highlight_tween.play()
 	pulse()
 
 func set_potential():
 	if highlight_state == HighlightState.POTENTIAL: return
 	highlight_state = HighlightState.POTENTIAL
-	var tween = create_tween()
-	tween.tween_method(highlight_potential, 0.0, 1.0, 0.1)
-	tween.play()
+	highlight_tween = create_tween()
+	highlight_tween.tween_method(highlight_potential, 0.0, 1.0, 0.1)
+	highlight_tween.play()
 	pulse()
 
 func clear_highlight():
 	highlight_state = HighlightState.NONE
+	if highlight_tween != null and highlight_tween.is_running():
+		highlight_tween.kill()
 	$Letter.modulate = Color.WHITE
