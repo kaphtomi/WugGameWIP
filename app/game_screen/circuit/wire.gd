@@ -17,6 +17,11 @@ var highlight_state = HighlightState.NONE
 var block_decay = false
 
 enum HighlightState { NONE, BLUE, GREEN, YELLOW, RED }
+var time = 0
+var start_offset = Vector2.ZERO
+var end_offset = Vector2.ZERO
+var start_offset_h = Vector2.ZERO
+var end_offset_h = Vector2.ZERO
 	
 
 # Called when the node enters the scene tree for the first time.
@@ -37,6 +42,7 @@ func set_nodes(from, to):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	time += _delta
 	color()
 	if (done>.99):
 		update(_from.position, _to.position)
@@ -45,13 +51,19 @@ func _process(_delta):
 	pass
 	
 func update(start: Vector2, end: Vector2):
+	if time>.1:
+		time=0
+		start_offset = 5*Vector2.ONE.rotated(randf()*TAU)
+		end_offset = 5*Vector2.ONE.rotated(randf()*TAU)
+		start_offset_h = 3*Vector2.ONE.rotated(randf()*TAU)
+		end_offset_h = 3*Vector2.ONE.rotated(randf()*TAU)
 	$Stroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
-	$Stroke.set_point_position(0,start)
-	$Stroke.set_point_position(1,end)
+	$Stroke.set_point_position(0,start+start_offset)
+	$Stroke.set_point_position(1,end+end_offset)
 	$HighlightStroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
 	if highlight_tween and not highlight_tween.is_running():
-		$HighlightStroke.set_point_position(0,start)
-		$HighlightStroke.set_point_position(1,end)
+		$HighlightStroke.set_point_position(0,start+start_offset + start_offset_h)
+		$HighlightStroke.set_point_position(1,end+end_offset +end_offset_h)
 	
 func color():
 	$Stroke.set_default_color(Color.from_ok_hsl(hue, sat, .5 + thickness*.03))
