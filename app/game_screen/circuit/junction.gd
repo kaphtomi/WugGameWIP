@@ -6,6 +6,9 @@ var velocity : Vector2
 var size : Vector2
 var _letter: String = ""
 var popped_in = false
+var time = 0
+var offset = Vector2.ZERO
+var letter_center
 
 var highlight_tween: Tween
 
@@ -14,6 +17,10 @@ var highlight_state = HighlightState.NONE
 
 func _ready():
 	velocity = Vector2.ZERO
+	letter_center = $Letter.position
+	encircle()
+	$Letter.modulate = Color.BLACK
+	$circler.modulate = Color.BLACK
 
 func has_incoming():
 	return incoming_edges.size() > 0
@@ -26,6 +33,11 @@ func _process(_delta):
 	velocity *= exp(-_delta*velocity.length_squared()*.0001)
 	if highlight_state == HighlightState.NONE:
 		clear_highlight()
+
+func sketch():
+	offset = offset*.5 + 3*Vector2.ONE.rotated(randf()*TAU)*randf()
+	$Letter.position = letter_center + offset
+	encircle()
 	
 func move(vee):
 	position += vee
@@ -81,7 +93,7 @@ func get_velocity():
 	return velocity
 
 func highlight_valid(amt: float):
-	$Letter.modulate = Color(1 - 0.6863 * amt, 1.0, 0.0)
+	$Letter.modulate = Color(1, .46, 0.78)
 
 func highlight_potential(amt: float):
 	$Letter.modulate = Color(1 - 0.5216 * amt, 1 - 0.1926 * amt, 1.0)
@@ -96,11 +108,16 @@ func apply_equal_scale(t: float):
 func pulse():
 	var tween = create_tween()
 	var tween2 = create_tween()
+	tween.tween_method(apply_equal_scale, 1.0, 1.5, 0.167)
 	tween2.tween_method(apply_equal_scale, 1.5, 1.0, 0.25)
-	
-	tween.tween_method(apply_equal_scale, 1.0, 1.5, 0.25)
 	tween.tween_callback(tween2.play)
 	tween.play()
+
+func de_pulse():
+	var tween = create_tween()
+	tween.tween_method(apply_equal_scale, 1.5, 1.0, 0.25)
+	tween.play()
+	
 	
 func flash_num_helper(t: float):
 	if t < 0.33: return t * 3
@@ -161,3 +178,24 @@ func clear_highlight():
 	if highlight_tween != null and highlight_tween.is_running():
 		highlight_tween.kill()
 	$Letter.modulate = Color.WHITE
+	$circler.modulate = Color.BLACK
+
+func encircle():
+	var circle_start = randf()*TAU
+	var num_points = 20
+	var thetas = []
+	var total = 0
+	for i in num_points:
+		var theta = .1 + randf()
+		total+=theta
+		thetas.append(total)
+	var scale_factor = TAU/total
+	var vector_array = PackedVector2Array()
+	var sum = Vector2.ZERO
+	for i in thetas.size():
+		var theta = thetas[i]
+		var vector = Vector2.ONE.rotated(theta*scale_factor+circle_start)*(42.5+5*randf())-sum
+		sum += vector
+		vector_array.append(sum)
+	$circler.polygon = vector_array
+	pass

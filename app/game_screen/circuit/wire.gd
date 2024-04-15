@@ -52,13 +52,19 @@ func _process(_delta):
 
 const SKETCHY_WIRES: bool = true
 
+func sketch():
+	start_offset = start_offset*.5 + 5*Vector2.ONE.rotated(randf()*TAU)
+	end_offset = end_offset*.5 + 5*Vector2.ONE.rotated(randf()*TAU)
+	start_offset_h = start_offset_h *.5 + 3*Vector2.ONE.rotated(randf()*TAU)
+	end_offset_h = end_offset_h*.5 + 3*Vector2.ONE.rotated(randf()*TAU)
+
 func update(start: Vector2, end: Vector2):
-	if time>.1 and SKETCHY_WIRES:
-		time=0
-		start_offset = 5*Vector2.ONE.rotated(randf()*TAU)
-		end_offset = 5*Vector2.ONE.rotated(randf()*TAU)
-		start_offset_h = 3*Vector2.ONE.rotated(randf()*TAU)
-		end_offset_h = 3*Vector2.ONE.rotated(randf()*TAU)
+	visible = true
+	var s = end - start
+	if s.length() < 160:
+		visible = false
+	end -= s.normalized()*70
+	start += s.normalized()*70
 	$Stroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
 	$Stroke.set_point_position(0,start+start_offset)
 	$Stroke.set_point_position(1,end+end_offset)
@@ -108,7 +114,7 @@ func highlight_blue(inverted: bool = false):
 	highlight(Color(0.4784, 0.8078, 1.0), HighlightState.BLUE, inverted)
 
 func highlight_green(inverted: bool = false):
-	highlight(Color(0.3137, 1.0, 0.0), HighlightState.GREEN, inverted)
+	highlight(Color(1.0, .46, .78), HighlightState.GREEN, inverted)
 
 func flash_num_helper(t: float):
 	if t < 0.33: return t * 3

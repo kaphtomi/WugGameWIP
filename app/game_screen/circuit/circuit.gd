@@ -16,6 +16,7 @@ const SPRING_CONSTANT : float = .1
 const SPRING_LENGTH : float = 800
 const SPRING_SNAP : float = 1000
 var score : int = 0
+var sketch_time: float = 0
 var time: float = 0
 var counter: int = 0
 var mouse_pos = Vector2.ZERO
@@ -33,7 +34,7 @@ func _ready():
 	
 	pass
 
-# GENERATION
+#region GENERATION
 func generate():
 	in_radius = 4000.0 * get_viewport().size.x/1600.0
 	out_radius = 4000.0 * get_viewport().size.x/1600.0
@@ -100,9 +101,9 @@ func generate_random_wire():
 	var w = generate_wire(from,to)
 	if from.popped_in:
 		from.pop_in_wire(w)
+#endregion
 
-
-# INPUT
+#region INPUT
 
 var selected_junction
 var word = ""
@@ -206,7 +207,6 @@ func _input(event):
 		validate_word()
 		return
 	elif not input in "QWERTYUIOPASDFGHJKLZXCVBNM/":
-		flash_all_red()
 		return
 	var junction = junction_map.get(input)
 	if junction == null: 
@@ -221,10 +221,11 @@ func _input(event):
 	highlight_wires()
 
 	word += selected_junction.get_letter()
-
+#end 
 
 # PROCESS
 func _process(delta):
+	
 	match GlobalVariables.cur_zzz:
 		GlobalVariables.WUG_ZZZ.AWAKE:
 			in_radius_to = 4000.0 * get_viewport().size.x/1600.0
@@ -233,6 +234,11 @@ func _process(delta):
 			in_radius_to = (190.0-score/50.0) * get_viewport().size.x/1600.0
 			out_radius_to = (200.0-score/50.0) * get_viewport().size.x/1600.0
 	time += delta
+	sketch_time += delta
+	var sketch = false
+	if sketch_time> .167:
+		sketch_time=0
+		sketch=true
 	if Input.is_action_just_pressed("click"):
 		for junc in junctions:
 			if junc.position.distance_to(get_viewport().get_mouse_position())<80:
@@ -247,6 +253,8 @@ func _process(delta):
 	RenderingServer.global_shader_parameter_set("in_radius", in_radius)
 	RenderingServer.global_shader_parameter_set("out_radius", out_radius)
 	for wire in wires:
+		if sketch: 
+			wire.sketch()
 		if kill:
 			wire.decay(delta*500,score+10)
 		if wires.size() == 1:
@@ -258,6 +266,8 @@ func _process(delta):
 	
 	var pop_outs = {}
 	for junc in junctions:
+		if sketch: 
+			junc.sketch()
 		if junc.get_connections().is_empty():
 			pop_outs[junc]=true
 	
@@ -294,6 +304,8 @@ func score_word(word : String):
 		s -= junctions.size()-7
 	if junctions.size() > 11:
 		s -= junctions.size()-11
+	if wires.size() > 15:
+		s -= wires.size()-15
 	if s>10:
 		s=10
 	add_to_graph(s)

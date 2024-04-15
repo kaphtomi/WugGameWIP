@@ -30,13 +30,18 @@ script = ExtResource("1_f0j0a")
 shape = SubResource("CircleShape2D_2jd3n")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
+visible = false
 scale = Vector2(0.32, 0.32)
 texture = ExtResource("2_6f8t3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 modulate = Color(0.0666667, 0.0666667, 0.0666667, 1)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_6f8t3")
+
+[node name="circler" type="Polygon2D" parent="."]
+color = Color(0, 0, 0, 1)
 
 [node name="Letter" type="Label" parent="."]
 anchors_preset = 8
@@ -44,10 +49,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -27.0
-offset_top = -53.0
-offset_right = 27.0
-offset_bottom = 53.0
+offset_left = -35.0
+offset_top = -58.0
+offset_right = 35.0
+offset_bottom = 58.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_3qctd")
