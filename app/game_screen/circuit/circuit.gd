@@ -110,6 +110,7 @@ var word = ""
 var affected_junctions = []
 var connecting_wires = []
 var potential_wires = []
+var invalid_characters_entered = []
 
 signal word_submitted
 
@@ -142,6 +143,7 @@ func clear_word_selection():
 	connecting_wires = []
 	potential_wires = []
 	affected_junctions = []
+	invalid_characters_entered = []
 
 func void_current_word():
 	clear_word_selection()
@@ -178,6 +180,15 @@ func validate_junction(junction, input):
 	selected_junction.set_selected()
 	return true
 
+func process_invalid_input(input):
+	if invalid_characters_entered.size() > 3:
+		void_current_word()
+		return
+	flash_all_red()
+	if input not in invalid_characters_entered: 
+		invalid_characters_entered.append(input)
+	return
+
 # Checks difficulty and, if applicable, highlights potential wires blue
 func highlight_wires():
 	for w in selected_junction.outgoing_edges:
@@ -210,10 +221,13 @@ func _input(event):
 		return
 	var junction = junction_map.get(input)
 	if junction == null: 
-		flash_all_red()
+		process_invalid_input(input)
 		return
-	if selected_junction and not validate_junction(junction, input): return
+	if selected_junction and not validate_junction(junction, input): 
+		process_invalid_input(input)
+		return
 	
+	invalid_characters_entered = []
 	junction.set_potential()
 	selected_junction = junction
 	affected_junctions.append(junction)
