@@ -1,16 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://c1ubg4xnqp7f7"]
+[gd_scene load_steps=3 format=3 uid="uid://c1ubg4xnqp7f7"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/wire.gd" id="1_q1emx"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ismxw"]
 
 [node name="Wire" type="AnimatableBody2D"]
 script = ExtResource("1_q1emx")
 metadata/_edit_group_ = true
 
-[node name="HighlightStroke" type="Line2D" parent="."]
-visible = false
-points = PackedVector2Array(0, 0, 0, 0)
-
 [node name="Stroke" type="Line2D" parent="."]
-z_index = -1
 points = PackedVector2Array(0, 0, 0, 0)
 default_color = Color(0.313726, 0.313726, 0.313726, 1)
+
+[node name="HighlightStroke" type="Line2D" parent="."]
+visible = false
+material = SubResource("CanvasItemMaterial_ismxw")
+points = PackedVector2Array(0, 0, 0, 0)

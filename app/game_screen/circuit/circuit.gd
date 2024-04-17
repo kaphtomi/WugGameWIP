@@ -7,7 +7,7 @@ const Junction = preload("res://app/game_screen/circuit/junction.tscn")
 signal circuit_broken
 var circuit_is_broken = false
 
-var alphabetter = "ETAONSHRDLCUMWFGYPBVKJXQZI".split("", true, 0)
+var alphabetter = "ETAONSHRDLCUMWFGYPBVKJXQZI".to_lower().split("", true, 0)
 var junction_map = {}
 var junctions : Array
 var wires : Array
@@ -29,9 +29,10 @@ var kill = false
 var cur_word = {}
 var handling_letter = false
 var words: Array = []
+var text = ""
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+	$LineEdit.grab_focus()
 	pass
 
 #region GENERATION
@@ -105,137 +106,140 @@ func generate_random_wire():
 
 #region INPUT
 
-var selected_junction
-var word = ""
-var affected_junctions = []
-var connecting_wires = []
-var potential_wires = []
-var invalid_characters_entered = []
+var selected_junction #the last junction in the word
+var affected_junctions = [] #all junctions in word (including selected)
+var potential_junctions = {} #all junctions connecting to selected & haven't used the wire yet
+var potential_wires = {}
+var connecting_wires = [] #path of wires in the word
+var word_invalid = false #if current word is valid or not
 
 signal word_submitted
 
-# Checks if currently selected word is not in word list
+# Checks if currently selected word (text) is not in word list
 func validate_word():
-	if null in connecting_wires:
+	#not a word
+	if word_invalid:
 		clear_word_selection()
 		flash_all_red()
-	elif word in words:
+		return
+	#repeat
+	elif text in words:
 		for w in connecting_wires: w.flash_red()
 		for j in affected_junctions: j.flash_red(false)
 	else:
-		if word.length() > 0: words.append(word)
-		score_word(word)
+		if text.length() > 1: words.append(text)
+		score_word(text)
 		for j in affected_junctions: j.pulse_and_reset()
 	clear_word_selection()
 
 func clear_word_selection():
 	selected_junction = null
-	for w in connecting_wires:
-		if w == null: continue
+	for w in wires:
 		w.clear_highlight()
-	for w in potential_wires: 
-		if w == null: continue
-		w.clear_highlight()
-	for j in affected_junctions:
-		if j == null: continue
+	for j in junctions: 
 		j.clear_highlight()
-	word = ""
+	text = ""
 	connecting_wires = []
-	potential_wires = []
 	affected_junctions = []
-	invalid_characters_entered = []
-
-func void_current_word():
-	clear_word_selection()
-	flash_all_red()
-
-# Checks to see if junction is connected to previously selected junction
-func validate_junction(junction, input):
-	var connection
-	for w in potential_wires:
-		if w == null: continue
-		if w.check_connecting_letters(junction.get_letter(), selected_junction.get_letter()):
-			connection = w
-			var invert_highlight_direction = w.get_end().get_letter() == selected_junction.get_letter()
-			w.highlight_green(invert_highlight_direction)
-			break
-		else: continue
-	if connection == null: 
-		if not word.ends_with(input):
-			for w in connecting_wires:
-				if w == null:
-					void_current_word()
-					return
-				w.flash_red()
-			if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.AWAKE:
-				for j in affected_junctions: j.flash_red()
-			else:
-				for j in junctions: j.flash_red()
-		return false
-	for w in potential_wires: 
-		if w == null: continue
-		w.clear_highlight(2)
-	potential_wires = []
-	connecting_wires.append(connection)
-	selected_junction.set_selected()
-	return true
+	word_invalid=false
 
 func process_invalid_input(input):
-	if invalid_characters_entered.size() > 3:
-		void_current_word()
-		return
+	word_invalid=true
 	flash_all_red()
-	if input not in invalid_characters_entered: 
-		invalid_characters_entered.append(input)
 	return
 
-# Checks difficulty and, if applicable, highlights potential wires blue
-func highlight_wires():
-	for w in selected_junction.outgoing_edges:
-		if w == null: continue
-		if w in connecting_wires: continue
-		if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
-			w.highlight_blue()
-		else: w.block_decay = true
-		potential_wires.append(w)
-	for w in selected_junction.incoming_edges:
-		if w == null: continue
-		if w in connecting_wires: continue
-		if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
-			w.highlight_blue(true)
-		else: w.block_decay = true
-		potential_wires.append(w)
-
+func reset_potential_wires():
+	for w in potential_wires:
+		w.clear_highlight()
+	potential_wires = {}
+	if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+		for junc in potential_junctions:
+			var potential_wire = get_wire(junc.get_letter(), selected_junction.get_letter())
+			potential_wire.potential_highlight(junc)
+			potential_wires[potential_wire]=true
+		
 func flash_all_red():
 	for w in wires: w.flash_red()
 	for j in junctions: j.flash_red()
 
-func _input(event):
-	if event.is_echo()||event.is_released():
+func _on_line_edit_text_changed(new_text):
+	if text==""&&new_text=="":
 		return
-	var input = event.as_text()
-	if input == "Enter": 
-		validate_word()
-		return
-	elif not input in "QWERTYUIOPASDFGHJKLZXCVBNM/":
-		return
-	var junction = junction_map.get(input)
-	if junction == null: 
-		process_invalid_input(input)
-		return
-	if selected_junction and not validate_junction(junction, input): 
-		process_invalid_input(input)
-		return
-	
-	invalid_characters_entered = []
-	junction.set_potential()
-	selected_junction = junction
-	affected_junctions.append(junction)
-	
-	highlight_wires()
+	#longer case
+	if text.length() == new_text.length()-1:
+		#added to end case
+		if new_text.begins_with(text):
+			char_added(new_text[-1])
+		#just in case
+		else:
+			re_do(new_text)
+	#shorter case
+	if text.length() == new_text.length()+1:
+		#subtracted from end case
+		if text.begins_with(new_text):
+			char_removed()
+		else:
+			re_do(new_text)
+	#weird case
+	if abs(text.length()-new_text.length())!=1:
+		re_do(new_text)
+	text = new_text
 
-	word += selected_junction.get_letter()
-#end 
+#adds the wire connecting selected_junction and junc to the connecting wires
+func connect_to(junc):
+	var connection = get_wire(selected_junction.get_letter(),junc.get_letter())
+	connecting_wires.append(connection)
+	potential_wires.erase(connection) #when we reset the potential wires, we clear highlights, but we don't want that to apply to this connection
+	connection.valid_highlight(junc)
+
+func _on_line_edit_text_submitted(_new_text):
+	validate_word()
+
+func re_do(input):
+	clear_word_selection()
+	for i in input.length():
+		char_added(input[i])
+
+func char_added(character):
+	if word_invalid:
+		return
+	var junction = junction_map.get(character)
+	if junction == null:
+		process_invalid_input(character)
+		return
+	if text!="":
+		if potential_junctions.get(junction) == null:
+			process_invalid_input(character)
+			return
+		connect_to(junction)
+	select_junction(junction)
+
+func select_junction(junc):
+	junc.set_potential()
+	selected_junction = junc
+	affected_junctions.append(junc)
+	potential_junctions = junc.get_connections()
+	for w in connecting_wires:
+		var other = w.other(junc)
+		if other != null:
+			potential_junctions.erase(other)
+	reset_potential_wires()
+	
+
+func char_removed():
+	if !word_invalid:
+		var backspaced_junction = affected_junctions.pop_back()
+		backspaced_junction.clear_highlight()
+		if affected_junctions != null:
+			var backspaced_wire = connecting_wires.pop_back()
+			backspaced_wire.clear_highlight()
+			select_junction(junction_map.get(text[-1]))
+		return
+	re_do(text.left(-1))
+	
+	
+
+#endregion
 
 # PROCESS
 func _process(delta):
@@ -294,7 +298,6 @@ func _process(delta):
 #SCORING
 func is_word_in_circuit(word : String):
 	var letters = word.split("", false, 0)
-	var update_wires : Dictionary = {}
 	for i in (letters.size()-1):
 		var wire = get_wire(letters[i], letters[i+1])
 		if wire == null:
@@ -400,7 +403,6 @@ func hookes(wire, delta : float):
 
 func snap(wire):
 	wire.snap()
-	if wire in connecting_wires: void_current_word()
 	var from = wire.get_start()
 	var to = wire.get_end()
 	var s = to.position-from.position

@@ -100,7 +100,7 @@ func highlight_potential(amt: float):
 
 func cos_0_to_15(val: float):
 	var ret = cos(val*2*PI) + 1
-	return ret * (2/3)
+	return ret * (2.0/3.0)
 	
 func apply_equal_scale(t: float):
 	set_scale(Vector2(t, t))
