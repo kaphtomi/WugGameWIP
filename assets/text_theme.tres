@@ -1,6 +1,9 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bvysw3gfc4ply"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bvysw3gfc4ply"]
 
 [ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="1_jqgrn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x10ly"]
+bg_color = Color(0.223529, 0.745098, 0.92549, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u7rwm"]
 
@@ -22,6 +25,7 @@ variation_opentype = {
 [resource]
 default_font = SubResource("FontVariation_nim1x")
 default_font_size = 38
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_x10ly")
 LineEdit/colors/caret_color = Color(0, 0, 0, 1)
 LineEdit/colors/font_color = Color(0, 0, 0, 1)
 LineEdit/colors/font_outline_color = Color(0, 0, 0, 1)
