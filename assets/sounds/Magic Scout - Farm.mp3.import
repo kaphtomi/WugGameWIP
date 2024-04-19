@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c033a3aocc636"
+path="res://.godot/imported/Magic Scout - Farm.mp3-a8ab77dd026aae0e722e4732f6225142.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Magic Scout - Farm.mp3"
+dest_files=["res://.godot/imported/Magic Scout - Farm.mp3-a8ab77dd026aae0e722e4732f6225142.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
