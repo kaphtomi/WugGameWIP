@@ -51,6 +51,22 @@ offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_50auc")
 
+[node name="CreditLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -637.0
+offset_top = -58.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("11_jvlly")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Sound effects from Zapsplat.com"
+horizontal_alignment = 2
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(291, 758)
 scale = Vector2(0.725, 0.64)
