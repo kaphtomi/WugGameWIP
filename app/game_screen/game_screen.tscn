@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dj4v5021f26wl"]
+[gd_scene load_steps=9 format=3 uid="uid://dj4v5021f26wl"]
 
 [ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="6_sk6v4"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="7_wel0y"]
 [ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="8_6yd12"]
-[ext_resource type="PackedScene" uid="uid://83uerxqnrne2" path="res://GlobalAudio.tscn" id="9_wgmyt"]
 
 [sub_resource type="FontVariation" id="FontVariation_4wr7i"]
 base_font = ExtResource("8_6yd12")
@@ -82,10 +81,6 @@ size_flags_vertical = 8
 theme = ExtResource("7_wel0y")
 theme_override_colors/font_color = Color(0.239216, 0.239216, 0.239216, 1)
 theme_override_font_sizes/font_size = 51
-
-[node name="AudioStreamPlayer2D" parent="." instance=ExtResource("9_wgmyt")]
-visible = false
-autoplay = false
 
 [connection signal="circuit_broken" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_circuit_broken"]
 [connection signal="word_submitted" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_word_submitted"]

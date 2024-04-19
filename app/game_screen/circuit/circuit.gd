@@ -209,6 +209,8 @@ func highlight_wires():
 func flash_all_red():
 	for w in wires: w.flash_red()
 	for j in junctions: j.flash_red()
+	$WrongSFX.play()
+	
 
 func _input(event):
 	if event.is_echo()||event.is_released():
@@ -400,6 +402,7 @@ func hookes(wire, delta : float):
 
 func snap(wire):
 	wire.snap()
+	$SnapSFX.play()
 	if wire in connecting_wires: void_current_word()
 	var from = wire.get_start()
 	var to = wire.get_end()
@@ -447,6 +450,7 @@ func pop_in_junction(v, i:int):
 	tween.tween_property(v, "scale", Vector2.ONE, randf()*.1)
 	tween.tween_callback(v.pop_in_wires)
 	tween.play()
+	$PopInSFX.play()
 
 func pop_out_junction(junc, delta):
 	junctions.erase(junc)
@@ -464,6 +468,7 @@ func pop_out_junction(junc, delta):
 	tweensize.play()
 	tweenopac.play()
 	tweenmove.play()
+	$PopOutSFX.play()
 
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
 func get_wire(startNodeLetter: String, endNodeLetter: String):

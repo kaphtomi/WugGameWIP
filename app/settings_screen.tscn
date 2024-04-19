@@ -51,19 +51,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_50auc")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(500, 2.08165e-12)
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -250.0
-offset_top = 66.0
-offset_right = 250.0
-offset_bottom = 231.0
-grow_horizontal = 2
-texture = ExtResource("2_jhe8y")
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(291, 758)
 scale = Vector2(0.725, 0.64)
@@ -71,41 +58,84 @@ sprite_frames = SubResource("SpriteFrames_wjnbe")
 animation = &"idle"
 autoplay = "idle"
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(932, 800)
+texture = ExtResource("10_mujcx")
+
+[node name="UIOrganizer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 250
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 250
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIOrganizer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="UIOrganizer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_jhe8y")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="GridContainer" type="GridContainer" parent="UIOrganizer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 20
+columns = 2
+
+[node name="MusicLabel" type="Label" parent="UIOrganizer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme = ExtResource("11_jvlly")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "Music: "
+horizontal_alignment = 2
+
+[node name="MusicSlider" type="HSlider" parent="UIOrganizer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource("11_jvlly")
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="SFXLabel" type="Label" parent="UIOrganizer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme = ExtResource("11_jvlly")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "Sound Effects: "
+horizontal_alignment = 2
+
+[node name="SFXSlider" type="HSlider" parent="UIOrganizer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource("11_jvlly")
+max_value = 1.0
+step = 0.05
+value = 1.0
+
 [node name="TextureButton" type="TextureButton" parent="."]
 layout_mode = 0
-offset_left = 690.0
-offset_top = 454.0
-offset_right = 2738.0
-offset_bottom = 2502.0
+offset_left = 771.0
+offset_top = 589.0
+offset_right = 2819.0
+offset_bottom = 2637.0
 scale = Vector2(0.07, 0.07)
 texture_normal = ExtResource("9_b0o4p")
 texture_pressed = ExtResource("10_qu47f")
 texture_hover = ExtResource("10_qu47f")
 stretch_mode = 0
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture_filter = 1
-position = Vector2(932, 800)
-texture = ExtResource("10_mujcx")
-
-[node name="CheckButton" type="CheckButton" parent="."]
-layout_mode = 0
-offset_left = 854.0
-offset_top = 290.0
-offset_right = 898.0
-offset_bottom = 314.0
-scale = Vector2(3, 3)
-
-[node name="Music" type="Label" parent="."]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 610.0
-offset_top = 258.0
-offset_right = 731.0
-offset_bottom = 316.0
-scale = Vector2(2, 2)
-theme = ExtResource("11_jvlly")
-text = "Music:"
-
+[connection signal="value_changed" from="UIOrganizer/VBoxContainer/GridContainer/MusicSlider" to="." method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="UIOrganizer/VBoxContainer/GridContainer/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]
-[connection signal="toggled" from="CheckButton" to="." method="_on_check_button_toggled"]

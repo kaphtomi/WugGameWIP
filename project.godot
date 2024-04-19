@@ -23,7 +23,7 @@ boot_splash/defaults/default_clear_color=Color(0.0666667, 0.0666667, 0.0666667, 
 [autoload]
 
 GlobalVariables="*res://app/global_variables.gd"
-GlobalAudio="*res://GlobalAudio.tscn"
+GlobalAudio="*res://app/global_audio.tscn"
 
 [display]
 

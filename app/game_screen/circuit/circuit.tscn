@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=6 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/circuit.gd" id="1_tyd7i"]
+[ext_resource type="AudioStream" uid="uid://b2oau08ck2y75" path="res://assets/sounds/pop_in_sound.mp3" id="2_lm86x"]
+[ext_resource type="AudioStream" uid="uid://b66lohca1jgi6" path="res://assets/sounds/pop_out_sound.mp3" id="3_p8qw1"]
+[ext_resource type="AudioStream" uid="uid://cpdhyt0y105q6" path="res://assets/sounds/snap_sound.mp3" id="4_fjvdh"]
+[ext_resource type="AudioStream" uid="uid://ouuk3r3dtfe1" path="res://assets/sounds/wrong_letter_sound.mp3" id="5_0qoah"]
 
 [node name="Circuit" type="Control"]
 layout_mode = 3
@@ -14,5 +18,21 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_tyd7i")
+
+[node name="PopInSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_lm86x")
+bus = &"SFX"
+
+[node name="PopOutSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_p8qw1")
+bus = &"SFX"
+
+[node name="SnapSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_fjvdh")
+bus = &"SFX"
+
+[node name="WrongSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_0qoah")
+bus = &"SFX"
 
 [connection signal="item_rect_changed" from="." to="." method="_on_item_rect_changed"]
