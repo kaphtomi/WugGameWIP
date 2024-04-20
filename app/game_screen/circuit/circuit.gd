@@ -167,10 +167,11 @@ func validate_junction(junction, input):
 					void_current_word()
 					return
 				w.flash_red()
-			if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.AWAKE:
-				for j in affected_junctions: j.flash_red()
-			else:
-				for j in junctions: j.flash_red()
+			if !junctions.is_empty():
+				if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.AWAKE:
+					for j in affected_junctions: j.flash_red()
+				else:
+					for j in junctions: j.flash_red()
 		return false
 	for w in potential_wires: 
 		if w == null: continue
