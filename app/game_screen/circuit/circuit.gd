@@ -210,7 +210,18 @@ func flash_all_red():
 	for w in wires: w.flash_red()
 	for j in junctions: j.flash_red()
 	$WrongSFX.play()
-	
+
+func do_backspace():
+	word[-1] = ""
+	for w in potential_wires: w.clear_highlight()
+	potential_wires = []
+	var end_junc = affected_junctions.pop_back()
+	end_junc.clear_highlight()
+	selected_junction = affected_junctions[-1]
+	selected_junction.set_potential()
+	invalid_characters_entered = []
+	connecting_wires.pop_back().clear_highlight()
+	highlight_wires()
 
 func _input(event):
 	if event.is_echo()||event.is_released():
@@ -218,6 +229,12 @@ func _input(event):
 	var input = event.as_text()
 	if input == "Enter": 
 		validate_word()
+		return
+	elif input == "Backspace":
+		if affected_junctions.size() <= 1:
+			flash_all_red()
+			return
+		do_backspace()
 		return
 	elif not input in "QWERTYUIOPASDFGHJKLZXCVBNM/":
 		return
