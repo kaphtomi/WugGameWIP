@@ -1,10 +1,34 @@
-[gd_scene load_steps=6 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=11 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/circuit.gd" id="1_tyd7i"]
 [ext_resource type="AudioStream" uid="uid://b2oau08ck2y75" path="res://assets/sounds/pop_in_sound.mp3" id="2_lm86x"]
 [ext_resource type="AudioStream" uid="uid://b66lohca1jgi6" path="res://assets/sounds/pop_out_sound.mp3" id="3_p8qw1"]
 [ext_resource type="AudioStream" uid="uid://cpdhyt0y105q6" path="res://assets/sounds/snap_sound.mp3" id="4_fjvdh"]
 [ext_resource type="AudioStream" uid="uid://ouuk3r3dtfe1" path="res://assets/sounds/wrong_letter_sound.mp3" id="5_0qoah"]
+[ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="6_bsi00"]
+[ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="7_y52tr"]
+[ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_8q3m8"]
+[ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="9_vx50n"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7s72m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_bsi00")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_y52tr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_8q3m8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_vx50n")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
 
 [node name="Circuit" type="Control"]
 layout_mode = 3
@@ -34,5 +58,12 @@ bus = &"SFX"
 [node name="WrongSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_0qoah")
 bus = &"SFX"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(156, 872)
+scale = Vector2(0.71, 0.56)
+sprite_frames = SubResource("SpriteFrames_7s72m")
+animation = &"idle"
+autoplay = "idle"
 
 [connection signal="item_rect_changed" from="." to="." method="_on_item_rect_changed"]

@@ -90,6 +90,7 @@ text = "Score: "
 horizontal_alignment = 1
 
 [node name="RestartButton" type="TextureButton" parent="."]
+layout_mode = 0
 offset_left = 694.0
 offset_top = 504.0
 offset_right = 2742.0

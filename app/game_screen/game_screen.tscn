@@ -1,11 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://dj4v5021f26wl"]
+[gd_scene load_steps=15 format=3 uid="uid://dj4v5021f26wl"]
 
 [ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
 [ext_resource type="Shader" path="res://assets/shader.gdshader" id="5_fgtqu"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="6_sk6v4"]
+[ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="7_vdmue"]
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="7_wel0y"]
 [ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="8_6yd12"]
+[ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_desqo"]
+[ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="9_nc5mt"]
+[ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="10_cyj6i"]
+[ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="11_c4tub"]
 
 [sub_resource type="FontVariation" id="FontVariation_4wr7i"]
 base_font = ExtResource("8_6yd12")
@@ -16,6 +21,32 @@ variation_opentype = {
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2rufv"]
 shader = ExtResource("5_fgtqu")
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5blnl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_vdmue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_desqo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_nc5mt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_cyj6i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_c4tub")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_desqo")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
 
 [node name="GameScreen" type="Control"]
 layout_mode = 3
@@ -81,6 +112,12 @@ size_flags_vertical = 8
 theme = ExtResource("7_wel0y")
 theme_override_colors/font_color = Color(0.239216, 0.239216, 0.239216, 1)
 theme_override_font_sizes/font_size = 51
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2731, 1659)
+sprite_frames = SubResource("SpriteFrames_5blnl")
+animation = &"idle"
+autoplay = "idle"
 
 [connection signal="circuit_broken" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_circuit_broken"]
 [connection signal="word_submitted" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_word_submitted"]
