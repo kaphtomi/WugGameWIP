@@ -121,11 +121,13 @@ func validate_word():
 		flash_all_red()
 	elif word in words:
 		for w in connecting_wires: w.flash_red()
-		for j in affected_junctions: j.flash_red(false)
+		if !affected_junctions.is_empty():
+			for j in affected_junctions: j.flash_red(false)
 	else:
 		if word.length() > 0: words.append(word)
 		score_word(word)
-		for j in affected_junctions: j.pulse_and_reset()
+		if !affected_junctions.is_empty():
+			for j in affected_junctions: j.pulse_and_reset()
 	clear_word_selection()
 
 func clear_word_selection():
@@ -167,11 +169,10 @@ func validate_junction(junction, input):
 					void_current_word()
 					return
 				w.flash_red()
-			if !junctions.is_empty():
-				if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.AWAKE:
-					for j in affected_junctions: j.flash_red()
-				else:
-					for j in junctions: j.flash_red()
+			if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.AWAKE && !affected_junctions.is_empty():
+				for j in affected_junctions: j.flash_red()
+			elif !junctions.is_empty():
+				for j in junctions: j.flash_red()
 		return false
 	for w in potential_wires: 
 		if w == null: continue
