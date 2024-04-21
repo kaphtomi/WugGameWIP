@@ -1,29 +1,47 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdojagepqgx3v"]
+[gd_scene load_steps=4 format=3 uid="uid://cdojagepqgx3v"]
 
 [ext_resource type="Script" path="res://speechBubble.gd" id="1_a5ouq"]
 [ext_resource type="Texture2D" uid="uid://bsamw6vov6qcv" path="res://assets/speechBubble.png" id="2_1y1wn"]
+[ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="2_cs2x1"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.411
+anchor_top = 0.186
+anchor_right = 0.411
+anchor_bottom = 0.186
+offset_left = -657.6
+offset_top = -167.4
+offset_right = 942.4
+offset_bottom = 732.6
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_a5ouq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.372549, 0.690196, 0.945098, 1)
+theme_override_fonts/font = ExtResource("2_cs2x1")
+text = "words"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 162
 
 [node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/Label"]
-layout_mode = 0
-offset_left = 1359.0
-offset_top = 673.0
-offset_right = 1505.0
-offset_bottom = 818.0
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_1y1wn")
