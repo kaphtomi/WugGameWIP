@@ -170,9 +170,11 @@ func validate_junction(junction, input):
 					return
 				w.flash_red()
 			if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.AWAKE && !affected_junctions.is_empty():
-				for j in affected_junctions: j.flash_red()
+				for j in affected_junctions: 
+					if j != null: j.flash_red()
 			elif !junctions.is_empty():
-				for j in junctions: j.flash_red()
+				for j in junctions:
+					if j != null: j.flash_red()
 		return false
 	for w in potential_wires: 
 		if w == null: continue
