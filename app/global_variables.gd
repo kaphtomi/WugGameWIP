@@ -7,3 +7,8 @@ var cur_zzz = WUG_ZZZ.AWAKE
 var cur_dif = WUG_DIFF.EASY 
 
 signal switching_to_zzz_mode
+
+func switch_to_sleep():
+	if cur_zzz != WUG_ZZZ.SLEEP:
+		cur_zzz = WUG_ZZZ.SLEEP
+		switching_to_zzz_mode.emit()
