@@ -315,6 +315,8 @@ func _process(delta):
 			junc.sketch()
 		if junc.get_connections().is_empty():
 			pop_outs[junc]=true
+			if junc in affected_junctions:
+				clear_word_selection()
 	
 	for junc in pop_outs.keys():
 		if !circuit_is_broken:
