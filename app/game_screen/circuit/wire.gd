@@ -111,7 +111,7 @@ func highlight(color: Color, state: HighlightState, inverted: bool = false):
 	highlight_tween.play()
 
 func highlight_blue(inverted: bool = false):
-	highlight(Color(0.4784, 0.8078, 1.0), HighlightState.BLUE, inverted)
+	highlight(Color(0.0, 0.8980392157, 1.0), HighlightState.BLUE, inverted)
 
 func highlight_green(inverted: bool = false):
 	highlight(Color(1.0, .46, .78), HighlightState.GREEN, inverted)
