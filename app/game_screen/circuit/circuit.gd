@@ -239,6 +239,8 @@ func _input(event):
 	if event.is_echo()||event.is_released():
 		return
 	var input = event.as_text()
+	if input == "Slash":
+		pass
 	if input == "Enter": 
 		validate_word()
 		return
@@ -248,7 +250,7 @@ func _input(event):
 			return
 		do_backspace()
 		return
-	elif not input in "QWERTYUIOPASDFGHJKLZXCVBNM/":
+	elif not input in "QWERTYUIOPASDFGHJKLZXCVBNM":
 		return
 	var junction = junction_map.get(input)
 	if junction == null: 
@@ -270,7 +272,8 @@ func _input(event):
 
 # PROCESS
 func _process(delta):
-	
+	if selected_junction && selected_junction.highlight_state != 2:
+		selected_junction.set_potential()
 	match GlobalVariables.cur_zzz:
 		GlobalVariables.WUG_ZZZ.AWAKE:
 			in_radius_to = 4000.0 * get_viewport().size.x/1600.0
