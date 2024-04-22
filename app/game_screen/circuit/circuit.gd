@@ -201,16 +201,16 @@ func highlight_wires():
 	for w in selected_junction.outgoing_edges:
 		if w == null: continue
 		if w in connecting_wires: continue
-		if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
-			w.highlight_blue()
-		else: w.block_decay = true
+		#if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+		w.highlight_blue()
+		#else: w.block_decay = true
 		potential_wires.append(w)
 	for w in selected_junction.incoming_edges:
 		if w == null: continue
 		if w in connecting_wires: continue
-		if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
-			w.highlight_blue(true)
-		else: w.block_decay = true
+		#if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
+		w.highlight_blue(true)
+		#else: w.block_decay = true
 		potential_wires.append(w)
 
 func flash_all_red():
@@ -315,6 +315,8 @@ func _process(delta):
 			junc.sketch()
 		if junc.get_connections().is_empty():
 			pop_outs[junc]=true
+			if junc in affected_junctions:
+				clear_word_selection()
 	
 	for junc in pop_outs.keys():
 		if !circuit_is_broken:
