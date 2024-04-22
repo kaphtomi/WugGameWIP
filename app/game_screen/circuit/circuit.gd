@@ -35,8 +35,7 @@ var cursor_tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
-	pass
+	GlobalVariables.switching_to_zzz_mode.connect(pulse_cursor)
 
 #region GENERATION
 func generate():
@@ -234,6 +233,7 @@ func do_backspace():
 func _input(event):
 	if event is InputEventMouseMotion and cursor_tween != null:
 		cursor_tween.kill()
+		print("cursor tween killed xp")
 		CustomCursor.update_cursor(base_scale)  # Auto-resets the cursor when the mouse is moved
 	
 	if event.is_echo()||event.is_released():
@@ -278,7 +278,6 @@ func _process(delta):
 		GlobalVariables.WUG_ZZZ.SLEEP:
 			in_radius_to = (190.0-score/50.0) * get_viewport().size.x/1600.0
 			out_radius_to = (200.0-score/50.0) * get_viewport().size.x/1600.0
-			pulse_cursor()
 	time += delta
 	sketch_time += delta
 	var sketch = false
@@ -520,9 +519,9 @@ func _on_item_rect_changed():
 
 
 func pulse_cursor():
-	cursor_tween = get_tree().create_tween().set_trans(Tween.TRANS_SINE)
+	cursor_tween = get_tree().create_tween().set_trans(Tween.TRANS_SINE).set_loops()
 	cursor_tween.tween_method(CustomCursor.update_cursor, base_scale, max_scale, 1)
 	cursor_tween.tween_method(CustomCursor.update_cursor, max_scale, base_scale, 1)
-	#cursor_tween.tween_interval(0.25)
+	cursor_tween.tween_interval(0.25)
 	cursor_tween.play()
 	

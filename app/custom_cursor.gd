@@ -23,8 +23,7 @@ func _input(event):
 			current_image = pressed_cursor
 		else:
 			current_image = default_cursor
-	
-	update_cursor(base_scale) 
+		update_cursor(base_scale) 
 
 
 func update_cursor(size_scale):

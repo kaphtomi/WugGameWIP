@@ -47,9 +47,9 @@ func _on_blackboard_text_field_changed(new_text):
 	
 	
 func change_state():
-	#if score/100 % 3 == 2:
-	if score > 20:
+	if score/100 % 3 == 2:
 		GlobalVariables.cur_zzz=GlobalVariables.WUG_ZZZ.SLEEP
+		GlobalVariables.switching_to_zzz_mode.emit()
 	else:
 		GlobalVariables.cur_zzz=GlobalVariables.WUG_ZZZ.AWAKE
 	match score/100:
