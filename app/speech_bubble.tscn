@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq8ko32wyx7c6"]
+
+[ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="1_nbqhs"]
+[ext_resource type="Texture2D" uid="uid://bsamw6vov6qcv" path="res://assets/speechBubble.png" id="2_lf6qk"]
+
+[node name="SpeechBubble" type="Node2D"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_nbqhs")
+theme_override_font_sizes/font_size = 10
+text = "words"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/Label"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_lf6qk")
