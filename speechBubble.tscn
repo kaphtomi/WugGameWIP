@@ -1,8 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://cdojagepqgx3v"]
+[gd_scene load_steps=4 format=3 uid="uid://bi8u14xvq3saf"]
 
-[ext_resource type="Script" path="res://speechBubble.gd" id="1_a5ouq"]
 [ext_resource type="Texture2D" uid="uid://bsamw6vov6qcv" path="res://assets/speechBubble.png" id="2_1y1wn"]
 [ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="2_cs2x1"]
+
+[sub_resource type="GDScript" id="GDScript_24fmt"]
+script/source = "extends Control
+
+var bubble_text = \"words\"
+var bubble_text_length = 0
+var bubble_text_index = 0
+var current_text = \"\"
+
+onready var lbltext = get_node(\"VBoxContainer/Label\")
+onready var ninerect = get_node(\"VBoxContainer/Label/NinePatchRect\")
+
+onready var timer = get_node(\"Timer\")
+
+onready var do_close = false
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	bubble_text_length = bubble_text.length()
+	timer.start(1)
+	pass # Replace with function body.
+
+
+"
 
 [node name="Speech" type="Control"]
 layout_mode = 3
@@ -16,7 +38,7 @@ offset_right = 942.4
 offset_bottom = 732.6
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_a5ouq")
+script = SubResource("GDScript_24fmt")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
