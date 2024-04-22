@@ -29,6 +29,10 @@ var kill = false
 var cur_word = {}
 var handling_letter = false
 var words: Array = []
+const base_scale = 0.25
+const max_scale = 0.75
+var cursor_tween
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -228,6 +232,10 @@ func do_backspace():
 	highlight_wires()
 
 func _input(event):
+	if event is InputEventMouseMotion and cursor_tween != null:
+		cursor_tween.kill()
+		CustomCursor.update_cursor(base_scale)  # Auto-resets the cursor when the mouse is moved
+	
 	if event.is_echo()||event.is_released():
 		return
 	var input = event.as_text()
@@ -270,6 +278,7 @@ func _process(delta):
 		GlobalVariables.WUG_ZZZ.SLEEP:
 			in_radius_to = (190.0-score/50.0) * get_viewport().size.x/1600.0
 			out_radius_to = (200.0-score/50.0) * get_viewport().size.x/1600.0
+			pulse_cursor()
 	time += delta
 	sketch_time += delta
 	var sketch = false
@@ -508,3 +517,12 @@ func _on_item_rect_changed():
 			junctions[i].position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
 		elif i > (num_junctions - 4):
 			junctions[i].position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
+
+
+func pulse_cursor():
+	cursor_tween = get_tree().create_tween().set_trans(Tween.TRANS_SINE)
+	cursor_tween.tween_method(CustomCursor.update_cursor, base_scale, max_scale, 1)
+	cursor_tween.tween_method(CustomCursor.update_cursor, max_scale, base_scale, 1)
+	#cursor_tween.tween_interval(0.25)
+	cursor_tween.play()
+	
