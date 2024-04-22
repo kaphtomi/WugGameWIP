@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_8q3m8"]
 [ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="9_vx50n"]
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="10_pl4sq"]
-[ext_resource type="PackedScene" uid="uid://cdojagepqgx3v" path="res://speechBubble.tscn" id="11_b8e4y"]
+[ext_resource type="PackedScene" uid="uid://chuw6kynbxvfd" path="res://speech_bubble.tscn" id="11_khwcx"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7s72m"]
 animations = [{
@@ -74,12 +74,11 @@ position = Vector2(1478, 803)
 scale = Vector2(0.6, 0.575)
 texture = ExtResource("10_pl4sq")
 
-[node name="SpeechBubble" parent="." instance=ExtResource("11_b8e4y")]
-visible = false
+[node name="Speech" parent="." instance=ExtResource("11_khwcx")]
 layout_mode = 1
-offset_left = -162.0
-offset_top = -82.0
-offset_right = -162.0
-offset_bottom = -82.0
+offset_left = -128.0
+offset_top = -54.0
+offset_right = -128.0
+offset_bottom = -54.0
 
 [connection signal="item_rect_changed" from="." to="." method="_on_item_rect_changed"]

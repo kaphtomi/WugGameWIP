@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bsamw6vov6qcv" path="res://assets/speechBubble.png" id="2_1y1wn"]
 [ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="2_cs2x1"]
 
-[node name="Control" type="Control"]
+[node name="Speech" type="Control"]
 layout_mode = 3
 anchor_left = 0.411
 anchor_top = 0.186
@@ -45,3 +45,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_1y1wn")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
