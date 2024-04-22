@@ -38,7 +38,8 @@ func update_cursor(size_scale):
 	
 
 func pulse_cursor():
-	tween.tween_method(update_cursor, 0.25, 0.75, 1)
-	tween.tween_method(update_cursor, 0.75, 0.25, 1)
+	tween.tween_method(update_cursor, 0.25, 0.75, 1).set_trans(Tween.TRANS_SINE)
+	tween.tween_method(update_cursor, 0.75, 0.25, 1).set_trans(Tween.TRANS_SINE)
+	tween.tween_interval(0.25)
 	
 	
