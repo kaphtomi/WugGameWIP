@@ -12,3 +12,6 @@ func switch_to_sleep():
 	if cur_zzz != WUG_ZZZ.SLEEP:
 		cur_zzz = WUG_ZZZ.SLEEP
 		switching_to_zzz_mode.emit()
+
+
+const cursor_base_scale = 0.75

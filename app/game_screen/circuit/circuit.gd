@@ -29,8 +29,7 @@ var kill = false
 var cur_word = {}
 var handling_letter = false
 var words: Array = []
-const base_scale = 0.25
-const max_scale = 0.75
+const max_scale = 1.5
 var cursor_tween
 
 # Called when the node enters the scene tree for the first time.
@@ -234,7 +233,7 @@ func _input(event):
 	if event is InputEventMouseMotion and cursor_tween != null:
 		cursor_tween.kill()
 		print("cursor tween killed xp")
-		CustomCursor.update_cursor(base_scale)  # Auto-resets the cursor when the mouse is moved
+		CustomCursor.update_cursor(GlobalVariables.cursor_base_scale)  # Auto-resets the cursor when the mouse is moved
 	
 	if event.is_echo()||event.is_released():
 		return
@@ -525,8 +524,8 @@ func _on_item_rect_changed():
 
 func pulse_cursor():
 	cursor_tween = get_tree().create_tween().set_trans(Tween.TRANS_SINE).set_loops()
-	cursor_tween.tween_method(CustomCursor.update_cursor, base_scale, max_scale, 1)
-	cursor_tween.tween_method(CustomCursor.update_cursor, max_scale, base_scale, 1)
+	cursor_tween.tween_method(CustomCursor.update_cursor, GlobalVariables.cursor_base_scale, max_scale, 1)
+	cursor_tween.tween_method(CustomCursor.update_cursor, max_scale, GlobalVariables.cursor_base_scale, 1)
 	cursor_tween.tween_interval(0.25)
 	cursor_tween.play()
 	
