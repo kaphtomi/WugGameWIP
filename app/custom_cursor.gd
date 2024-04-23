@@ -3,7 +3,7 @@ extends CanvasLayer
 var default_cursor: Image = load("res://assets/cursor/cursor_arrow.png").get_image()
 var pressed_cursor: Image = load("res://assets/cursor/cursor_pressed.png").get_image()
 var base_cursor_size = max(default_cursor.get_size().x, default_cursor.get_size().y)
-const HOTSPOT = Vector2(5,12)
+const HOTSPOT = Vector2(5,12) # Where the "clicky-point" is in the custom image
 var current_image
 
 
@@ -13,7 +13,7 @@ func _ready():
 	current_image = default_cursor
 	update_cursor(GlobalVariables.cursor_base_scale)
 
-
+# Changes the image of the cursor based on whether the mouse is pressed
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
@@ -22,7 +22,7 @@ func _input(event):
 			current_image = default_cursor
 		update_cursor(GlobalVariables.cursor_base_scale) 
 
-
+# Updates the image size of the cursor based on a scale number
 func update_cursor(size_scale):
 	var image = Image.new()
 	image.copy_from(current_image)
