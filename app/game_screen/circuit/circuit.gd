@@ -232,7 +232,6 @@ func do_backspace():
 func _input(event):
 	if event is InputEventMouseMotion and cursor_tween != null:
 		cursor_tween.kill()
-		print("cursor tween killed xp")
 		CustomCursor.update_cursor(GlobalVariables.cursor_base_scale)  # Auto-resets the cursor when the mouse is moved
 	
 	if event.is_echo()||event.is_released():
@@ -270,22 +269,7 @@ func _input(event):
 #end 
 
 # PROCESS
-func _process(delta):
-	if selected_junction && selected_junction.highlight_state != 2:
-		selected_junction.set_potential()
-	match GlobalVariables.cur_zzz:
-		GlobalVariables.WUG_ZZZ.AWAKE:
-			in_radius_to = 4000.0 * get_viewport().size.x/1600.0
-			out_radius_to = 4000.0 * get_viewport().size.x/1600.0
-		GlobalVariables.WUG_ZZZ.SLEEP:
-			in_radius_to = (190.0-score/50.0) * get_viewport().size.x/1600.0
-			out_radius_to = (200.0-score/50.0) * get_viewport().size.x/1600.0
-	time += delta
-	sketch_time += delta
-	var sketch = false
-	if sketch_time> .167:
-		sketch_time=0
-		sketch=true
+func grab_junction():
 	if Input.is_action_just_pressed("click"):
 		for junc in junctions:
 			if junc.position.distance_to(get_viewport().get_mouse_position())<80:
@@ -293,12 +277,23 @@ func _process(delta):
 				break
 	if Input.is_action_just_released("click"):
 		grabbed = null
+
+func process_flashlight(delta):
+	match GlobalVariables.cur_zzz:
+		GlobalVariables.WUG_ZZZ.AWAKE:
+			in_radius_to = 4000.0 * get_viewport().size.x/1600.0
+			out_radius_to = 4000.0 * get_viewport().size.x/1600.0
+		GlobalVariables.WUG_ZZZ.SLEEP:
+			in_radius_to = (190.0-score/50.0) * get_viewport().size.x/1600.0
+			out_radius_to = (200.0-score/50.0) * get_viewport().size.x/1600.0
 	mouse_pos = lerp(mouse_pos,get_viewport().get_mouse_position()/Vector2(get_viewport().size),.1)
 	in_radius = lerp(in_radius,in_radius_to,delta)
 	out_radius = lerp(out_radius,out_radius_to,delta)
 	RenderingServer.global_shader_parameter_set("mouse_pos", mouse_pos)
 	RenderingServer.global_shader_parameter_set("in_radius", in_radius)
 	RenderingServer.global_shader_parameter_set("out_radius", out_radius)
+
+func process_wires(sketch: bool, delta):
 	for wire in wires:
 		if sketch: 
 			wire.sketch()
@@ -309,8 +304,8 @@ func _process(delta):
 		if (wire.decay(delta,score)):
 			snap(wire)
 			break
-	physics(delta)
-	
+			
+func process_junctions(sketch, delta):
 	var pop_outs = {}
 	for junc in junctions:
 		if sketch: 
@@ -323,6 +318,24 @@ func _process(delta):
 	for junc in pop_outs.keys():
 		if !circuit_is_broken:
 			pop_out_junction(junc, delta)
+			
+func _process(delta):
+	if selected_junction && selected_junction.highlight_state != 2:
+		selected_junction.set_potential()
+	
+	time += delta
+	sketch_time += delta
+	var sketch = false
+	if sketch_time> .167:
+		sketch_time=0
+		sketch=true
+	
+	grab_junction()
+	process_flashlight(delta)
+	process_wires(sketch, delta)
+	physics(delta)
+	
+	process_junctions(sketch, delta)
 	if grabbed != null && !circuit_is_broken:
 		grabbed.position = lerp(grabbed.position,get_viewport().get_mouse_position(),.1)
 
