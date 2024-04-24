@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bq8ko32wyx7c6"]
+[gd_scene load_steps=3 format=3 uid="uid://dwwysdl7r7f3p"]
 
 [ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="1_nbqhs"]
 [ext_resource type="Texture2D" uid="uid://bsamw6vov6qcv" path="res://assets/speechBubble.png" id="2_lf6qk"]
