@@ -271,8 +271,6 @@ func _input(event):
 
 # PROCESS
 func _process(delta):
-	if selected_junction && selected_junction.highlight_state != 2:
-		selected_junction.set_potential()
 	match GlobalVariables.cur_zzz:
 		GlobalVariables.WUG_ZZZ.AWAKE:
 			in_radius_to = 4000.0 * get_viewport().size.x/1600.0
