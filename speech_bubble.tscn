@@ -5,10 +5,9 @@
 
 [sub_resource type="GDScript" id="GDScript_24fmt"]
 script/source = "extends Control
-
-
-#This adds the words to a bubble and 
-var bubble_text = \"Make connections by typing in connecting letters!\"
+#This adds the words to a bubble and expands the bubble as the text increases.
+#Followed tutorial by Rungeon on YoutTube 
+var bubble_text = \"Make connections by typing in connecting letters! Press enter to submit\"
 var bubble_text_length = 0
 var bubble_text_index = 0
 var current_text = \"\"
@@ -16,7 +15,6 @@ var can_shrink = true
 
 @onready var lbltext = get_node(\"VBoxContainer/Label\")
 @onready var ninerect = get_node(\"VBoxContainer/Label/NinePatchRect\")
-
 @onready var timer = get_node(\"Timer\")
 
 var do_close = false
@@ -46,7 +44,7 @@ func _on_timer_timeout():
 			lbltext.text = current_text
 			bubble_text_length -= 1
 			#if(can_shrink):
-				##ninerect.rect_size -= Vector2(6,0)
+				#ninerect.rect_size -= Vector2(6,0)
 				#ninerect.rect_position += Vector2(3,0)
 			
 			timer.start(0.04)
@@ -82,7 +80,7 @@ grow_vertical = 2
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.372549, 0.690196, 0.945098, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("1_6gqtc")
 horizontal_alignment = 1
 vertical_alignment = 1
