@@ -29,7 +29,7 @@ var kill = false
 var cur_word = {}
 var handling_letter = false
 var words: Array = []
-const max_scale = 1.25
+const max_scale = 1.1
 var cursor_tween
 
 # Called when the node enters the scene tree for the first time.
