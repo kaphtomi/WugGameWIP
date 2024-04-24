@@ -14,4 +14,4 @@ func switch_to_sleep():
 		switching_to_zzz_mode.emit()
 
 
-const cursor_base_scale = 0.75
+const cursor_base_scale = 0.6
