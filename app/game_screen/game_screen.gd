@@ -60,4 +60,8 @@ func change_state():
 			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD
 	if score/1000!=0:
 		GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD
+		
+	#if score == 10:
+		#$SpeechBubble/VBoxContainer/Label/NinePatchRect.update_word("I'm getting sleepy... Zzzz")
+		
 
