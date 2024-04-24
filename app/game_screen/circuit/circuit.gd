@@ -335,7 +335,7 @@ func _process(delta):
 	process_wires(sketch, delta)
 	physics(delta)
 	
-	process_popouts()
+	process_junctions(sketch, delta)
 	if grabbed != null && !circuit_is_broken:
 		grabbed.position = lerp(grabbed.position,get_viewport().get_mouse_position(),.1)
 
