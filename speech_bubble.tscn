@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://xhhoxq7r5h5j"]
 
-[ext_resource type="FontFile" uid="uid://3q7lm7chmeir" path="res://font/PlaypenSans-VariableFont_wght.ttf" id="1_6gqtc"]
+[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="1_pwldu"]
 [ext_resource type="Texture2D" uid="uid://cray8qxnw5hh4" path="res://assets/SpeachBubb.png" id="2_4o2t3"]
 
 [sub_resource type="GDScript" id="GDScript_24fmt"]
@@ -80,8 +80,8 @@ grow_vertical = 2
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("1_pwldu")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("1_6gqtc")
 theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1
