@@ -35,6 +35,7 @@ var cursor_tween
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	GlobalVariables.switching_to_zzz_mode.connect(pulse_cursor)
+	$CurrentWordLabel.text = ""  # Empties the current word label with a new circuit
 
 #region GENERATION
 func generate():
@@ -148,6 +149,7 @@ func clear_word_selection():
 	potential_wires = []
 	affected_junctions = []
 	invalid_characters_entered = []
+	$CurrentWordLabel.text = word
 
 func void_current_word():
 	clear_word_selection()
@@ -212,13 +214,16 @@ func highlight_wires():
 		#else: w.block_decay = true
 		potential_wires.append(w)
 
+
 func flash_all_red():
 	for w in wires: w.flash_red()
 	for j in junctions: j.flash_red()
 	$WrongSFX.play()
 
+
 func do_backspace():
 	word[-1] = ""
+	$CurrentWordLabel.text = word
 	for w in potential_wires: w.clear_highlight()
 	potential_wires = []
 	var end_junc = affected_junctions.pop_back()
@@ -228,6 +233,7 @@ func do_backspace():
 	invalid_characters_entered = []
 	connecting_wires.pop_back().clear_highlight()
 	highlight_wires()
+
 
 func _input(event):
 	if event is InputEventMouseMotion and cursor_tween != null:
@@ -266,6 +272,7 @@ func _input(event):
 	highlight_wires()
 
 	word += selected_junction.get_letter()
+	$CurrentWordLabel.text = word
 #end 
 
 # PROCESS

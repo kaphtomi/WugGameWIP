@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=15 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/circuit.gd" id="1_tyd7i"]
 [ext_resource type="AudioStream" uid="uid://b2oau08ck2y75" path="res://assets/sounds/pop_in_sound.mp3" id="2_lm86x"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="9_vx50n"]
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="10_pl4sq"]
 [ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://speech_bubble.tscn" id="11_hbdw6"]
+[ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="12_2k17u"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7s72m"]
 animations = [{
@@ -31,6 +32,13 @@ animations = [{
 "name": &"idle",
 "speed": 5.0
 }]
+
+[sub_resource type="FontVariation" id="FontVariation_6mh1r"]
+base_font = ExtResource("12_2k17u")
+variation_opentype = {
+1869640570: null,
+2003265652: 900
+}
 
 [node name="Circuit" type="Control"]
 layout_mode = 3
@@ -76,5 +84,15 @@ texture = ExtResource("10_pl4sq")
 
 [node name="SpeechBubble" parent="." instance=ExtResource("11_hbdw6")]
 layout_mode = 1
+
+[node name="CurrentWordLabel" type="Label" parent="."]
+z_index = -2
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 80.0
+offset_bottom = 344.0
+theme_override_colors/font_color = Color(0.898039, 0.898039, 0.898039, 1)
+theme_override_fonts/font = SubResource("FontVariation_6mh1r")
+theme_override_font_sizes/font_size = 250
 
 [connection signal="item_rect_changed" from="." to="." method="_on_item_rect_changed"]
