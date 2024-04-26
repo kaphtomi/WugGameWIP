@@ -21,6 +21,10 @@ func _process(delta):
 			get_tree().change_scene_to_file("res://app/game_over_screen/game_over_screen.tscn")
 	if ceil(cur_score)!= ceil(cur_score_init):
 		$Flow/Score.text = str(ceil(cur_score))
+	if cur_score == 5:
+		$SpeechBubble.snooze_text = "Snoozing"
+		
+	
 
 func ready_circuit():
 	$CircuitAndBlackboard/Circuit.generate()
@@ -60,9 +64,5 @@ func change_state():
 			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD
 	if score/1000!=0:
 		GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD
-		
-func sleepyWarning(new_text):
-	if score == 10:
-		$SpeechBubble/VBoxContainer/Label/NinePatchRect.update_word("I'm getting sleepy... Zzzz")
 		
 

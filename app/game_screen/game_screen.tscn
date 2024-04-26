@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dj4v5021f26wl"]
+[gd_scene load_steps=16 format=3 uid="uid://dj4v5021f26wl"]
 
 [ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="9_nc5mt"]
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="10_cyj6i"]
 [ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="11_c4tub"]
+[ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://speech_bubble.tscn" id="12_euwpy"]
 
 [sub_resource type="FontVariation" id="FontVariation_4wr7i"]
 base_font = ExtResource("8_6yd12")
@@ -118,6 +119,9 @@ position = Vector2(2731, 1659)
 sprite_frames = SubResource("SpriteFrames_5blnl")
 animation = &"idle"
 autoplay = "idle"
+
+[node name="SpeechBubble" parent="." instance=ExtResource("12_euwpy")]
+layout_mode = 1
 
 [connection signal="circuit_broken" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_circuit_broken"]
 [connection signal="word_submitted" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_word_submitted"]

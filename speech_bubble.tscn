@@ -12,6 +12,7 @@ var bubble_text_length = 0
 var bubble_text_index = 0
 var current_text = \"\"
 var can_shrink = true 
+var snooze_text = \"I'm getting sleepy... Zzzz\"
 
 @onready var lbltext = get_node(\"VBoxContainer/Label\")
 @onready var ninerect = get_node(\"VBoxContainer/Label/NinePatchRect\")
@@ -22,6 +23,7 @@ var do_close = false
 func _ready():
 	bubble_text_length = bubble_text.length()
 	timer.start(1)
+	
 	pass # Replace with function body.
 
 
@@ -52,6 +54,9 @@ func _on_timer_timeout():
 			queue_free()
 	
 	pass # Replace with function body.
+
+
+
 
 "
 
