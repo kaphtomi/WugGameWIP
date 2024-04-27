@@ -35,7 +35,13 @@ func _process(_delta):
 	if popped_in:
 		size_junc(_delta)
 		
-	
+#sizes the junction. Starts based on the pulse_amt, which ranges from 1 to 1.2
+#then if it's the selected junction (highlightstate path), it scales that by 1.5
+#then if it's currently in the path (affected), it scales that by 1.1
+#the sizing is a lerp thing so size represents the size it's moving towards
+#and cur_size is the current size. This way we can have a lot of things that
+#affect sizing without worrying about tween concurrency issues
+#TODO check to see if affected can break
 func size_junc(delta):
 	size = pulse_amt
 	if highlight_state == GlobalVariables.HighlightState.PATH:
@@ -112,12 +118,14 @@ func color():
 	if red:
 		$Letter.modulate =GlobalVariables.red_color
 
+#pulse amt is a property that basically represents the base amount of scaling
 func pulse():
 	var tween = create_tween()
 	tween.tween_property(self,"pulse_amt",1.2,.2)
 	tween.tween_property(self,"pulse_amt",1.0,.2)
 	tween.play()
 
+#all these are fairly self explanatory
 func flash_red(revert: bool = true):
 	var tween = create_tween()
 	tween.tween_property(self,"modulate",Color(1.0,0.0,0.0),.1)
@@ -125,9 +133,11 @@ func flash_red(revert: bool = true):
 	tween.play()
 	pulse()
 
+
 func pulse_and_reset():
 	clear_highlight()
 	pulse()
+
 
 func set_red():
 	red = true
