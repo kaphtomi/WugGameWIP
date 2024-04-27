@@ -11,7 +11,7 @@ var alphabetter = "ETAONSHRDLCUMWFGYPBVKJXQZI".split("", true, 0)
 var junction_map = {}
 var junctions : Array
 var wires : Array
-const ELECTRIC_CONSTANT : float = 30000000
+const ELECTRIC_CONSTANT : float = 40000000
 const SPRING_CONSTANT : float = .1
 const SPRING_LENGTH : float = 800
 const SPRING_SNAP : float = 1000
@@ -26,16 +26,17 @@ var out_radius
 var in_radius_to
 var out_radius_to
 var kill = false
-var cur_word = {}
 var handling_letter = false
-var words: Array = []
+var words: Dictionary = {}
 const max_scale = 1.1
 var cursor_tween
+var submitted_path = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	GlobalVariables.switching_to_zzz_mode.connect(pulse_cursor)
 	$CurrentWordLabel.text = ""  # Empties the current word label with a new circuit
+	reset_all_input_defaults()
 
 #region GENERATION
 func generate():
@@ -107,173 +108,232 @@ func generate_random_wire():
 #endregion
 
 #region INPUT
-
-var selected_junction
-var word = ""
-var affected_junctions = []
-var connecting_wires = []
-var potential_wires = []
-var invalid_characters_entered = []
-
+var selected_junction # last letter typed, null if word empty
+var word # current word, may have wrong letters at any point
+var word_valid # true if word is currently valid, false otherwise
+var affected_junctions # list of valid junctions in word, in order. contains selected junction. used for graphics
+var connecting_wires # wires that connect affected junctions. used for graphics, and to determine potential wires
+var potential_wires # wires that connect to selected junction that aren't in connecting wires
+var potential_junctions # junctions that connect to selected junction. false if there's a connection, but it's already in connecting wires
 signal word_submitted
 
-# Checks if currently selected word is not in word list
-func validate_word():
-	if null in connecting_wires:
-		clear_word_selection()
-		flash_all_red()
-	elif word in words:
-		for w in connecting_wires: w.flash_red()
-		if !affected_junctions.is_empty():
-			for j in affected_junctions: j.flash_red(false)
-	else:
-		if word.length() > 0: words.append(word)
-		score_word(word)
-		if !affected_junctions.is_empty():
-			for j in affected_junctions: j.pulse_and_reset()
-	clear_word_selection()
-
-func clear_word_selection():
+#DO NOT CALL THIS DIRECTLY, OTHER METHODS ARE USED TO MAKE SURE STATE IS MAINTAINED
+func reset_all_input_defaults():
 	selected_junction = null
-	for w in connecting_wires:
-		if w == null: continue
-		w.clear_highlight()
-	for w in potential_wires: 
-		if w == null: continue
-		w.clear_highlight()
-	for j in affected_junctions:
-		if j == null: continue
-		j.clear_highlight()
 	word = ""
-	connecting_wires = []
-	potential_wires = []
+	word_valid = true
 	affected_junctions = []
-	invalid_characters_entered = []
 	$CurrentWordLabel.text = word
+	connecting_wires = []
+	potential_wires = {}
+	potential_junctions = {}
 
-func void_current_word():
-	clear_word_selection()
-	flash_all_red()
-
-# Checks to see if junction is connected to previously selected junction
-func validate_junction(junction, input):
-	var connection
-	for w in potential_wires:
-		if w == null: continue
-		if w.check_connecting_letters(junction.get_letter(), selected_junction.get_letter()):
-			connection = w
-			var invert_highlight_direction = w.get_end().get_letter() == selected_junction.get_letter()
-			w.highlight_green(invert_highlight_direction)
-			break
-		else: continue
-	if connection == null: 
-		if not word.ends_with(input):
-			for w in connecting_wires:
-				if w == null:
-					void_current_word()
-					return
-				w.flash_red()
-			if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.AWAKE && !affected_junctions.is_empty():
-				for j in affected_junctions: 
-					if j != null: j.flash_red()
-			elif !junctions.is_empty():
-				for j in junctions:
-					if j != null: j.flash_red()
-		return false
-	for w in potential_wires: 
-		if w == null: continue
-		w.clear_highlight(2)
-	potential_wires = []
-	connecting_wires.append(connection)
-	selected_junction.set_selected()
+#checks if word is in circuit
+func is_word_in_circuit():
+	var letters = word.split("", false, 0)
+	if letters.size()==1:
+		if junction_map.get(word)==null:
+			return false
+		return true
+	for i in (letters.size()-1):
+		if i+2<letters.size():
+			if letters[i]==letters[i+2]:
+				return false
+		var wire = get_wire(letters[i], letters[i+1])
+		if wire == null:
+			return false
 	return true
 
-func process_invalid_input(input):
-	if invalid_characters_entered.size() > 3:
-		void_current_word()
+func submit_word():
+	if !word_valid:
+		clear_word_selection()
 		return
-	flash_all_red()
-	if input not in invalid_characters_entered: 
-		invalid_characters_entered.append(input)
+	if words.get(word):
+		sad_path()
+	else:
+		if word.length() > 1: 
+			words[word]=true
+			score_word(word)
+			happy_path()
+	
+	for j in affected_junctions: j.pulse_and_reset()
+	clear_word_selection()
+
+func set_submitted_path(path):
+	path[0].pop_out()
+	if !submitted_path.is_empty():
+		for h in submitted_path:
+			h.queue_free()
+	submitted_path=path
+
+func sad_path():
+	var path = []
+	for w in connecting_wires:
+		var h = w.path_to_higherlights()
+		path.append(h)
+	set_submitted_path(path)
+
+func happy_path():
+	var path = []
+	for w in connecting_wires:
+		var h = w.path_to_higherlights()
+		h.happy_out()
+		path.append(h)
+	set_submitted_path(path)
+	
+
+func clear_word_selection():
+	for w in wires:
+		if w == null: continue
+		w.clear_highlights()
+	for j in junctions: 
+		j.clear_highlight()
+	unset_all_red()
+	reset_all_input_defaults()
+
+#called if a wire snaps in the current word
+#TODO sound effect
+func void_current_word():
+	clear_word_selection()
+
+# Checks to see if junction is connected to previously selected junction
+func validate_junction(junction):
+	return potential_junctions.get(junction)
+
+func add_to_word(junction):
+	var connection = get_wire(selected_junction.get_letter(), junction.get_letter())
+	var invert_highlight_direction = connection.get_end().get_letter() == selected_junction.get_letter()
+	connection.highlight_path(invert_highlight_direction)
+	clear_potential_highlights()
+	potential_wires = {}
+	connecting_wires.append(connection)
+	deselect_junction(selected_junction)
+	affected_junctions[-1].affected = true
+
+func clear_potential_highlights():
+	for w in potential_wires:
+		if w == null: continue
+		w.clear_potential_highlight()
+
+#makes all juncs and wires red until the word is valid
+func process_invalid_input():
+	if word_valid:
+		set_all_red()
+		word_valid = false
+	pulse_all()
 	return
 
 # Checks difficulty and, if applicable, highlights potential wires blue
 func highlight_wires():
-	for w in selected_junction.outgoing_edges:
-		if w == null: continue
-		if w in connecting_wires: continue
-		#if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
-		w.highlight_blue()
-		#else: w.block_decay = true
-		potential_wires.append(w)
-	for w in selected_junction.incoming_edges:
-		if w == null: continue
-		if w in connecting_wires: continue
-		#if GlobalVariables.cur_dif == GlobalVariables.WUG_DIFF.EASY:
-		w.highlight_blue(true)
-		#else: w.block_decay = true
-		potential_wires.append(w)
+	for w in potential_wires:
+		w.highlight_potential(w.get_end().get_letter() == selected_junction.get_letter())
 
-
-func flash_all_red():
-	for w in wires: w.flash_red()
-	for j in junctions: j.flash_red()
+func set_all_red():
+	for w in wires: w.set_red()
+	for j in junctions: j.set_red()
 	$WrongSFX.play()
 
+#TODO add a good sound effect
+func unset_all_red():
+	for w in wires: w.unset_red()
+	for j in junctions: j.unset_red()
+	
+func pulse_all():
+	for j in junctions: j.pulse()
 
 func do_backspace():
-	word[-1] = ""
-	$CurrentWordLabel.text = word
-	for w in potential_wires: w.clear_highlight()
-	potential_wires = []
-	var end_junc = affected_junctions.pop_back()
-	end_junc.clear_highlight()
-	selected_junction = affected_junctions[-1]
-	selected_junction.set_potential()
-	invalid_characters_entered = []
-	connecting_wires.pop_back().clear_highlight()
-	highlight_wires()
+	if word.length()<2:
+		clear_potential_highlights()
+		deselect_junction(selected_junction)
+		unset_all_red()
+		reset_all_input_defaults()
+		return
+	word = word.left(-1)
+	$CurrentWordLabel.text=word
+	if is_word_in_circuit():
+		if !word_valid:
+			word_valid = true
+			unset_all_red()
+			return
+		for w in potential_wires: w.clear_potential_highlight()
+		var end_junc = affected_junctions.pop_back()
+		deselect_junction(end_junc)
+		
+		#VERY STRANGE HARD TO REPRODUCE BUG, THIS PROTECTS AGAINST IT BUT ITS NOT
+		#GREAT (spam adjacent letters and backspace a lot to maybe reproduce)
+		#(somehow the connecting wires is null when it shouldn't be based on)
+		#(the invariants that seem to mostly hold)
+		var cwb = connecting_wires.pop_back() 
+		if cwb!=null: cwb.clear_path_highlight()
+		else: 
+			clear_word_selection()
+			return
+		
+		select_junction(affected_junctions.pop_back())
+		highlight_wires()
+	
+func deselect_junction(junction):
+	selected_junction = null
+	if junction!=null:
+		junction.deselect()
+
+func select_junction(junction):
+	junction.set_selected()
+	selected_junction = junction
+	affected_junctions.append(junction)
+	reset_potentials()
+	
+func reset_potentials():
+	potential_wires = {}
+	potential_junctions = selected_junction.get_connections()
+	for junc in potential_junctions:
+		var p_wire = get_wire(junc.get_letter(), selected_junction.get_letter())
+		for wire in connecting_wires:
+			if p_wire == wire:
+				potential_junctions[junc]=false
+		if potential_junctions[junc]:
+			potential_wires[p_wire]=true
+	
+
 
 
 func _input(event):
 	if event is InputEventMouseMotion and cursor_tween != null:
 		cursor_tween.kill()
 		CustomCursor.update_cursor(GlobalVariables.cursor_base_scale)  # Auto-resets the cursor when the mouse is moved
-	
 	if event.is_echo()||event.is_released():
 		return
 	var input = event.as_text()
 	if input == "Slash":
 		pass
 	if input == "Enter": 
-		validate_word()
+		submit_word()
 		return
 	elif input == "Backspace":
-		if affected_junctions.size() <= 1:
-			flash_all_red()
-			return
 		do_backspace()
 		return
-	elif not input in "QWERTYUIOPASDFGHJKLZXCVBNM":
+	elif input in "QWERTYUIOPASDFGHJKLZXCVBNM":
+		char_inputted(input)
+		return
+	
+func char_inputted(input):
+	word += input
+	$CurrentWordLabel.text = word
+	if !is_word_in_circuit():
+		process_invalid_input()
 		return
 	var junction = junction_map.get(input)
-	if junction == null: 
-		process_invalid_input(input)
+	if junction == null:
 		return
-	if selected_junction and not validate_junction(junction, input): 
-		process_invalid_input(input)
-		return
-	
-	invalid_characters_entered = []
-	junction.set_potential()
-	selected_junction = junction
-	affected_junctions.append(junction)
-	
+	if selected_junction:
+		if validate_junction(junction): 
+			add_to_word(junction)
+		else:
+			process_invalid_input()
+			return
+	select_junction(junction)
 	highlight_wires()
-
-	word += selected_junction.get_letter()
-	$CurrentWordLabel.text = word
-#end 
+#endregion
 
 # PROCESS
 func grab_junction():
@@ -326,7 +386,12 @@ func process_junctions(sketch, delta):
 		if !circuit_is_broken:
 			pop_out_junction(junc, delta)
 			
+			
+
+	
 func _process(delta):
+	
+	
 	if selected_junction && selected_junction.highlight_state != 2:
 		selected_junction.set_potential()
 	
@@ -341,21 +406,15 @@ func _process(delta):
 	process_flashlight(delta)
 	process_wires(sketch, delta)
 	physics(delta)
+	if !submitted_path.is_empty():
+		animate_submitted_path()
 	
 	process_junctions(sketch, delta)
 	if grabbed != null && !circuit_is_broken:
 		grabbed.position = lerp(grabbed.position,get_viewport().get_mouse_position(),.1)
+#endregion
 
-#SCORING
-func is_word_in_circuit(word : String):
-	var letters = word.split("", false, 0)
-	var update_wires : Dictionary = {}
-	for i in (letters.size()-1):
-		var wire = get_wire(letters[i], letters[i+1])
-		if wire == null:
-			return false
-	return true
-
+#region SCORING
 func score_word(word : String):
 	var letters = word.split("", false, 0)
 	var update_wires : Dictionary = {}
@@ -411,12 +470,15 @@ func add_to_graph(amt):
 				pop_in_junction(junc,0)
 			generate_random_wire()
 			generate_random_wire()
+#endregion
 
 # PHYSICS
 func physics(delta):
 	for i in junctions.size():
 		for j in range(i,junctions.size()):
 			coolombs(junctions[i],junctions[j], delta)
+		for w in wires:
+			coolerombs(junctions[i],w,delta)
 	for wire in wires:
 		hookes(wire,delta)
 	for junc in junctions:
@@ -432,6 +494,15 @@ func coolombs(v1, v2, delta : float):
 	var f : Vector2 = ELECTRIC_CONSTANT / (r.length_squared()+1) * r.normalized()
 	v1.force(-f*delta)
 	v2.force(f*delta)
+
+func coolerombs(v,w,delta):
+	var p = v.position
+	var a = w.get_start().position
+	var n = w.get_end().position
+	var d = (p - a) - ((p - a).dot(n))*n
+	var f = 1000*ELECTRIC_CONSTANT / (d.length_squared()+1.0) * d.normalized()
+	v.force(f*delta)
+	pass
 
 #border_force
 func border_force(v, delta):
@@ -457,6 +528,10 @@ func snap(wire):
 	wire.snap()
 	$SnapSFX.play()
 	if wire in connecting_wires: void_current_word()
+	if wire in potential_wires:
+		potential_wires.erase(wire)
+		potential_junctions.erase(wire.get_end())
+		potential_junctions.erase(wire.get_start())
 	var from = wire.get_start()
 	var to = wire.get_end()
 	var s = to.position-from.position
@@ -522,6 +597,16 @@ func pop_out_junction(junc, delta):
 	tweenopac.play()
 	tweenmove.play()
 	$PopOutSFX.play()
+	
+func animate_submitted_path():
+	if !submitted_path.is_empty():
+		var h = submitted_path[0]
+		if h!= null:
+			h.pop_out()
+			if h.ended:
+				h.queue_free()
+				submitted_path.pop_front()
+		else: submitted_path.pop_front()
 
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
 func get_wire(startNodeLetter: String, endNodeLetter: String):

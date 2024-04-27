@@ -6,11 +6,6 @@
 script = ExtResource("1_q1emx")
 metadata/_edit_group_ = true
 
-[node name="HighlightStroke" type="Line2D" parent="."]
-visible = false
-points = PackedVector2Array(0, 0, 0, 0)
-
 [node name="Stroke" type="Line2D" parent="."]
-z_index = -1
 points = PackedVector2Array(0, 0, 0, 0)
 default_color = Color(0.313726, 0.313726, 0.313726, 1)

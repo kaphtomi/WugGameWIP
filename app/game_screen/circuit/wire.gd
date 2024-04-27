@@ -1,5 +1,6 @@
 extends AnimatableBody2D
 
+const Highlight = preload("res://app/game_screen/circuit/highlight.tscn")
 var _from
 var _to
 var hue = randf()
@@ -10,19 +11,18 @@ var thickness: float = 1
 const WIDTH_SCALE: int = 3
 const MAX_THICKNESS: int = 7
 var not_scored = true
+var red = false
 
-var highlight_tween
-var highlight_state = HighlightState.NONE
+var highlights = []
 
 var block_decay = false
 
-enum HighlightState { NONE, BLUE, GREEN, YELLOW, RED }
+
 var time = 0
+var start_pos = Vector2.ZERO
+var end_pos = Vector2.ZERO
 var start_offset = Vector2.ZERO
 var end_offset = Vector2.ZERO
-var start_offset_h = Vector2.ZERO
-var end_offset_h = Vector2.ZERO
-	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,119 +32,122 @@ func _ready():
 func set_nodes(from, to):
 	_from = from
 	_to = to
-	var start = from.position
-	var end = to.position
+	start_pos = from.position
+	end_pos = to.position
 	from.add_outgoing(self)
 	to.add_incoming(self)
 	connecting_letters.append(_from.get_letter())
 	connecting_letters.append(_to.get_letter())
-	update(start,end)
+	update()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	start_pos = _from.position
+	end_pos = _to.position
 	time += _delta
 	color()
-	if (done>.99):
-		update(_from.position, _to.position)
-	if highlight_state == HighlightState.NONE:
-		clear_highlight()
-	pass
+	update()
+	for h in highlights.duplicate():
+		if h.ended:
+			highlights.erase(h)
+			h.queue_free()
 
 const SKETCHY_WIRES: bool = true
 
 func sketch():
 	start_offset = start_offset*.5 + 5*Vector2.ONE.rotated(randf()*TAU)
 	end_offset = end_offset*.5 + 5*Vector2.ONE.rotated(randf()*TAU)
-	start_offset_h = start_offset_h *.5 + 3*Vector2.ONE.rotated(randf()*TAU)
-	end_offset_h = end_offset_h*.5 + 3*Vector2.ONE.rotated(randf()*TAU)
+	for h in highlights:
+		h.sketch()
 
-func update(start: Vector2, end: Vector2):
+func update():
 	visible = true
-	var s = end - start
-	if s.length() < 160:
+	var d = end_pos - start_pos
+	if d.length() < 160:
 		visible = false
-	end -= s.normalized()*70
-	start += s.normalized()*70
+	var e = end_pos+end_offset - d.normalized()*70
+	var s = start_pos+start_offset + d.normalized()*70
 	$Stroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
-	$Stroke.set_point_position(0,start+start_offset)
-	$Stroke.set_point_position(1,end+end_offset)
-	$HighlightStroke.width = clamp(thickness * WIDTH_SCALE, 5, 20)
-	if highlight_tween and not highlight_tween.is_running():
-		$HighlightStroke.set_point_position(0,start+start_offset + start_offset_h)
-		$HighlightStroke.set_point_position(1,end+end_offset +end_offset_h)
+	$Stroke.set_point_position(0,s)
+	$Stroke.set_point_position(1,s+(e-s)*done)
 	
 func color():
-	$Stroke.set_default_color(Color.from_ok_hsl(hue, sat, .5 + thickness*.03))
+	$Stroke.set_default_color(get_color())
 
 func get_color():
-	return Color.from_ok_hsl(hue, sat, .5 + thickness*.03)
+	if red:
+		return GlobalVariables.red_color
+	else:
+		return Color.from_ok_hsl(hue, sat, .5 + thickness*.03)
 	
 func pop_in(t:float):
-	update(_from.position, _from.position+ t*(_to.position-_from.position))
 	done = t
 
-func fade_highlight_stroke(t: float, from, to):
-	var current_origin: Vector2 = from.position
-	var current_dest: Vector2 = to.position
-	var new_end_pos = (current_dest - current_origin) * t + current_origin
-	$HighlightStroke.set_point_position(0, current_origin)
-	$HighlightStroke.set_point_position(1, new_end_pos)
+func highlight_path(inverted: bool = false):
+	var h = Highlight.instantiate()
+	h.direction = inverted
+	add_child(h)
+	h.pop_in_path()
+	highlights.append(h)
 
-func set_highlight_stroke_length(t: float):
-	fade_highlight_stroke(t, _from, _to)
+func get_start_pos():
+	var start = _from.position
+	var end = _to.position
+	var s = end - start
+	return start + s.normalized()*70
+
+func get_end_pos():
+	var start = _from.position
+	var end = _to.position
+	var s = end - start
+	return end - s.normalized()*70
+
+func highlight_potential(inverted: bool = false):
+	var h = Highlight.instantiate()
+	h.direction=inverted
+	add_child(h)
+	h.pop_in_potential()
+	highlights.append(h)
 	
-func set_highlight_stroke_length_inverted(t: float):
-	fade_highlight_stroke(t, _to, _from)
-
-func highlight(color: Color, state: HighlightState, inverted: bool = false):
-	if highlight_state == state: return
-	$HighlightStroke.set_default_color(color) # place so early in code to enable immediate return if already highlighted
-	if highlight_state != HighlightState.NONE: 
-		highlight_state = state
-		return
-	block_decay = true
-	highlight_state = state
-	highlight_tween = create_tween()
-	if inverted: highlight_tween.tween_method(set_highlight_stroke_length_inverted, 0.0, 1.0, 0.2)
-	else: highlight_tween.tween_method(set_highlight_stroke_length, 0.0, 1.0, 0.2)
-	$HighlightStroke.set_visible(true)
-	highlight_tween.play()
-
-func highlight_blue(inverted: bool = false):
-	highlight(Color(0.0, 0.8980392157, 1.0), HighlightState.BLUE, inverted)
-
-func highlight_green(inverted: bool = false):
-	highlight(Color(1.0, .46, .78), HighlightState.GREEN, inverted)
-
-func flash_num_helper(t: float):
-	if t < 0.33: return t * 3
-	elif t < 0.67: return 1
-	elif t > 0.67: return 1 - (t - 0.67) * 3
-
-func tween_highlight_color(t: float, og_color: Color, target_color: Color):
-	var r = og_color.r * (1 - t) + t
-	var g = og_color.g * (1 - t)
-	var b = og_color.b * (1 - t)
-	$HighlightStroke.set_default_color(Color(r, g, b))
-
 func flash_red():
-	if highlight_state == HighlightState.RED: return
-	var og_state = highlight_state
-	highlight_state = HighlightState.RED
-	var reset = func reset(): highlight_state = og_state
-	var og_color = $HighlightStroke.get_default_color()
 	var tween = create_tween()
-	tween.tween_method(func flash_red_tween_helper(t: float):
-		t = flash_num_helper(t)
-		tween_highlight_color(t, og_color, Color.RED), 0.0, 1.0, 0.5)
-	tween.tween_callback(reset)
+	tween.tween_property(self,"modulate",Color(1.0,0.0,0.0),.1)
+	tween.tween_property(self,"modulate",Color(1.0,1.0,1.0),.1)
 	tween.play()
+
+func set_red():
+	red = true
+	for h in highlights:
+		h.set_red()
+
+func unset_red():
+	red = false
+	for h in highlights:
+		h.unset_red()
 		
-func clear_highlight(unless: HighlightState = HighlightState.NONE):
-	if highlight_state == unless: return
-	block_decay = false
-	highlight_state = HighlightState.NONE
-	$HighlightStroke.set_visible(false)
+func clear_highlights():
+	for h in highlights:
+		h.queue_free()
+	highlights=[]
+	
+func remove_highlight(h):
+	highlights.erase(h)
+	
+func clear_potential_highlight():
+	for h in highlights:
+		if h.type == GlobalVariables.HighlightState.POTENTIAL:
+			h.pop_out()
+	
+func clear_path_highlight():
+	for h in highlights:
+		if h.type == GlobalVariables.HighlightState.PATH:
+			h.shrink_out()
+			
+func path_to_higherlights():
+	for h in highlights.duplicate():
+		if h.type == GlobalVariables.HighlightState.PATH:
+			highlights.erase(h)
+			return h
 
 func get_start():
 	return _from

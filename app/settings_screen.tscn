@@ -46,6 +46,7 @@ grow_vertical = 2
 script = ExtResource("1_p6sej")
 
 [node name="TextureRect2" type="TextureRect" parent="."]
+texture_filter = 1
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -94,6 +95,7 @@ theme_override_constants/margin_right = 250
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="UIOrganizer/VBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 size_flags_vertical = 4
 texture = ExtResource("2_jhe8y")

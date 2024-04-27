@@ -3,23 +3,24 @@ extends Area2D
 var outgoing_edges : Array
 var incoming_edges : Array
 var velocity : Vector2
-var size : Vector2
+var pulse_amt = 1.0
+var size = 1.0
+var cur_size = 1.0
 var _letter: String = ""
 var popped_in = false
 var time = 0
 var offset = Vector2.ZERO
 var letter_center
+var red = false
+var affected = false
+const AFFECTED_SIZE = 1.1
 
-var highlight_tween: Tween
-
-enum HighlightState { NONE, POTENTIAL, SELECTED, INVALID }
-var highlight_state = HighlightState.NONE
+var highlight_state = GlobalVariables.HighlightState.NONE
 
 func _ready():
 	velocity = Vector2.ZERO
 	letter_center = $Letter.position
 	encircle()
-	$Letter.modulate = Color.BLACK
 	$circler.modulate = Color.BLACK
 
 func has_incoming():
@@ -31,9 +32,19 @@ func has_outgoing():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	velocity *= exp(-_delta*velocity.length_squared()*.0001)
-	if highlight_state == HighlightState.NONE:
-		clear_highlight()
-
+	if popped_in:
+		size_junc(_delta)
+		
+	
+func size_junc(delta):
+	size = pulse_amt
+	if highlight_state == GlobalVariables.HighlightState.PATH:
+		size *= 1.5
+	if affected:
+		size *= 1.1
+	cur_size = lerp(cur_size,size,delta*10.0)
+	set_scale(Vector2.ONE*cur_size)
+	
 func sketch():
 	offset = offset*.5 + 3*Vector2.ONE.rotated(randf()*TAU)*randf()
 	$Letter.position = letter_center + offset
@@ -92,93 +103,61 @@ func force(amt : Vector2):
 func get_velocity():
 	return velocity
 
-func highlight_valid(amt: float):
-	$Letter.modulate = Color(1, .46, 0.78)
+func color():
+	$Letter.modulate = Color.WHITE
+	if highlight_state==GlobalVariables.HighlightState.PATH:
+		$Letter.modulate = GlobalVariables.path_color
+	if highlight_state==GlobalVariables.HighlightState.POTENTIAL:
+		$Letter.modulate = GlobalVariables.potential_color
+	if red:
+		$Letter.modulate =GlobalVariables.red_color
 
-func highlight_potential(amt: float):
-	$Letter.modulate = Color(1 - 0.5216 * amt, 1 - 0.1926 * amt, 1.0)
-
-func cos_0_to_15(val: float):
-	var ret = cos(val*2*PI) + 1
-	return ret * (2/3)
-	
-func apply_equal_scale(t: float):
-	set_scale(Vector2(t, t))
-	
 func pulse():
 	var tween = create_tween()
-	var tween2 = create_tween()
-	tween.tween_method(apply_equal_scale, 1.0, 1.5, 0.167)
-	tween2.tween_method(apply_equal_scale, 1.5, 1.0, 0.25)
-	tween.tween_callback(tween2.play)
+	tween.tween_property(self,"pulse_amt",1.2,.2)
+	tween.tween_property(self,"pulse_amt",1.0,.2)
 	tween.play()
-
-func de_pulse():
-	var tween = create_tween()
-	tween.tween_method(apply_equal_scale, 1.5, 1.0, 0.25)
-	tween.play()
-	
-	
-func flash_num_helper(t: float):
-	if t < 0.33: return t * 3
-	elif t < 0.67: return 1
-	elif t > 0.67: return 1 - (t - 0.67) * 3
-
-func tween_highlight_color(t: float, og_color: Color, target_color: Color):
-	var r = og_color.r * (1 - t) + t
-	var g = og_color.g * (1 - t)
-	var b = og_color.b * (1 - t)
-	$Letter.modulate = Color(r, g, b)
 
 func flash_red(revert: bool = true):
-	if highlight_state == HighlightState.INVALID: return
-	var og_state = highlight_state
-	highlight_state = HighlightState.INVALID
-	highlight_tween = create_tween()
-	var reset
-	if revert:
-		reset = func reset(): 
-			highlight_state = og_state
-			match highlight_state:
-				HighlightState.POTENTIAL: highlight_potential(1.0)
-				HighlightState.SELECTED: highlight_valid(1.0)
-	else:
-		reset = clear_highlight
-	var og_color = $Letter.modulate
-	
-	highlight_tween.tween_method(func flash_red_tween_helper(t: float):
-		t = flash_num_helper(t)
-		tween_highlight_color(t, og_color, Color.RED), 0.0, 1.0, 0.5)
-	highlight_tween.tween_callback(reset)
-	highlight_tween.play()
+	var tween = create_tween()
+	tween.tween_property(self,"modulate",Color(1.0,0.0,0.0),.1)
+	tween.tween_property(self,"modulate",Color(1.0,1.0,1.0),.1)
+	tween.play()
 	pulse()
 
 func pulse_and_reset():
 	clear_highlight()
 	pulse()
 
+func set_red():
+	red = true
+	flash_red()
+	color()
+
+func unset_red():
+	red = false
+	color()
+
 func set_selected():
-	if highlight_state == HighlightState.SELECTED: return
-	highlight_state = HighlightState.SELECTED
-	highlight_tween = create_tween()
-	highlight_tween.tween_method(highlight_valid, 0.0, 1.0, 0.1)
-	highlight_tween.play()
+	highlight_state = GlobalVariables.HighlightState.PATH
+	affected = true
+	color()
 	pulse()
 
 func set_potential():
-	if highlight_state == HighlightState.POTENTIAL: return
-	highlight_state = HighlightState.POTENTIAL
-	highlight_tween = create_tween()
-	highlight_tween.tween_method(highlight_potential, 0.0, 1.0, 0.1)
-	highlight_tween.play()
+	highlight_state = GlobalVariables.HighlightState.POTENTIAL
+	color()
 	pulse()
 
+func deselect():
+	highlight_state = GlobalVariables.HighlightState.NONE
+	affected = false
+	color()
+
 func clear_highlight():
-	highlight_state = HighlightState.NONE
-	if highlight_tween != null and highlight_tween.is_running():
-		highlight_tween.kill()
-	$Letter.modulate = Color.WHITE
-	$circler.modulate = Color.BLACK
+	highlight_state = GlobalVariables.HighlightState.NONE
+	affected = false
+	color()
 
 func encircle():
 	var circle_start = randf()*TAU

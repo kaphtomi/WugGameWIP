@@ -5,6 +5,11 @@ enum WUG_ZZZ {AWAKE, SLEEP}
 enum WUG_DIFF {EASY, MED, HARD}
 var cur_zzz = WUG_ZZZ.AWAKE
 var cur_dif = WUG_DIFF.EASY 
+enum HighlightState {NONE, PATH, POTENTIAL }
+var path_color = Color(1.0, .46, .78)
+var potential_color = Color(.2,.9,1.0)
+var red_color = Color(1.0, .4, .4)
+
 
 signal switching_to_zzz_mode
 

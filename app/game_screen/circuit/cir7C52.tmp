@@ -1,6 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=16 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/circuit.gd" id="1_tyd7i"]
+[ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="2_fjepo"]
 [ext_resource type="AudioStream" uid="uid://b2oau08ck2y75" path="res://assets/sounds/pop_in_sound.mp3" id="2_lm86x"]
 [ext_resource type="AudioStream" uid="uid://b66lohca1jgi6" path="res://assets/sounds/pop_out_sound.mp3" id="3_p8qw1"]
 [ext_resource type="AudioStream" uid="uid://cpdhyt0y105q6" path="res://assets/sounds/snap_sound.mp3" id="4_fjvdh"]
@@ -10,8 +11,18 @@
 [ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_8q3m8"]
 [ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="9_vx50n"]
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="10_pl4sq"]
-[ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://speech_bubble.tscn" id="11_hbdw6"]
-[ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="12_2k17u"]
+[ext_resource type="PackedScene" path="res://speechBubble.tscn" id="11_b8e4y"]
+
+[sub_resource type="FontVariation" id="FontVariation_28ud6"]
+base_font = ExtResource("2_fjepo")
+variation_opentype = {
+1869640570: 32,
+2003265652: 700
+}
+
+[sub_resource type="Theme" id="Theme_67a1p"]
+default_font = SubResource("FontVariation_28ud6")
+default_font_size = 200
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7s72m"]
 animations = [{
@@ -33,13 +44,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="FontVariation" id="FontVariation_6mh1r"]
-base_font = ExtResource("12_2k17u")
-variation_opentype = {
-1869640570: null,
-2003265652: 900
-}
-
 [node name="Circuit" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -53,21 +57,25 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_tyd7i")
 
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme = SubResource("Theme_67a1p")
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "aaaaa"
+
 [node name="PopInSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_lm86x")
-bus = &"SFX"
 
 [node name="PopOutSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_p8qw1")
-bus = &"SFX"
 
 [node name="SnapSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_fjvdh")
-bus = &"SFX"
 
 [node name="WrongSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_0qoah")
-bus = &"SFX"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 visible = false
@@ -78,22 +86,17 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(1470, 797)
+position = Vector2(1478, 803)
 scale = Vector2(0.6, 0.575)
 texture = ExtResource("10_pl4sq")
 
-[node name="SpeechBubble" parent="." instance=ExtResource("11_hbdw6")]
+[node name="SpeechBubble" parent="." instance=ExtResource("11_b8e4y")]
+visible = false
 layout_mode = 1
-
-[node name="CurrentWordLabel" type="Label" parent="."]
-z_index = -2
-layout_mode = 0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 80.0
-offset_bottom = 344.0
-theme_override_colors/font_color = Color(0.898039, 0.898039, 0.898039, 1)
-theme_override_fonts/font = SubResource("FontVariation_6mh1r")
-theme_override_font_sizes/font_size = 250
+offset_left = -162.0
+offset_top = -82.0
+offset_right = -162.0
+offset_bottom = -82.0
+script = null
 
 [connection signal="item_rect_changed" from="." to="." method="_on_item_rect_changed"]
