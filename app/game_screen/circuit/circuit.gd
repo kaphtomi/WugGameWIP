@@ -144,6 +144,10 @@ func is_word_in_circuit():
 			return false
 	return true
 
+#called on enter. if the word is invalid, clear
+#if the word is valid and has already been entered, sad path + clear
+#if the word is valid hasn't been entered, and has multiple letters, score + happy path
+#then pulse reset affected junctions and clear word 
 func submit_word():
 	if !word_valid:
 		clear_word_selection()
@@ -159,6 +163,7 @@ func submit_word():
 	for j in affected_junctions: j.pulse_and_reset()
 	clear_word_selection()
 
+#helper for happy and sad paths, which starts the new path and clears the old one if applicable
 func set_submitted_path(path):
 	path[0].pop_out()
 	if !submitted_path.is_empty():
@@ -166,6 +171,7 @@ func set_submitted_path(path):
 			h.queue_free()
 	submitted_path=path
 
+#slowly retracts the highlight path from a duplicate word and doesn't change its color
 func sad_path():
 	var path = []
 	for w in connecting_wires:
@@ -173,6 +179,7 @@ func sad_path():
 		path.append(h)
 	set_submitted_path(path)
 
+#quickly retracts the highlight path from a new word, changes its color, and it makes the graph wiggle
 func happy_path():
 	var path = []
 	var i = 0
@@ -184,7 +191,7 @@ func happy_path():
 		path.append(h)
 	set_submitted_path(path)
 	
-
+#clears all the highlights (except for highlights in submitted_path) and resets everything
 func clear_word_selection():
 	for w in wires:
 		if w == null: continue
@@ -203,6 +210,12 @@ func void_current_word():
 func validate_junction(junction):
 	return potential_junctions.get(junction)
 
+#adds a junction to the end of the word. only call this if
+#a) the word is currently valid
+#b) the junction has a wire connecting it to the last junction (selected junction) 
+#c) that wire isn't already in connecting wires
+#TODO typing sfx (maybe it should be in a more general place, 
+#still making the typing noise even if it doesn't add to word i'm not sure)
 func add_to_word(junction):
 	var connection = get_wire(selected_junction.get_letter(), junction.get_letter())
 	var invert_highlight_direction = connection.get_end().get_letter() == selected_junction.get_letter()
@@ -213,12 +226,14 @@ func add_to_word(junction):
 	deselect_junction(selected_junction)
 	affected_junctions[-1].affected = true
 
+#clears all the potential highlights (with a fun animation)
 func clear_potential_highlights():
 	for w in potential_wires:
 		if w == null: continue
 		w.clear_potential_highlight()
 
-#makes all juncs and wires red until the word is valid
+# should it be called when junction == null in char_inputted? i don't know what that case
+# was for, perhaps it cannot happen anymore
 func process_invalid_input():
 	if word_valid:
 		set_all_red()
@@ -226,11 +241,12 @@ func process_invalid_input():
 	pulse_all()
 	return
 
-# Checks difficulty and, if applicable, highlights potential wires blue
+# highlights potential wires blue
 func highlight_wires():
 	for w in potential_wires:
 		w.highlight_potential(w.get_end().get_letter() == selected_junction.get_letter())
 
+#sets everything red
 func set_all_red():
 	for w in wires: w.set_red()
 	for j in junctions: j.set_red()
@@ -241,9 +257,11 @@ func unset_all_red():
 	for w in wires: w.unset_red()
 	for j in junctions: j.unset_red()
 	
+
 func pulse_all():
 	for j in junctions: j.pulse()
 
+#a pain for sure but it works except in the rare bug mentioned below
 func do_backspace():
 	if word.length()<2:
 		clear_potential_highlights()
@@ -275,17 +293,23 @@ func do_backspace():
 		select_junction(affected_junctions.pop_back())
 		highlight_wires()
 	
+	
+#deselects the junction. make sure you call it on the selected junction. 
+#TODO maybe i should change this to not take a parameter
 func deselect_junction(junction):
 	selected_junction = null
 	if junction!=null:
 		junction.deselect()
 
+#selects the junction, AND APPENDS IT TO AFFECTED JUNCTIONS. 
+#the second bit might cause more confusion than it's worth
 func select_junction(junction):
 	junction.set_selected()
 	selected_junction = junction
 	affected_junctions.append(junction)
 	reset_potentials()
 	
+#resets the potentials for the selected junction, without redrawing
 func reset_potentials():
 	potential_wires = {}
 	potential_junctions = selected_junction.get_connections()
@@ -318,7 +342,10 @@ func _input(event):
 	elif input in "QWERTYUIOPASDFGHJKLZXCVBNM":
 		char_inputted(input)
 		return
-	
+
+#again, not sure about the junction==null case, should it process invalid input? 
+#my brain says the game has gone horribly wrong if we reach that case. the new word
+#is in the circuit, but the junction is missing from the map of junctions
 func char_inputted(input):
 	word += input
 	$CurrentWordLabel.text = word
@@ -600,7 +627,10 @@ func pop_out_junction(junc, delta):
 	tweenopac.play()
 	tweenmove.play()
 	$PopOutSFX.play()
-	
+
+#checks if the head of the path ended it's animation, in which case we remove & free it,
+#and then start the next one. if that highlight was happy, then it knocks it's end node
+#a bit, depending on how long the path was.
 func animate_submitted_path():
 	if !submitted_path.is_empty():
 		var h = submitted_path[0]

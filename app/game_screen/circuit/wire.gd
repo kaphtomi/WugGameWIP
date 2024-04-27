@@ -13,7 +13,7 @@ const MAX_THICKNESS: int = 7
 var not_scored = true
 var red = false
 
-var highlights = []
+var highlights = [] #a list of highlights
 
 var block_decay = false
 
@@ -47,7 +47,7 @@ func _process(_delta):
 	time += _delta
 	color()
 	update()
-	for h in highlights.duplicate():
+	for h in highlights.duplicate(): #only look at highlights
 		if h.ended:
 			highlights.erase(h)
 			h.queue_free()
@@ -57,7 +57,7 @@ const SKETCHY_WIRES: bool = true
 func sketch():
 	start_offset = start_offset*.5 + 5*Vector2.ONE.rotated(randf()*TAU)
 	end_offset = end_offset*.5 + 5*Vector2.ONE.rotated(randf()*TAU)
-	for h in highlights:
+	for h in highlights: #just realized this doesn't resketch the submitted path, this is probably find though, would be too much work
 		h.sketch()
 
 func update():
@@ -74,6 +74,7 @@ func update():
 func color():
 	$Stroke.set_default_color(get_color())
 
+#handles the reddening
 func get_color():
 	if red:
 		return GlobalVariables.red_color
@@ -83,6 +84,7 @@ func get_color():
 func pop_in(t:float):
 	done = t
 
+#path highlight, called by circuit
 func highlight_path(inverted: bool = false):
 	var h = Highlight.instantiate()
 	h.direction = inverted
@@ -90,18 +92,22 @@ func highlight_path(inverted: bool = false):
 	h.pop_in_path()
 	highlights.append(h)
 
+#used by highlight
 func get_start_pos():
 	var start = _from.position
 	var end = _to.position
 	var s = end - start
 	return start + s.normalized()*70
 
+#used by highlight, honestly a bit silly but computer is fast and it's not worth breaking when
+#i could be working on a scores graph
 func get_end_pos():
 	var start = _from.position
 	var end = _to.position
 	var s = end - start
 	return end - s.normalized()*70
 
+#potential highlight, called by circuit
 func highlight_potential(inverted: bool = false):
 	var h = Highlight.instantiate()
 	h.direction=inverted
@@ -109,40 +115,52 @@ func highlight_potential(inverted: bool = false):
 	h.pop_in_potential()
 	highlights.append(h)
 	
+#makes the initial red more intense
 func flash_red():
 	var tween = create_tween()
 	tween.tween_property(self,"modulate",Color(1.0,0.0,0.0),.1)
 	tween.tween_property(self,"modulate",Color(1.0,1.0,1.0),.1)
 	tween.play()
 
+#sets it to red
 func set_red():
 	red = true
+	flash_red()
 	for h in highlights:
 		h.set_red()
 
+#unsets red
 func unset_red():
 	red = false
 	for h in highlights:
 		h.unset_red()
 		
+#clears all highlights not in submitted path
 func clear_highlights():
 	for h in highlights:
 		h.queue_free()
 	highlights=[]
 	
+#removes a specific highlight, but i don't think i ended up using it
+#TODO see if this can be removed
 func remove_highlight(h):
 	highlights.erase(h)
 	
+#clears all potential highlights with a fun animation
 func clear_potential_highlight():
 	for h in highlights:
 		if h.type == GlobalVariables.HighlightState.POTENTIAL:
 			h.pop_out()
 	
+#clears all path highlights with a fun animation
 func clear_path_highlight():
 	for h in highlights:
 		if h.type == GlobalVariables.HighlightState.PATH:
 			h.shrink_out()
-			
+
+#removes all path highlights and returns them for the submitted path
+#TODO investigate if this could run into a strange thing with the above
+#method?
 func path_to_higherlights():
 	for h in highlights.duplicate():
 		if h.type == GlobalVariables.HighlightState.PATH:
@@ -195,6 +213,10 @@ func snap():
 	_from.remove_outgoing(self)
 	_to.remove_incoming(self)
 
+#increases score of wire first time it's used, and also is used
+#the not_scored thing makes the wire decay faster until it's used for
+#the first time, and also, once it's scored for the first time, it
+#then increments faster
 func score_wire():
 	var s = not_scored
 	not_scored = false

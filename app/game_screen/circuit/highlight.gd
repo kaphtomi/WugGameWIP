@@ -7,7 +7,7 @@ var time_out = 0.0
 var ending = false
 var shrinking = false
 var happy = false
-var happiness = 0
+var happiness = 0 #happiness :) (amount to knock the junction by in the submitted path)
 var ended = false
 var DURATION = .33
 var type
@@ -25,12 +25,16 @@ func _ready():
 	sketch()
 	pass
 
+#pop ins are done automatically based on process, but this is used to color it appropriately
+#and determine how it interacts with the logic in wire
 func pop_in_path():
 	set_type(GlobalVariables.HighlightState.PATH)
 
 func pop_in_potential():
 	set_type(GlobalVariables.HighlightState.POTENTIAL)
 
+#updates its position and length according to the time variables that are updated accordingly
+#in process
 func update():
 	var s = start + start_offset+(end+end_offset-start-start_offset)*sqrt(time_out)
 	var e = start + start_offset+(end+end_offset-start-start_offset)*sqrt(time_in)
@@ -41,20 +45,29 @@ func update():
 	set_point_position(0,s)
 	set_point_position(1,e)
 
+#these all make time_out increase,
+#and determine direction
+
+#shrinks out into the outgoing junction
 func pop_out():
 	ending = true
 	
+#shrinks back into the incoming junction
 func shrink_out():
 	shrinking = true
 	
+#shrinks out into the outgoing junction, faster and yellow
 func happy_out():
 	happy = true
 	color()
 
+#sets the type and colors accordingly
 func set_type(new_type):
 	type=new_type
 	color()
 
+#perhaps we should use a boolean like in wire but i don't think it's needed
+#since the color rarely updates
 func set_red():
 	modulate = GlobalVariables.red_color
 	
@@ -69,7 +82,7 @@ func color():
 	if happy:
 		modulate = Color.GOLD
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# updates start, end, and the time_in / time_out vars which are used in the animations
 func _process(delta):
 	if direction:
 		end = get_parent().start_pos
