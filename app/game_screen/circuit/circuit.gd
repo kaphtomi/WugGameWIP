@@ -175,9 +175,12 @@ func sad_path():
 
 func happy_path():
 	var path = []
+	var i = 0
 	for w in connecting_wires:
+		i+=1
 		var h = w.path_to_higherlights()
 		h.happy_out()
+		h.happiness=i
 		path.append(h)
 	set_submitted_path(path)
 	
@@ -604,6 +607,16 @@ func animate_submitted_path():
 		if h!= null:
 			h.pop_out()
 			if h.ended:
+				if h.happy:
+					var happy = h.happiness
+					var start = h.get_parent().get_start()
+					var end = h.get_parent().get_end()
+					var d = end.position-start.position
+					if h.direction:
+						d *= -1
+						start.force(100*happy*d.normalized())
+					else:
+						end.force(100*happy*d.normalized())
 				h.queue_free()
 				submitted_path.pop_front()
 		else: submitted_path.pop_front()

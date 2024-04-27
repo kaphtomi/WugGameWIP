@@ -7,11 +7,13 @@ var time_out = 0.0
 var ending = false
 var shrinking = false
 var happy = false
+var happiness = 0
 var ended = false
 var DURATION = .33
 var type
 var start_offset
 var end_offset 
+
 
 
 # Called when the node enters the scene tree for the first time.
