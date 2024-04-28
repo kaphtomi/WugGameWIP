@@ -121,6 +121,7 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="SpeechBubble" parent="." instance=ExtResource("12_euwpy")]
+visible = false
 layout_mode = 1
 
 [connection signal="circuit_broken" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_circuit_broken"]
