@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="11_c4tub"]
 [ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://speech_bubble.tscn" id="12_euwpy"]
 [ext_resource type="Script" path="res://app/game_screen/pause_modal.gd" id="14_bo6ms"]
-[ext_resource type="Theme" uid="uid://dxkrlgnlsexuj" path="res://app/game_screen/pause_menu.tres" id="14_pw67a"]
+[ext_resource type="Theme" uid="uid://c774170h4crgv" path="res://app/game_screen/pause_menu.tres" id="14_pw67a"]
 
 [sub_resource type="Environment" id="Environment_wdw4p"]
 background_mode = 3

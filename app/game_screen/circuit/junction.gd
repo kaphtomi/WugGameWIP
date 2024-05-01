@@ -206,7 +206,7 @@ func mirror_off():
 		is_mirrored = false
 
 func random_rotation():
-	var random_rotation_degrees = randi() % 340 + 10
+	var random_rotation_degrees = randi() % 270 + 90
 	current_letter_rotation = random_rotation_degrees
 	return random_rotation_degrees
 

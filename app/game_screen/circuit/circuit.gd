@@ -40,6 +40,7 @@ func _ready():
 	$CurrentWordLabel.text = ""  # Empties the current word label with a new circuit
 	reset_all_input_defaults()
 
+
 #region GENERATION
 func generate():
 	in_radius = 4000.0 * get_viewport().size.x/1600.0
@@ -694,9 +695,12 @@ func junction_mirroring_off():
 
 func rotate_junctions():
 	for junc in junctions:
-		var tween = get_tree().create_tween().set_loops()
+		var tween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE)
 		letter_rotation_tweens.append(tween)
-		tween.tween_method(junc.set_junction_rotation, junc.get_current_rotation(), junc.random_rotation(), 2.5)
+		var start_rotation = junc.get_current_rotation()
+		var end_rotation = junc.random_rotation()
+		tween.tween_method(junc.set_junction_rotation, start_rotation, end_rotation, 1.5)
+		tween.tween_method(junc.set_junction_rotation, end_rotation, start_rotation, 1.5)
 		tween.play()
 
 func reset_junction_rotations():
@@ -705,14 +709,11 @@ func reset_junction_rotations():
 	letter_rotation_tweens.clear()
 	for junc in junctions:
 		var tween = get_tree().create_tween()
-		tween.tween_method(junc.set_junction_rotation, junc.get_current_rotation(), 0, 1.5)
+		tween.tween_method(junc.set_junction_rotation, junc.get_current_rotation(), 0, 1)
 		tween.play()
 
 func _on_game_screen_game_pause():
 	paused = true
-	
-
-
 
 func _on_game_screen_game_unpause():
 	paused=false

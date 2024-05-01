@@ -12,7 +12,7 @@ func easy_mode():
 
 func med_mode():
 	get_parent().junction_mirroring_on()
-	get_parent().rotate_junctions()
+	get_parent().reset_junction_rotations()
 
 func hard_mode():
 	get_parent().junction_mirroring_off()
