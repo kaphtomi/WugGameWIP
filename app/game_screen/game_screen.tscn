@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dj4v5021f26wl"]
+[gd_scene load_steps=19 format=3 uid="uid://dj4v5021f26wl"]
 
 [ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
@@ -12,6 +12,21 @@
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="10_cyj6i"]
 [ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="11_c4tub"]
 [ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://speech_bubble.tscn" id="12_euwpy"]
+[ext_resource type="Script" path="res://app/game_screen/pause_modal.gd" id="14_bo6ms"]
+[ext_resource type="Theme" uid="uid://dxkrlgnlsexuj" path="res://app/game_screen/pause_menu.tres" id="14_pw67a"]
+
+[sub_resource type="Environment" id="Environment_wdw4p"]
+background_mode = 3
+background_energy_multiplier = 0.0
+glow_levels/3 = 0.0
+glow_levels/5 = 0.0
+glow_normalized = true
+glow_intensity = 1.0
+glow_mix = 0.0
+glow_bloom = 1.0
+glow_blend_mode = 3
+glow_hdr_threshold = 4.0
+glow_map_strength = 1.0
 
 [sub_resource type="FontVariation" id="FontVariation_4wr7i"]
 base_font = ExtResource("8_6yd12")
@@ -19,9 +34,6 @@ variation_opentype = {
 1869640570: null,
 2003265652: 900
 }
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2rufv"]
-shader = ExtResource("5_fgtqu")
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5blnl"]
 animations = [{
@@ -49,6 +61,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2rufv"]
+shader = ExtResource("5_fgtqu")
+
 [node name="GameScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -57,6 +72,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_64wdv")
+
+[node name="PauseBlur" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wdw4p")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
@@ -68,27 +86,15 @@ theme_override_colors/font_color = Color(0.898039, 0.898039, 0.898039, 1)
 theme_override_fonts/font = SubResource("FontVariation_4wr7i")
 theme_override_font_sizes/font_size = 250
 
-[node name="CircuitAndBlackboard" type="HBoxContainer" parent="."]
+[node name="Circuit" parent="." instance=ExtResource("4_0o6or")]
+z_as_relative = false
 layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 12.0
 offset_right = 1600.0
 offset_bottom = 900.0
-
-[node name="Circuit" parent="CircuitAndBlackboard" instance=ExtResource("4_0o6or")]
-z_as_relative = false
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="."]
-z_index = 2
-material = SubResource("ShaderMaterial_2rufv")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("6_sk6v4")
 
 [node name="Flow" type="VFlowContainer" parent="."]
 layout_mode = 1
@@ -114,15 +120,74 @@ theme = ExtResource("7_wel0y")
 theme_override_colors/font_color = Color(0.239216, 0.239216, 0.239216, 1)
 theme_override_font_sizes/font_size = 51
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="SpeechBubble" parent="." instance=ExtResource("12_euwpy")]
+visible = false
+layout_mode = 1
+
+[node name="CanvasLayer3" type="CanvasLayer" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CanvasLayer3"]
+top_level = true
 position = Vector2(2731, 1659)
 sprite_frames = SubResource("SpriteFrames_5blnl")
 animation = &"idle"
 autoplay = "idle"
 
-[node name="SpeechBubble" parent="." instance=ExtResource("12_euwpy")]
+[node name="Container" type="HFlowContainer" parent="CanvasLayer3"]
 visible = false
-layout_mode = 1
+top_level = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -201.0
+offset_right = 201.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("14_bo6ms")
 
-[connection signal="circuit_broken" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_circuit_broken"]
-[connection signal="word_submitted" from="CircuitAndBlackboard/Circuit" to="." method="_on_circuit_word_submitted"]
+[node name="Continue" type="Button" parent="CanvasLayer3/Container"]
+layout_mode = 2
+theme = ExtResource("14_pw67a")
+text = "continue"
+
+[node name="Restart" type="Button" parent="CanvasLayer3/Container"]
+layout_mode = 2
+theme = ExtResource("14_pw67a")
+theme_override_font_sizes/font_size = 32
+text = "restart"
+
+[node name="Home" type="Button" parent="CanvasLayer3/Container"]
+layout_mode = 2
+theme = ExtResource("14_pw67a")
+theme_override_font_sizes/font_size = 32
+text = "home"
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer3"]
+top_level = true
+z_index = 2
+material = SubResource("ShaderMaterial_2rufv")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1320.0
+offset_top = -966.0
+offset_right = 1320.0
+offset_bottom = 966.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_sk6v4")
+
+[connection signal="game_pause" from="." to="Circuit" method="_on_game_screen_game_pause"]
+[connection signal="game_pause" from="." to="CanvasLayer3/Container" method="_on_game_screen_game_pause"]
+[connection signal="game_unpause" from="." to="Circuit" method="_on_game_screen_game_unpause"]
+[connection signal="game_unpause" from="." to="CanvasLayer3/Container" method="_on_game_screen_game_unpause"]
+[connection signal="circuit_broken" from="Circuit" to="." method="_on_circuit_circuit_broken"]
+[connection signal="word_submitted" from="Circuit" to="." method="_on_circuit_word_submitted"]
+[connection signal="pressed" from="CanvasLayer3/Container/Continue" to="CanvasLayer3/Container" method="_on_continue_pressed"]
+[connection signal="pressed" from="CanvasLayer3/Container/Restart" to="CanvasLayer3/Container" method="_on_restart_pressed"]
+[connection signal="pressed" from="CanvasLayer3/Container/Home" to="CanvasLayer3/Container" method="_on_home_pressed"]
