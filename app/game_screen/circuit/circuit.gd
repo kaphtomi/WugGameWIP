@@ -30,6 +30,7 @@ var handling_letter = false
 var words: Dictionary = {}
 const max_scale = 1.1
 var cursor_tween
+var letter_rotation_tweens = []
 var submitted_path = []
 
 # Called when the node enters the scene tree for the first time.
@@ -420,9 +421,7 @@ func process_junctions(sketch, delta):
 
 	
 func _process(delta):
-	
-	
-	if selected_junction && selected_junction.highlight_state != 2:
+	if selected_junction != null && selected_junction.highlight_state != 2:
 		selected_junction.set_potential()
 	
 	time += delta
@@ -677,3 +676,27 @@ func pulse_cursor():
 	cursor_tween.tween_interval(0.25)
 	cursor_tween.play()
 	
+
+func junction_mirroring_on():
+	for junc in junctions:
+		junc.mirror_on()
+
+func junction_mirroring_off():
+	for junc in junctions:
+		junc.mirror_off()
+
+func rotate_junctions():
+	for junc in junctions:
+		var tween = get_tree().create_tween().set_loops()
+		letter_rotation_tweens.append(tween)
+		tween.tween_method(junc.set_junction_rotation, junc.get_current_rotation(), junc.random_rotation(), 2.5)
+		tween.play()
+
+func reset_junction_rotations():
+	for tween in letter_rotation_tweens:
+		tween.kill()
+	letter_rotation_tweens.clear()
+	for junc in junctions:
+		var tween = get_tree().create_tween()
+		tween.tween_method(junc.set_junction_rotation, junc.get_current_rotation(), 0, 1.5)
+		tween.play()

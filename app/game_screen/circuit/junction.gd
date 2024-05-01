@@ -14,6 +14,7 @@ var letter_center
 var red = false
 var affected = false
 var is_mirrored = false
+var current_letter_rotation = 0
 const AFFECTED_SIZE = 1.1
 
 var highlight_state = GlobalVariables.HighlightState.NONE
@@ -191,10 +192,27 @@ func encircle():
 	$circler.polygon = vector_array
 	pass
 
-func mirror_letter():
-	is_mirrored = true
+func toggle_mirror():
 	$Letter.scale *= -1
 
-func reset_mirror():
-	is_mirrored = false
-	$Letter.scale *= -1
+func mirror_on():
+	if !is_mirrored:
+		toggle_mirror()
+		is_mirrored = true
+
+func mirror_off():
+	if is_mirrored:
+		toggle_mirror()
+		is_mirrored = false
+
+func random_rotation():
+	var random_rotation_degrees = randi() % 340 + 10
+	current_letter_rotation = random_rotation_degrees
+	return random_rotation_degrees
+
+func set_junction_rotation(degrees):
+	$Letter.set_rotation_degrees(degrees)
+	current_letter_rotation = degrees
+
+func get_current_rotation():
+	return current_letter_rotation
