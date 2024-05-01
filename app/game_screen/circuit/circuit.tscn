@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=16 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/circuit.gd" id="1_tyd7i"]
 [ext_resource type="AudioStream" uid="uid://b2oau08ck2y75" path="res://assets/sounds/pop_in_sound.mp3" id="2_lm86x"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="10_pl4sq"]
 [ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://speech_bubble.tscn" id="11_hbdw6"]
 [ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="12_2k17u"]
+[ext_resource type="Script" path="res://app/game_screen/circuit/difficulty_mode.gd" id="13_6y0lg"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7s72m"]
 animations = [{
@@ -95,5 +96,8 @@ offset_bottom = 344.0
 theme_override_colors/font_color = Color(0.898039, 0.898039, 0.898039, 1)
 theme_override_fonts/font = SubResource("FontVariation_6mh1r")
 theme_override_font_sizes/font_size = 250
+
+[node name="DifficultyMode" type="Node" parent="."]
+script = ExtResource("13_6y0lg")
 
 [connection signal="item_rect_changed" from="." to="." method="_on_item_rect_changed"]

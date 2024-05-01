@@ -13,6 +13,7 @@ var offset = Vector2.ZERO
 var letter_center
 var red = false
 var affected = false
+var is_mirrored = false
 const AFFECTED_SIZE = 1.1
 
 var highlight_state = GlobalVariables.HighlightState.NONE
@@ -20,6 +21,7 @@ var highlight_state = GlobalVariables.HighlightState.NONE
 func _ready():
 	velocity = Vector2.ZERO
 	letter_center = $Letter.position
+	$Letter.pivot_offset = $Letter.size/2
 	encircle()
 	$circler.modulate = Color.BLACK
 
@@ -188,3 +190,11 @@ func encircle():
 		vector_array.append(sum)
 	$circler.polygon = vector_array
 	pass
+
+func mirror_letter():
+	is_mirrored = true
+	$Letter.scale *= -1
+
+func reset_mirror():
+	is_mirrored = false
+	$Letter.scale *= -1

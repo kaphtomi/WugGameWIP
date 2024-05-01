@@ -54,15 +54,19 @@ func change_state():
 	if score/100 % 3 == 2:
 		GlobalVariables.switch_to_sleep()
 	else:
-		GlobalVariables.cur_zzz = GlobalVariables.WUG_ZZZ.AWAKE
-	match score/100:
-		0, 2:
-			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.EASY
-		1, 3, 5, 6, 8:
-			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.MED
-		4, 7, 9:
-			GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD
+		GlobalVariables.switch_to_awake()
+	
 	if score/1000!=0:
-		GlobalVariables.cur_dif=GlobalVariables.WUG_DIFF.HARD
+		GlobalVariables.switch_to_hard_mode()
+	else:
+		match score/100:
+			0, 2:
+				GlobalVariables.switch_to_easy_mode()
+			1, 3, 5, 6, 8:
+				GlobalVariables.switch_to_med_mode()
+			4, 7, 9:
+				GlobalVariables.switch_to_hard_mode()
+	
+	
 		
 
