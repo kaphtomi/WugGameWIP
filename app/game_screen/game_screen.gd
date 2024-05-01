@@ -3,11 +3,21 @@ var score = 0
 var cur_score = 0
 var fade = 0
 var game_is_over=false
+var paused = false
+signal game_pause
+signal game_unpause
 	
 func _ready():
+	paused = true
+	unpause_game()
 	call_deferred("ready_circuit")
 
 func _process(delta):
+	if paused:
+		var env = $PauseBlur.get_environment()
+		env.set_glow_level(1, lerp(env.get_glow_level(1),0.0,delta*10))
+		env.set_glow_level(3, lerp(env.get_glow_level(3),1.0,delta*10))
+		env.set_glow_level(5, lerp(env.get_glow_level(5),1.0,delta*10))
 	var cur_score_init = cur_score
 	cur_score = lerp(float(cur_score),float(score),delta*2)
 	fade = fade-delta
@@ -18,25 +28,44 @@ func _process(delta):
 			game_over_label.text = game_over_label.text + ", game over"
 			GlobalVariables.score = score
 			print("changing scene")
-			get_tree().change_scene_to_file("res://app/game_over_screen/game_over_screen.tscn")
+			get_tree().current_scene.to_game_over_screen()
 	if ceil(cur_score)!= ceil(cur_score_init):
 		$Flow/Score.text = str(ceil(cur_score))
 	if cur_score == 5:
 		$SpeechBubble.snooze_text = "Snoozing"
 		
 	
+func pause_game():
+	if paused:
+		return
+	paused = true
+	Engine.time_scale = .25
+	game_pause.emit()
+	$PauseBlur.get_environment().glow_enabled = true
+	$PauseBlur.get_environment().set_glow_level(1, 1.0)
+	$PauseBlur.get_environment().set_glow_level(3, 0.0)
+	$PauseBlur.get_environment().set_glow_level(5, 0.0)
+	
+	
+func unpause_game():
+	if !paused:
+		return
+	paused = false
+	Engine.time_scale = 1.0
+	game_unpause.emit()
+	$PauseBlur.get_environment().glow_enabled = false
 
 func ready_circuit():
-	$CircuitAndBlackboard/Circuit.generate()
-	$CircuitAndBlackboard/Circuit.position = Vector2()
+	$Circuit.generate()
+	$Circuit.position = Vector2()
 
 func _on_circuit_word_submitted(word : String):
 	if word == "/kill":
-		$CircuitAndBlackboard/Circuit.kill_circuit()
+		$Circuit.kill_circuit()
 	if true: #$CircuitAndBlackboard/Circuit.is_word_in_circuit(word):
 		#$CircuitAndBlackboard/Circuit.score_word(word)
 		#$CircuitAndBlackboard/Blackboard.add_word(word)
-		var score_plus = $CircuitAndBlackboard/Circuit.score - score
+		var score_plus = $Circuit.score - score
 		score += score_plus
 		$Flow/Extras.text = "+" + str(score_plus) + " " + word
 		fade=2
@@ -47,7 +76,7 @@ func _on_circuit_circuit_broken():
 	game_is_over=true
 
 func _on_blackboard_text_field_changed(new_text):
-	$CircuitAndBlackboard/Circuit.update_word(new_text)
+	$Circuit.update_word(new_text)
 	
 	
 func change_state():

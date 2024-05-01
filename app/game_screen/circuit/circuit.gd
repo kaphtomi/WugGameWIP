@@ -32,6 +32,7 @@ const max_scale = 1.1
 var cursor_tween
 var letter_rotation_tweens = []
 var submitted_path = []
+var paused = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -334,6 +335,8 @@ func _input(event):
 	var input = event.as_text()
 	if input == "Slash":
 		pass
+	if input == "Escape":
+		get_parent().pause_game()
 	if input == "Enter": 
 		submit_word()
 		return
@@ -395,6 +398,8 @@ func process_wires(sketch: bool, delta):
 	for wire in wires:
 		if sketch: 
 			wire.sketch()
+		if paused:
+			continue
 		if kill:
 			wire.decay(delta*500,score+10)
 		if wires.size() == 1:
@@ -521,6 +526,8 @@ func coolombs(v1, v2, delta : float):
 	var p2 : Vector2 = v2.position
 	var r : Vector2 = p2 - p1
 	var f : Vector2 = ELECTRIC_CONSTANT / (r.length_squared()+1) * r.normalized()
+	if v1==selected_junction||v2==selected_junction:
+		f = 1.5*f
 	v1.force(-f*delta)
 	v2.force(f*delta)
 
@@ -700,3 +707,12 @@ func reset_junction_rotations():
 		var tween = get_tree().create_tween()
 		tween.tween_method(junc.set_junction_rotation, junc.get_current_rotation(), 0, 1.5)
 		tween.play()
+
+func _on_game_screen_game_pause():
+	paused = true
+	
+
+
+
+func _on_game_screen_game_unpause():
+	paused=false
