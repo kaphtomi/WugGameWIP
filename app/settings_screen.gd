@@ -7,12 +7,13 @@ func _enter_tree():
 	$UIOrganizer/VBoxContainer/GridContainer/MusicSlider.value = Settings.music_volume
 	$UIOrganizer/VBoxContainer/GridContainer/SFXSlider.value = Settings.sfx_volume
 
+
 func _exit_tree():
 	Settings.save()
 
 func _on_texture_button_pressed():
-	get_tree().change_scene_to_file("res://app/start_screen/start_screen.tscn")
-
+	get_tree().current_scene.to_start_screen()
+	
 func _on_music_slider_value_changed(value):
 	AudioServer.set_bus_volume_db(MUSIC_BUS_ID, linear_to_db(value))
 	AudioServer.set_bus_mute(MUSIC_BUS_ID, value < 0.05)

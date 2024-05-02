@@ -16,4 +16,4 @@ func _process(_delta):
 
 
 func _on_restart_button_pressed():
-	get_tree().change_scene_to_file("res://app/start_screen/start_screen.tscn")
+	get_tree().current_scene.to_start_screen()

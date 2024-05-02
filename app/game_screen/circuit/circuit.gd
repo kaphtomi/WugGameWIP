@@ -30,13 +30,16 @@ var handling_letter = false
 var words: Dictionary = {}
 const max_scale = 1.1
 var cursor_tween
+var letter_rotation_tweens = []
 var submitted_path = []
+var paused = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	GlobalVariables.switching_to_zzz_mode.connect(pulse_cursor)
 	$CurrentWordLabel.text = ""  # Empties the current word label with a new circuit
 	reset_all_input_defaults()
+
 
 #region GENERATION
 func generate():
@@ -333,6 +336,8 @@ func _input(event):
 	var input = event.as_text()
 	if input == "Slash":
 		pass
+	if input == "Escape":
+		get_parent().pause_game()
 	if input == "Enter": 
 		submit_word()
 		return
@@ -394,6 +399,8 @@ func process_wires(sketch: bool, delta):
 	for wire in wires:
 		if sketch: 
 			wire.sketch()
+		if paused:
+			continue
 		if kill:
 			wire.decay(delta*500,score+10)
 		if wires.size() == 1:
@@ -420,9 +427,7 @@ func process_junctions(sketch, delta):
 
 	
 func _process(delta):
-	
-	
-	if selected_junction && selected_junction.highlight_state != 2:
+	if selected_junction != null && selected_junction.highlight_state != 2:
 		selected_junction.set_potential()
 	
 	time += delta
@@ -522,6 +527,8 @@ func coolombs(v1, v2, delta : float):
 	var p2 : Vector2 = v2.position
 	var r : Vector2 = p2 - p1
 	var f : Vector2 = ELECTRIC_CONSTANT / (r.length_squared()+1) * r.normalized()
+	if v1==selected_junction||v2==selected_junction:
+		f = 1.5*f
 	v1.force(-f*delta)
 	v2.force(f*delta)
 
@@ -677,3 +684,36 @@ func pulse_cursor():
 	cursor_tween.tween_interval(0.25)
 	cursor_tween.play()
 	
+
+func junction_mirroring_on():
+	for junc in junctions:
+		junc.mirror_on()
+
+func junction_mirroring_off():
+	for junc in junctions:
+		junc.mirror_off()
+
+func rotate_junctions():
+	for junc in junctions:
+		var tween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE)
+		letter_rotation_tweens.append(tween)
+		var start_rotation = junc.get_current_rotation()
+		var end_rotation = junc.random_rotation()
+		tween.tween_method(junc.set_junction_rotation, start_rotation, end_rotation, 1.5)
+		tween.tween_method(junc.set_junction_rotation, end_rotation, start_rotation, 1.5)
+		tween.play()
+
+func reset_junction_rotations():
+	for tween in letter_rotation_tweens:
+		tween.kill()
+	letter_rotation_tweens.clear()
+	for junc in junctions:
+		var tween = get_tree().create_tween()
+		tween.tween_method(junc.set_junction_rotation, junc.get_current_rotation(), 0, 1)
+		tween.play()
+
+func _on_game_screen_game_pause():
+	paused = true
+
+func _on_game_screen_game_unpause():
+	paused=false
