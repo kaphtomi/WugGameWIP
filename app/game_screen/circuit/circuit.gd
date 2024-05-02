@@ -45,8 +45,11 @@ var submitted_path = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	GlobalVariables.switching_to_zzz_mode.connect(pulse_cursor)
-	$CurrentWordLabel.text = ""  # Empties the current word label with a new circuit
+	$CurrentWordLabel.text = ""  # Empties the current word label
 	reset_all_input_defaults()
+	# Resets difficulty with a new circuit
+	GlobalVariables.switch_to_awake()
+	GlobalVariables.switch_to_easy_mode()
 
 
 #region GENERATION
