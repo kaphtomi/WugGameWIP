@@ -8,33 +8,39 @@ signal circuit_broken
 var circuit_is_broken = false
 
 var alphabetter = "ETAONSHRDLCUMWFGYPBVKJXQZI".split("", true, 0)
+# junction & wire vars
 var junction_map = {}
 var junctions : Array
 var wires : Array
+# force constants
 const ELECTRIC_CONSTANT : float = 40000000
 const SPRING_CONSTANT : float = .1
 const SPRING_LENGTH : float = 800
 const SPRING_SNAP : float = 1000
+
 var score : int = 0
 var sketch_time: float = 0
 var time: float = 0
 var counter: int = 0
 var mouse_pos = Vector2.ZERO
 var grabbed = null
+# flashlight vars
 var in_radius
 var out_radius
 var in_radius_to
 var out_radius_to
+#booleans
 var kill = false
 var handling_letter = false
-var words: Dictionary = {}
-const max_scale = 1.1
-var cursor_tween
-var letter_rotation_tweens = []
-var submitted_path = []
 var paused = false
 var junctions_mirrored = false
 var junctions_rotating = false
+
+var words: Dictionary = {}
+const MAX_CURSOR_SIZE = 1.5
+var cursor_tween
+var letter_rotation_tweens = []
+var submitted_path = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -69,6 +75,10 @@ func generate_junction(num_wires : int):
 	generate_wires(junc, num_wires)
 	junctions.append(junc)
 	junction_map[letter]=junc
+	if junctions_mirrored:
+		junc.mirror_on()
+	if junctions_rotating:
+		rotate_junction(junc)
 	return junc
 	
 func generate_wires(from, num_wires : int):
@@ -372,7 +382,7 @@ func char_inputted(input):
 	highlight_wires()
 #endregion
 
-# PROCESS
+#region PROCESS
 func grab_junction():
 	if Input.is_action_just_pressed("click"):
 		for junc in junctions:
@@ -509,7 +519,7 @@ func add_to_graph(amt):
 			generate_random_wire()
 #endregion
 
-# PHYSICS
+#region PHYSICS
 func physics(delta):
 	for i in junctions.size():
 		for j in range(i,junctions.size()):
@@ -562,7 +572,9 @@ func hookes(wire, delta : float):
 	var f : Vector2 = -(SPRING_CONSTANT * wire.thickness * wire.thickness)* s * d.normalized() * wire.done* wire.done
 	from.force(-f*delta)
 	to.force(f*delta)
+#endregion
 
+#region POP TWEENS
 func snap(wire):
 	wire.snap()
 	$SnapSFX.play()
@@ -637,6 +649,7 @@ func pop_out_junction(junc, delta):
 	tweenopac.play()
 	tweenmove.play()
 	$PopOutSFX.play()
+#endregion
 
 #checks if the head of the path ended it's animation, in which case we remove & free it,
 #and then start the next one. if that highlight was happy, then it knocks it's end node
@@ -679,24 +692,27 @@ func _on_item_rect_changed():
 		elif i > (num_junctions - 4):
 			junctions[i].position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
 
-
+#Tweens the cursor's size to pulse to grab attention to it
 func pulse_cursor():
 	cursor_tween = get_tree().create_tween().set_trans(Tween.TRANS_SINE).set_loops()
-	cursor_tween.tween_method(CustomCursor.update_cursor, GlobalVariables.cursor_base_scale, max_scale, 1)
-	cursor_tween.tween_method(CustomCursor.update_cursor, max_scale, GlobalVariables.cursor_base_scale, 1)
+	cursor_tween.tween_method(CustomCursor.update_cursor, GlobalVariables.cursor_base_scale, MAX_CURSOR_SIZE, 1)
+	cursor_tween.tween_method(CustomCursor.update_cursor, MAX_CURSOR_SIZE, GlobalVariables.cursor_base_scale, 1)
 	cursor_tween.tween_interval(0.25)
 	cursor_tween.play()
-	
 
+#region JUNCTION MIRRORING & ROTATION
 func junction_mirroring_on():
+	junctions_mirrored = true
 	for junc in junctions:
 		junc.mirror_on()
 
 func junction_mirroring_off():
+	junctions_mirrored = false
 	for junc in junctions:
 		junc.mirror_off()
 
 func rotate_all_junctions():
+	junctions_rotating = true
 	for junc in junctions:
 		rotate_junction(junc)
 
@@ -710,6 +726,7 @@ func rotate_junction(junc):
 	tween.play()
 
 func reset_junction_rotations():
+	junctions_rotating = false
 	for tween in letter_rotation_tweens:
 		tween.kill()
 	letter_rotation_tweens.clear()
@@ -717,9 +734,10 @@ func reset_junction_rotations():
 		var tween = get_tree().create_tween()
 		tween.tween_method(junc.set_junction_rotation, junc.get_current_rotation(), 0, 1)
 		tween.play()
+#endregion
 
 func _on_game_screen_game_pause():
 	paused = true
 
 func _on_game_screen_game_unpause():
-	paused=false
+	paused = false
