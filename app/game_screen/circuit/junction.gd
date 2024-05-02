@@ -129,7 +129,7 @@ func pulse():
 	tween.play()
 
 #all these are fairly self explanatory
-func flash_red(revert: bool = true):
+func flash_red(_revert: bool = true):
 	var tween = create_tween()
 	tween.tween_property(self,"modulate",Color(1.0,0.0,0.0),.1)
 	tween.tween_property(self,"modulate",Color(1.0,1.0,1.0),.1)

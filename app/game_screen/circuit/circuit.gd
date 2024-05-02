@@ -33,6 +33,8 @@ var cursor_tween
 var letter_rotation_tweens = []
 var submitted_path = []
 var paused = false
+var junctions_mirrored = false
+var junctions_rotating = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -450,8 +452,8 @@ func _process(delta):
 #endregion
 
 #region SCORING
-func score_word(word : String):
-	var letters = word.split("", false, 0)
+func score_word(new_word : String):
+	var letters = new_word.split("", false, 0)
 	var update_wires : Dictionary = {}
 	for i in (letters.size()-1):
 		var wire = get_wire(letters[i], letters[i+1])
@@ -574,6 +576,7 @@ func snap(wire):
 	var s = to.position-from.position
 	var snap_text = Label.new()
 	snap_text.text = ["snap","snap","snap","snap","snap!","ssnap","snap!","snip"].pick_random()
+	snap_text.set_z_index(5)
 	var angle = s.angle()
 	if angle < -PI/2:
 		angle+=PI
@@ -693,15 +696,18 @@ func junction_mirroring_off():
 	for junc in junctions:
 		junc.mirror_off()
 
-func rotate_junctions():
+func rotate_all_junctions():
 	for junc in junctions:
-		var tween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE)
-		letter_rotation_tweens.append(tween)
-		var start_rotation = junc.get_current_rotation()
-		var end_rotation = junc.random_rotation()
-		tween.tween_method(junc.set_junction_rotation, start_rotation, end_rotation, 1.5)
-		tween.tween_method(junc.set_junction_rotation, end_rotation, start_rotation, 1.5)
-		tween.play()
+		rotate_junction(junc)
+
+func rotate_junction(junc):
+	var tween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE)
+	letter_rotation_tweens.append(tween)
+	var start_rotation = junc.get_current_rotation()
+	var end_rotation = junc.random_rotation()
+	tween.tween_method(junc.set_junction_rotation, start_rotation, end_rotation, 1.5)
+	tween.tween_method(junc.set_junction_rotation, end_rotation, start_rotation, 1.5)
+	tween.play()
 
 func reset_junction_rotations():
 	for tween in letter_rotation_tweens:
