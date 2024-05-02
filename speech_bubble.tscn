@@ -1,7 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://xhhoxq7r5h5j"]
 
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="1_pwldu"]
-[ext_resource type="Texture2D" uid="uid://cray8qxnw5hh4" path="res://assets/SpeachBubb.png" id="2_4o2t3"]
 
 [sub_resource type="GDScript" id="GDScript_24fmt"]
 script/source = "extends Control
@@ -45,20 +44,20 @@ func _on_timer_timeout():
 			current_text.erase(bubble_text_length -1,1)
 			lbltext.text = current_text
 			bubble_text_length -= 1
-			#if(can_shrink):
-				#ninerect.rect_size -= Vector2(6,0)
-				#ninerect.rect_position += Vector2(3,0)
+			
 			
 			timer.start(0.04)
 		else:
 			queue_free()
 	
-	pass # Replace with function body.
+	
 
 
 
 
 "
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8j2ym"]
 
 [node name="SpeechBubble" type="Control"]
 layout_mode = 3
@@ -105,7 +104,7 @@ offset_right = -6.10352e-05
 offset_bottom = 0.99999
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_4o2t3")
+texture = SubResource("CompressedTexture2D_8j2ym")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
