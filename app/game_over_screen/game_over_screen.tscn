@@ -5,10 +5,10 @@
 [ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/themes/text_theme.tres" id="2_stirv"]
 [ext_resource type="Texture2D" uid="uid://dy1yny3uq0jt1" path="res://assets/wug_home_hover.png" id="3_000kw"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/paper_background.png" id="5_bjqul"]
+[ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="5_t4ve7"]
 [ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="6_qao40"]
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="7_ux0k7"]
 [ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_3kiqm"]
-[ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="9_1r3rp"]
 [ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="10_yaap0"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_745db"]
@@ -24,10 +24,10 @@ animations = [{
 "texture": ExtResource("7_ux0k7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_3kiqm")
+"texture": ExtResource("5_t4ve7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_1r3rp")
+"texture": ExtResource("8_3kiqm")
 }, {
 "duration": 1.0,
 "texture": ExtResource("10_yaap0")
