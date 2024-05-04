@@ -89,8 +89,7 @@ func _on_blackboard_text_field_changed(new_text):
 	
 	
 func change_state():
-	#if score/100 % 3 == 2:
-	if score > 20:
+	if score/100 % 3 == 2:
 		GlobalVariables.switch_to_sleep()
 	else:
 		GlobalVariables.switch_to_awake()

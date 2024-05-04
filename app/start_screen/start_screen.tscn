@@ -80,43 +80,48 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pdbn0")
 
-[node name="StartButton" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 1434.0
-offset_top = 534.0
-offset_right = 1551.0
-offset_bottom = 580.0
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -227.0
+offset_top = -391.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 270
+
+[node name="Organizer" type="HFlowContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/v_separation = 20
+alignment = 2
+
+[node name="StartButton" type="TextureButton" parent="MarginContainer/Organizer"]
+layout_mode = 2
 texture_normal = ExtResource("3_sm3k7")
 texture_pressed = ExtResource("3_skdr3")
 texture_hover = ExtResource("3_skdr3")
 
-[node name="SnoozeButton" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 1370.0
-offset_top = 654.0
-offset_right = 1555.0
-offset_bottom = 694.0
+[node name="SnoozeButton" type="TextureButton" parent="MarginContainer/Organizer"]
+visible = false
+layout_mode = 2
 texture_normal = ExtResource("5_vjobh")
 
-[node name="ScoreButton" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 1380.0
-offset_top = 598.0
-offset_right = 1552.0
-offset_bottom = 638.0
+[node name="ScoreButton" type="TextureButton" parent="MarginContainer/Organizer"]
+visible = false
+layout_mode = 2
 texture_normal = ExtResource("6_pk8i2")
 
-[node name="SettingsButton" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 1352.0
-offset_top = 710.0
-offset_right = 1554.0
-offset_bottom = 765.0
+[node name="SettingsButton" type="TextureButton" parent="MarginContainer/Organizer"]
+layout_mode = 2
 texture_normal = ExtResource("7_g6jsy")
 texture_pressed = ExtResource("7_b80md")
 texture_hover = ExtResource("7_b80md")
 
-[node name="TextureRect2" type="TextureRect" parent="."]
+[node name="PaperBackground" type="TextureRect" parent="."]
 z_index = 2
 material = SubResource("CanvasItemMaterial_w5o8w")
 layout_mode = 1
@@ -128,7 +133,7 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("8_8e3qr")
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedWug" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(220, 716)
 scale = Vector2(0.753369, 0.717054)
@@ -138,15 +143,15 @@ autoplay = "idle"
 frame = 1
 frame_progress = 0.0785378
 
-[node name="Sprite2D2" type="Sprite2D" parent="."]
+[node name="LineImage" type="Sprite2D" parent="."]
 position = Vector2(854, 785)
 texture = ExtResource("13_lloq7")
 
-[node name="TextureRect" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedTitle" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(1042, 191)
 sprite_frames = SubResource("SpriteFrames_2u1g2")
 autoplay = "default"
 
-[connection signal="pressed" from="StartButton" to="." method="_on_texture_button_pressed"]
-[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="MarginContainer/Organizer/StartButton" to="." method="_on_texture_button_pressed"]
+[connection signal="pressed" from="MarginContainer/Organizer/SettingsButton" to="." method="_on_settings_button_pressed"]
