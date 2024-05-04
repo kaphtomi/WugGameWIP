@@ -16,4 +16,4 @@ func med_mode():
 
 func hard_mode():
 	get_parent().junction_mirroring_off()
-	get_parent().rotate_junctions()
+	get_parent().rotate_all_junctions()
