@@ -154,9 +154,11 @@ autoplay = "idle"
 [node name="PauseContainer" type="Control" parent="CanvasLayer3"]
 visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("14_bo6ms")
 
 [node name="Container" type="HFlowContainer" parent="CanvasLayer3/PauseContainer"]
@@ -193,8 +195,12 @@ text = " home "
 
 [node name="Instructions" type="MarginContainer" parent="CanvasLayer3/PauseContainer"]
 layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -222.0
 offset_right = 964.0
-offset_bottom = 222.0
+grow_vertical = 0
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
