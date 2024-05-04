@@ -39,7 +39,11 @@ animations = [{
 
 [node name="GameOverScreen" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ckdyu")
 
 [node name="TextureRect2" type="TextureRect" parent="."]
@@ -58,49 +62,6 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("5_bjqul")
 
-[node name="Organizer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 596.0
-offset_top = 281.0
-offset_right = 955.0
-offset_bottom = 601.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-
-[node name="GameOverLabel" type="Label" parent="Organizer"]
-layout_mode = 2
-theme = ExtResource("2_stirv")
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 60
-text = "Game Over!"
-horizontal_alignment = 1
-
-[node name="ScoreLabel" type="Label" parent="Organizer"]
-layout_mode = 2
-theme = ExtResource("2_stirv")
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 60
-text = "Score: "
-horizontal_alignment = 1
-
-[node name="RestartButton" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 694.0
-offset_top = 504.0
-offset_right = 2742.0
-offset_bottom = 2552.0
-scale = Vector2(0.07, 0.07)
-texture_normal = ExtResource("2_ho4j4")
-texture_pressed = ExtResource("3_000kw")
-texture_hover = ExtResource("3_000kw")
-stretch_mode = 0
-
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(276, 672)
@@ -109,4 +70,46 @@ sprite_frames = SubResource("SpriteFrames_55dna")
 animation = &"idle"
 autoplay = "idle"
 
-[connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
+[node name="UIOrganizer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 250
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 250
+
+[node name="VOrganizer" type="VBoxContainer" parent="UIOrganizer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 50
+
+[node name="GameOverLabel" type="Label" parent="UIOrganizer/VOrganizer"]
+layout_mode = 2
+theme = ExtResource("2_stirv")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
+text = "Game Over!"
+horizontal_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="UIOrganizer/VOrganizer"]
+layout_mode = 2
+theme = ExtResource("2_stirv")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
+text = "Score: "
+horizontal_alignment = 1
+
+[node name="RestartButton" type="TextureButton" parent="UIOrganizer/VOrganizer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+texture_normal = ExtResource("2_ho4j4")
+texture_pressed = ExtResource("3_000kw")
+texture_hover = ExtResource("3_000kw")
+ignore_texture_size = true
+stretch_mode = 5
+
+[connection signal="pressed" from="UIOrganizer/VOrganizer/RestartButton" to="." method="_on_restart_button_pressed"]

@@ -607,7 +607,7 @@ func snap(wire):
 	snap_text.rotation = angle
 	snap_text.position = from.position+(s*.5)
 	
-	snap_text.set_theme(load("res://assets/text_theme.tres"))
+	snap_text.set_theme(load("res://assets/themes/text_theme.tres"))
 	add_child(snap_text)
 	var tween = create_tween()
 	snap_text.modulate = wire.get_color()
