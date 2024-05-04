@@ -353,6 +353,8 @@ func _input(event):
 		pass
 	if input == "Escape":
 		get_parent().pause_game()
+	if paused:
+		return
 	if input == "Enter": 
 		submit_word()
 		return
@@ -626,14 +628,16 @@ func snap(wire):
 func pop_in_junction(v, i:int):
 	v.scale = Vector2.ZERO
 	var tween = create_tween()
-	var wait = .15*i
-	var dur = .25
+	var wait = (.1+.1*randf())*(i+randf()*.5)
+	var dur = .25*(.5+randf())
+	var tweensfx = create_tween()
 	tween.tween_interval(wait)
+	tweensfx.tween_interval(wait+.25*dur)
+	tweensfx.tween_callback($PopInSFX.play)
 	tween.tween_property(v, "scale", (1+randf()*.3)*Vector2.ONE, dur)
 	tween.tween_property(v, "scale", Vector2.ONE, randf()*.1)
 	tween.tween_callback(v.pop_in_wires)
 	tween.play()
-	$PopInSFX.play()
 
 func pop_out_junction(junc, delta):
 	junctions.erase(junc)
