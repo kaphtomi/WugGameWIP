@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="9_nc5mt"]
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="10_cyj6i"]
 [ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="11_c4tub"]
-[ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://app/game_screen/speech_bubble.tscn" id="12_euwpy"]
+[ext_resource type="PackedScene" path="res://app/game_screen/speech_bubble.tscn" id="12_euwpy"]
 [ext_resource type="Script" path="res://app/game_screen/pause_modal.gd" id="14_bo6ms"]
 [ext_resource type="Theme" uid="uid://c774170h4crgv" path="res://assets/themes/pause_menu.tres" id="14_pw67a"]
 

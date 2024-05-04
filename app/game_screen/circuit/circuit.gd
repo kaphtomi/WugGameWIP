@@ -200,6 +200,7 @@ func sad_path():
 
 #quickly retracts the highlight path from a new word, changes its color, and it makes the graph wiggle
 func happy_path():
+	$HappySFX.play()
 	var path = []
 	var i = 0
 	for w in connecting_wires:
@@ -682,6 +683,8 @@ func animate_submitted_path():
 					var start = h.get_parent().get_start()
 					var end = h.get_parent().get_end()
 					var d = end.position-start.position
+					if submitted_path.size()>2:
+						$HappySFX.play()
 					if h.direction:
 						d *= -1
 						start.force(100*happy*d.normalized())
@@ -689,6 +692,7 @@ func animate_submitted_path():
 						end.force(100*happy*d.normalized())
 				h.queue_free()
 				submitted_path.pop_front()
+				
 		else: submitted_path.pop_front()
 
 # Gets a wire based on its start and end letter (does not depend on direction, at the moment)
