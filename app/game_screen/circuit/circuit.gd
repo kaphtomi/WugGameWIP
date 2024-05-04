@@ -177,6 +177,7 @@ func submit_word():
 			words[word]=true
 			score_word(word)
 			happy_path()
+			$DingSFX.play()
 	
 	for j in affected_junctions: j.pulse_and_reset()
 	clear_word_selection()
@@ -222,6 +223,7 @@ func clear_word_selection():
 #called if a wire snaps in the current word
 #TODO sound effect
 func void_current_word():
+	$VoidSFX.play()
 	clear_word_selection()
 
 # Checks to see if junction is connected to previously selected junction
@@ -253,9 +255,8 @@ func clear_potential_highlights():
 # should it be called when junction == null in char_inputted? i don't know what that case
 # was for, perhaps it cannot happen anymore
 func process_invalid_input():
-	if word_valid:
-		set_all_red()
-		word_valid = false
+	set_all_red()
+	word_valid = false
 	pulse_all()
 	return
 
@@ -359,9 +360,18 @@ func _input(event):
 		submit_word()
 		return
 	elif input == "Backspace":
+		#if (randi() % 2 == 0):
+			#$TypeSFX2.play()
+		#else:
+			#$TypeSFX.play()
+		$BackSFX.play()
 		do_backspace()
 		return
 	elif input in "QWERTYUIOPASDFGHJKLZXCVBNM":
+		if (randi() % 2 == 0):
+			$TypeSFX2.play()
+		else:
+			$TypeSFX.play()
 		char_inputted(input)
 		return
 

@@ -1,16 +1,21 @@
-[gd_scene load_steps=16 format=3 uid="uid://b7kr8ic08u4od"]
+[gd_scene load_steps=21 format=3 uid="uid://b7kr8ic08u4od"]
 
 [ext_resource type="Script" path="res://app/game_screen/circuit/circuit.gd" id="1_tyd7i"]
 [ext_resource type="AudioStream" uid="uid://b2oau08ck2y75" path="res://assets/sounds/pop_in_sound.mp3" id="2_lm86x"]
+[ext_resource type="AudioStream" uid="uid://cliudr105jqng" path="res://assets/sounds/type_sound.wav" id="3_6yd74"]
 [ext_resource type="AudioStream" uid="uid://b66lohca1jgi6" path="res://assets/sounds/pop_out_sound.mp3" id="3_p8qw1"]
+[ext_resource type="AudioStream" uid="uid://ccv1tdw5owk2i" path="res://assets/sounds/backspace_sound.wav" id="4_3h0vp"]
+[ext_resource type="AudioStream" uid="uid://dawrgcr1qjok2" path="res://assets/sounds/type_sound_2.wav" id="4_78nls"]
 [ext_resource type="AudioStream" uid="uid://cpdhyt0y105q6" path="res://assets/sounds/snap_sound.mp3" id="4_fjvdh"]
+[ext_resource type="AudioStream" uid="uid://cedvng1tuj7gc" path="res://assets/sounds/ding_sound.wav" id="4_y2fu7"]
 [ext_resource type="AudioStream" uid="uid://ouuk3r3dtfe1" path="res://assets/sounds/wrong_letter_sound.mp3" id="5_0qoah"]
+[ext_resource type="AudioStream" uid="uid://bgcnexjrhe8vq" path="res://assets/sounds/void_sound.wav" id="5_f87ol"]
 [ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="6_bsi00"]
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="7_y52tr"]
 [ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_8q3m8"]
 [ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="9_vx50n"]
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="10_pl4sq"]
-[ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://app/game_screen/speech_bubble.tscn" id="11_hbdw6"]
+[ext_resource type="PackedScene" path="res://app/game_screen/speech_bubble.tscn" id="11_hbdw6"]
 [ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="12_2k17u"]
 [ext_resource type="Script" path="res://app/game_screen/circuit/difficulty_mode.gd" id="13_6y0lg"]
 
@@ -56,6 +61,27 @@ script = ExtResource("1_tyd7i")
 
 [node name="PopInSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_lm86x")
+bus = &"SFX"
+
+[node name="TypeSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_6yd74")
+volume_db = -2.921
+bus = &"SFX"
+
+[node name="DingSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_y2fu7")
+bus = &"SFX"
+
+[node name="VoidSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_f87ol")
+bus = &"SFX"
+
+[node name="BackSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_3h0vp")
+bus = &"SFX"
+
+[node name="TypeSFX2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_78nls")
 bus = &"SFX"
 
 [node name="PopOutSFX" type="AudioStreamPlayer" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b0hw5ra8b0p6w"]
+[gd_scene load_steps=24 format=3 uid="uid://b0hw5ra8b0p6w"]
 
 [ext_resource type="Script" path="res://app/start_screen/start_screen.gd" id="1_pdbn0"]
 [ext_resource type="Texture2D" uid="uid://cegvrxsnl8nb1" path="res://assets/wug title1.png" id="2_xs5of"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bd7x3kj3tgn0m" path="res://assets/wug_settings_hover.png" id="7_b80md"]
 [ext_resource type="Texture2D" uid="uid://ckpapo8q7rwkp" path="res://assets/wug_settings_360.png" id="7_g6jsy"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/paper_background.png" id="8_8e3qr"]
+[ext_resource type="Texture2D" uid="uid://cy17guh3yund6" path="res://assets/wug_snooze_360_hover.png" id="8_he85n"]
 [ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="8_tdxo1"]
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="10_kvlei"]
 [ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="11_dg88i"]
@@ -88,11 +89,10 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -227.0
-offset_top = -391.0
+offset_top = -319.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/margin_right = 25
-theme_override_constants/margin_bottom = 270
 
 [node name="Organizer" type="HFlowContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -105,11 +105,6 @@ texture_normal = ExtResource("3_sm3k7")
 texture_pressed = ExtResource("3_skdr3")
 texture_hover = ExtResource("3_skdr3")
 
-[node name="SnoozeButton" type="TextureButton" parent="MarginContainer/Organizer"]
-visible = false
-layout_mode = 2
-texture_normal = ExtResource("5_vjobh")
-
 [node name="ScoreButton" type="TextureButton" parent="MarginContainer/Organizer"]
 visible = false
 layout_mode = 2
@@ -120,6 +115,11 @@ layout_mode = 2
 texture_normal = ExtResource("7_g6jsy")
 texture_pressed = ExtResource("7_b80md")
 texture_hover = ExtResource("7_b80md")
+
+[node name="SnoozeButton" type="TextureButton" parent="MarginContainer/Organizer"]
+layout_mode = 2
+texture_normal = ExtResource("5_vjobh")
+texture_hover = ExtResource("8_he85n")
 
 [node name="PaperBackground" type="TextureRect" parent="."]
 z_index = 2
@@ -155,3 +155,4 @@ autoplay = "default"
 
 [connection signal="pressed" from="MarginContainer/Organizer/StartButton" to="." method="_on_texture_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Organizer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="MarginContainer/Organizer/SnoozeButton" to="." method="_on_snooze_button_pressed"]
