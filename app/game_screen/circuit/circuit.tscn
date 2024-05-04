@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_8q3m8"]
 [ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="9_vx50n"]
 [ext_resource type="Texture2D" uid="uid://c8x4cccrpe4eh" path="res://assets/wug wug2.png" id="10_pl4sq"]
-[ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://speech_bubble.tscn" id="11_hbdw6"]
+[ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://app/game_screen/speech_bubble.tscn" id="11_hbdw6"]
 [ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="12_2k17u"]
 [ext_resource type="Script" path="res://app/game_screen/circuit/difficulty_mode.gd" id="13_6y0lg"]
 

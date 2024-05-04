@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://c3ko3ueexu8ps" path="res://assets/wug title5.png" id="6_s8bys"]
 [ext_resource type="Texture2D" uid="uid://bd7x3kj3tgn0m" path="res://assets/wug_settings_hover.png" id="7_b80md"]
 [ext_resource type="Texture2D" uid="uid://ckpapo8q7rwkp" path="res://assets/wug_settings_360.png" id="7_g6jsy"]
-[ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="8_8e3qr"]
+[ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/paper_background.png" id="8_8e3qr"]
 [ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="8_tdxo1"]
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="10_kvlei"]
 [ext_resource type="Texture2D" uid="uid://dh55fejbmhpow" path="res://assets/wug wug4.png" id="11_dg88i"]

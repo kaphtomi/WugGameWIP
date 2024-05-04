@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://app/game_over_screen/game_over_screen.gd" id="1_ckdyu"]
 [ext_resource type="Texture2D" uid="uid://cd6pxsail74ia" path="res://assets/wug_home.png" id="2_ho4j4"]
-[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="2_stirv"]
+[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/themes/text_theme.tres" id="2_stirv"]
 [ext_resource type="Texture2D" uid="uid://dy1yny3uq0jt1" path="res://assets/wug_home_hover.png" id="3_000kw"]
-[ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="5_bjqul"]
+[ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/paper_background.png" id="5_bjqul"]
 [ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="6_qao40"]
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="7_ux0k7"]
 [ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_3kiqm"]

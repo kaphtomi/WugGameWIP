@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=3 uid="uid://cshqe8yfov5j2"]
 
-[ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="1_50auc"]
+[ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/paper_background.png" id="1_50auc"]
 [ext_resource type="Script" path="res://app/settings_screen.gd" id="1_p6sej"]
 [ext_resource type="Texture2D" uid="uid://ckpapo8q7rwkp" path="res://assets/wug_settings_360.png" id="2_jhe8y"]
 [ext_resource type="Texture2D" uid="uid://bs41cpv3f0x8w" path="res://assets/wug wug1.png" id="3_kycmt"]
@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cd6pxsail74ia" path="res://assets/wug_home.png" id="9_b0o4p"]
 [ext_resource type="Texture2D" uid="uid://cc2xkh0eth680" path="res://assets/wug horizon.png" id="10_mujcx"]
 [ext_resource type="Texture2D" uid="uid://dy1yny3uq0jt1" path="res://assets/wug_home_hover.png" id="10_qu47f"]
-[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/text_theme.tres" id="11_jvlly"]
+[ext_resource type="Theme" uid="uid://bvysw3gfc4ply" path="res://assets/themes/text_theme.tres" id="11_jvlly"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wjnbe"]
 animations = [{
