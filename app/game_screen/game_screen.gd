@@ -13,7 +13,7 @@ func _ready():
 	unpause_game()
 	call_deferred("ready_circuit")
 	GlobalVariables.switch_to_awake()
-	GlobalVariables.switch_to_med_mode()
+	GlobalVariables.switch_to_easy_mode()
 
 func _process(delta):
 	if paused:
