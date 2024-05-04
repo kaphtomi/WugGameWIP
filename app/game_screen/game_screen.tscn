@@ -1,5 +1,6 @@
 [gd_scene load_steps=19 format=3 uid="uid://dj4v5021f26wl"]
 
+[ext_resource type="Script" path="res://app/game_screen/game_screen.gd" id="1_64wdv"]
 [ext_resource type="PackedScene" uid="uid://b7kr8ic08u4od" path="res://app/game_screen/circuit/circuit.tscn" id="4_0o6or"]
 [ext_resource type="Shader" path="res://assets/shader.gdshader" id="5_fgtqu"]
 [ext_resource type="Texture2D" uid="uid://4h7nuhdikbx1" path="res://assets/Texturelabs_Paper_143L.png" id="6_sk6v4"]
@@ -13,110 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://speech_bubble.tscn" id="12_euwpy"]
 [ext_resource type="Script" path="res://app/game_screen/pause_modal.gd" id="14_bo6ms"]
 [ext_resource type="Theme" uid="uid://c774170h4crgv" path="res://app/game_screen/pause_menu.tres" id="14_pw67a"]
-
-[sub_resource type="GDScript" id="GDScript_44sfp"]
-script/source = "extends Control
-var score = 0
-var cur_score = 0
-var fade = 0
-var game_is_over=false
-var paused = false
-signal game_pause
-signal game_unpause
-	
-func _ready():
-	paused = true
-	unpause_game()
-	call_deferred(\"ready_circuit\")
-	GlobalVariables.switch_to_awake()
-	GlobalVariables.switch_to_easy_mode()
-
-func _process(delta):
-	if paused:
-		var env = $PauseBlur.get_environment()
-		env.set_glow_level(1, lerp(env.get_glow_level(1),0.0,delta*10))
-		env.set_glow_level(3, lerp(env.get_glow_level(3),1.0,delta*10))
-		env.set_glow_level(5, lerp(env.get_glow_level(5),1.0,delta*10))
-	var cur_score_init = cur_score
-	cur_score = lerp(float(cur_score),float(score),delta*2)
-	fade = fade-delta
-	if fade < 0:
-		$FlowMargins/Flow/Extras.text = \"\"
-		if game_is_over:
-			var game_over_label = $FlowMargins/Flow/Score
-			game_over_label.text = game_over_label.text + \", game over\"
-			GlobalVariables.score = score
-			get_tree().current_scene.to_game_over_screen()
-	if ceil(cur_score)!= ceil(cur_score_init):
-		$FlowMargins/Flow/Score.text = str(ceil(cur_score))
-	if cur_score == 5:
-		$SpeechBubble.snooze_text = \"Snoozing\"
-		
-	
-func pause_game():
-	if paused:
-		return
-	paused = true
-	Engine.time_scale = .25
-	game_pause.emit()
-	$PauseBlur.get_environment().glow_enabled = true
-	$PauseBlur.get_environment().set_glow_level(1, 1.0)
-	$PauseBlur.get_environment().set_glow_level(3, 0.0)
-	$PauseBlur.get_environment().set_glow_level(5, 0.0)
-	
-	
-func unpause_game():
-	if !paused:
-		return
-	paused = false
-	Engine.time_scale = 1.0
-	game_unpause.emit()
-	$PauseBlur.get_environment().glow_enabled = false
-
-func ready_circuit():
-	$Circuit.generate()
-	$Circuit.position = Vector2()
-
-func _on_circuit_word_submitted(word : String):
-	if word == \"/kill\":
-		$Circuit.kill_circuit()
-	if true: #$CircuitAndBlackboard/Circuit.is_word_in_circuit(word):
-		#$CircuitAndBlackboard/Circuit.score_word(word)
-		#$CircuitAndBlackboard/Blackboard.add_word(word)
-		var score_plus = $Circuit.score - score
-		score += score_plus
-		$FlowMargins/Flow/Extras.text = \"+\" + str(score_plus) + \" \" + word
-		fade=2
-		change_state()
-
-func _on_circuit_circuit_broken():
-	fade = 1.5
-	game_is_over=true
-
-func _on_blackboard_text_field_changed(new_text):
-	$Circuit.update_word(new_text)
-	
-	
-func change_state():
-	if score/100 % 3 == 2:
-		GlobalVariables.switch_to_sleep()
-	else:
-		GlobalVariables.switch_to_awake()
-	
-	if score/1000!=0:
-		GlobalVariables.switch_to_hard_mode()
-	else:
-		match score/100:
-			0, 2:
-				GlobalVariables.switch_to_easy_mode()
-			1, 3, 5, 6, 8:
-				GlobalVariables.switch_to_med_mode()
-			4, 7, 9:
-				GlobalVariables.switch_to_hard_mode()
-
-func _on_button_pressed():
-	pause_game()
-"
 
 [sub_resource type="Environment" id="Environment_wdw4p"]
 background_mode = 3
@@ -174,7 +71,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_44sfp")
+script = ExtResource("1_64wdv")
 
 [node name="PauseBlur" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_wdw4p")
@@ -235,7 +132,7 @@ offset_bottom = 57.0
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 
-[node name="Button" type="Button" parent="ButtonMargins"]
+[node name="PauseButton" type="Button" parent="ButtonMargins"]
 layout_mode = 2
 theme = ExtResource("14_pw67a")
 theme_override_font_sizes/font_size = 40
@@ -346,10 +243,10 @@ texture = ExtResource("6_sk6v4")
 [connection signal="game_unpause" from="." to="CanvasLayer3/PauseContainer" method="_on_game_screen_game_unpause"]
 [connection signal="circuit_broken" from="Circuit" to="." method="_on_circuit_circuit_broken"]
 [connection signal="word_submitted" from="Circuit" to="." method="_on_circuit_word_submitted"]
-[connection signal="pressed" from="ButtonMargins/Button" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Continue" to="CanvasLayer3/PauseContainer/Container" method="_on_continue_pressed"]
+[connection signal="pressed" from="ButtonMargins/PauseButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Continue" to="CanvasLayer3/PauseContainer" method="_on_continue_pressed"]
-[connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Restart" to="CanvasLayer3/PauseContainer/Container" method="_on_restart_pressed"]
+[connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Continue" to="CanvasLayer3/PauseContainer/Container" method="_on_continue_pressed"]
 [connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Restart" to="CanvasLayer3/PauseContainer" method="_on_restart_pressed"]
-[connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Home" to="CanvasLayer3/PauseContainer/Container" method="_on_home_pressed"]
+[connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Restart" to="CanvasLayer3/PauseContainer/Container" method="_on_restart_pressed"]
 [connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Home" to="CanvasLayer3/PauseContainer" method="_on_home_pressed"]
+[connection signal="pressed" from="CanvasLayer3/PauseContainer/Container/Home" to="CanvasLayer3/PauseContainer/Container" method="_on_home_pressed"]

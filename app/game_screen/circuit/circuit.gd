@@ -591,7 +591,7 @@ func snap(wire):
 	var s = to.position-from.position
 	var snap_text = Label.new()
 	snap_text.text = ["snap","snap","snap","snap","snap!","ssnap","snap!","snip"].pick_random()
-	snap_text.set_z_index(5)
+	snap_text.set_z_index(10)
 	var angle = s.angle()
 	if angle < -PI/2:
 		angle+=PI

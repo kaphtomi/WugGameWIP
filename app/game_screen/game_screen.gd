@@ -4,6 +4,7 @@ var cur_score = 0
 var fade = 0
 var game_is_over=false
 var paused = false
+var was_asleep = false
 signal game_pause
 signal game_unpause
 	
@@ -40,6 +41,11 @@ func pause_game():
 	if paused:
 		return
 	paused = true
+	if GlobalVariables.cur_zzz == GlobalVariables.WUG_ZZZ.SLEEP:
+		was_asleep = true
+		GlobalVariables.switch_to_awake()
+	else:
+		was_asleep = false
 	Engine.time_scale = .25
 	game_pause.emit()
 	$PauseBlur.get_environment().glow_enabled = true
@@ -52,6 +58,8 @@ func unpause_game():
 	if !paused:
 		return
 	paused = false
+	if was_asleep:
+		GlobalVariables.switch_to_sleep()
 	Engine.time_scale = 1.0
 	game_unpause.emit()
 	$PauseBlur.get_environment().glow_enabled = false
@@ -81,7 +89,8 @@ func _on_blackboard_text_field_changed(new_text):
 	
 	
 func change_state():
-	if score/100 % 3 == 2:
+	#if score/100 % 3 == 2:
+	if score > 20:
 		GlobalVariables.switch_to_sleep()
 	else:
 		GlobalVariables.switch_to_awake()
