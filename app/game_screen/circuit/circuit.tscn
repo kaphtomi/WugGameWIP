@@ -115,11 +115,13 @@ z_index = -2
 layout_mode = 0
 offset_left = 40.0
 offset_top = 40.0
-offset_right = 80.0
+offset_right = 1620.0
 offset_bottom = 344.0
 theme_override_colors/font_color = Color(0.898039, 0.898039, 0.898039, 1)
+theme_override_constants/line_spacing = -90
 theme_override_fonts/font = SubResource("FontVariation_6mh1r")
 theme_override_font_sizes/font_size = 250
+autowrap_mode = 1
 
 [node name="DifficultyMode" type="Node" parent="."]
 script = ExtResource("13_6y0lg")
