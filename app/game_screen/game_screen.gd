@@ -24,15 +24,14 @@ func _process(delta):
 	cur_score = lerp(float(cur_score),float(score),delta*2)
 	fade = fade-delta
 	if fade < 0:
-		$Flow/Extras.text = ""
+		$FlowMargins/Flow/Extras.text = ""
 		if game_is_over:
-			var game_over_label = $Flow/Score
+			var game_over_label = $FlowMargins/Flow/Score
 			game_over_label.text = game_over_label.text + ", game over"
 			GlobalVariables.score = score
-			print("changing scene")
 			get_tree().current_scene.to_game_over_screen()
 	if ceil(cur_score)!= ceil(cur_score_init):
-		$Flow/Score.text = str(ceil(cur_score))
+		$FlowMargins/Flow/Score.text = str(ceil(cur_score))
 	if cur_score == 5:
 		$SpeechBubble.snooze_text = "Snoozing"
 		
@@ -69,7 +68,7 @@ func _on_circuit_word_submitted(word : String):
 		#$CircuitAndBlackboard/Blackboard.add_word(word)
 		var score_plus = $Circuit.score - score
 		score += score_plus
-		$Flow/Extras.text = "+" + str(score_plus) + " " + word
+		$FlowMargins/Flow/Extras.text = "+" + str(score_plus) + " " + word
 		fade=2
 		change_state()
 
@@ -97,7 +96,6 @@ func change_state():
 				GlobalVariables.switch_to_med_mode()
 			4, 7, 9:
 				GlobalVariables.switch_to_hard_mode()
-	
-	
-		
 
+func _on_button_pressed():
+	pause_game()
