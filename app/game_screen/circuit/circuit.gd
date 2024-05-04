@@ -691,14 +691,6 @@ func get_wire(startNodeLetter: String, endNodeLetter: String):
 func kill_circuit():
 	kill=true
 
-func _on_item_rect_changed():
-	var num_junctions = junctions.size()
-	for i in range(num_junctions):
-		if i < 3:
-			junctions[i].position = Vector2(size.x*0.1, size.y*i*0.35+(size.y*0.15))
-		elif i > (num_junctions - 4):
-			junctions[i].position = Vector2(size.x*0.9, size.y*(num_junctions-i-1)*0.35+(size.y*0.15))
-
 #Tweens the cursor's size to pulse to grab attention to it
 func pulse_cursor():
 	cursor_tween = get_tree().create_tween().set_trans(Tween.TRANS_SINE).set_loops()
