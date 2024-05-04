@@ -11,6 +11,8 @@ func _ready():
 	paused = true
 	unpause_game()
 	call_deferred("ready_circuit")
+	GlobalVariables.switch_to_awake()
+	GlobalVariables.switch_to_easy_mode()
 
 func _process(delta):
 	if paused:
