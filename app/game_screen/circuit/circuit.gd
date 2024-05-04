@@ -452,7 +452,6 @@ func process_junctions(sketch, delta):
 			pop_out_junction(junc, delta)
 			
 			
-
 	
 func _process(delta):
 	if selected_junction != null && selected_junction.highlight_state != 2:
