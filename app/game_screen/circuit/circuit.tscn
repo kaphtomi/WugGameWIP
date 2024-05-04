@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://brk6273m4udyx" path="res://assets/wug wug3.png" id="7_y52tr"]
 [ext_resource type="Texture2D" uid="uid://cj323j0c0ag62" path="res://assets/wug wug5.png" id="8_8q3m8"]
 [ext_resource type="Texture2D" uid="uid://bp7pc6q6mv5ca" path="res://assets/wug wug.png" id="9_vx50n"]
-[ext_resource type="PackedScene" path="res://app/game_screen/speech_bubble.tscn" id="11_hbdw6"]
+[ext_resource type="PackedScene" uid="uid://xhhoxq7r5h5j" path="res://app/game_screen/speech_bubble.tscn" id="11_hbdw6"]
 [ext_resource type="FontFile" uid="uid://oj45ybhijpd7" path="res://font/InterVariable.ttf" id="12_2k17u"]
 [ext_resource type="Script" path="res://app/game_screen/circuit/difficulty_mode.gd" id="13_6y0lg"]
 
@@ -61,23 +61,27 @@ script = ExtResource("1_tyd7i")
 
 [node name="PopInSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_lm86x")
+volume_db = -1.486
 bus = &"SFX"
 
 [node name="HappySFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_osftp")
+volume_db = -3.962
 bus = &"SFX"
 
 [node name="TypeSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_6yd74")
-volume_db = -2.921
+volume_db = -1.931
 bus = &"SFX"
 
 [node name="DingSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_y2fu7")
+volume_db = -3.466
 bus = &"SFX"
 
 [node name="VoidSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_f87ol")
+volume_db = -2.476
 bus = &"SFX"
 
 [node name="BackSFX" type="AudioStreamPlayer" parent="."]
